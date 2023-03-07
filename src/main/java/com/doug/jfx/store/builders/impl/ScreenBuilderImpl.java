@@ -1,7 +1,6 @@
 package com.doug.jfx.store.builders.impl;
 
 import com.doug.jfx.store.builders.ScreenBuilder;
-import com.doug.jfx.store.enums.Routes;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 

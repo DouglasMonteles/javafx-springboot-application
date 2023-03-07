@@ -3,6 +3,7 @@ package com.doug.jfx.store.enums;
 import com.doug.jfx.store.builders.ScreenBuilder;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import org.jetbrains.annotations.NotNull;
 
 /*
 * This enum actuate as a Director class: The director class defines the order
@@ -14,12 +15,12 @@ public enum Routes {
 
     LOGIN;
 
-    public static void LOGIN(ScreenBuilder screen) {
+    public static void LOGIN(@NotNull ScreenBuilder screen) {
         screen.setTitle("Login")
                 .setResizable(false)
                 .setFullScreen(false)
-                .setWidth(300)
-                .setHeight(300)
+                .setWidth(500)
+                .setHeight(580)
                 .setAlwaysOnTop(true)
                 .setScene(new Scene(new Parent() {}))
                 .build();
