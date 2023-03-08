@@ -23,6 +23,15 @@ public enum Routes {
 
             return fxmlLoader;
         }
+    },
+
+    ADMIN () {
+        public FXMLLoader loadFxmlScreen() {
+            var fxmlLoader = new FXMLLoader(Routes.class.getResource("/screens/login_screen.fxml"));
+            fxmlLoader.setControllerFactory(controller -> RoutesController.loginController);
+
+            return fxmlLoader;
+        }
     };
 
     public static void LOGIN(@NotNull ScreenBuilder screen) throws IOException {
@@ -31,6 +40,17 @@ public enum Routes {
                 .setFullScreen(false)
                 .setWidth(600)
                 .setHeight(440)
+                .setAlwaysOnTop(true)
+                .setScene(handleFxmlScene(LOGIN.loadFxmlScreen()))
+                .build();
+    }
+
+    public static void ADMIN(@NotNull ScreenBuilder screen) throws IOException {
+        screen.setTitle("Admin")
+                .setResizable(false)
+                .setFullScreen(false)
+                .setWidth(-1)
+                .setHeight(-1)
                 .setAlwaysOnTop(true)
                 .setScene(handleFxmlScene(LOGIN.loadFxmlScreen()))
                 .build();

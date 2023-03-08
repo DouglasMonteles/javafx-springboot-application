@@ -1,5 +1,8 @@
 package com.doug.jfx.store.controllers;
 
+import com.doug.jfx.store.builders.ScreenBuilder;
+import com.doug.jfx.store.builders.impl.ScreenBuilderImpl;
+import com.doug.jfx.store.enums.Routes;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
@@ -16,6 +19,7 @@ import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -37,10 +41,10 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    void doLogin(ActionEvent event) {
+    void doLogin(ActionEvent event) throws IOException {
         if (username.getText() != null && password.getText() != null) {
-            System.out.println(username.isValid());
-            System.out.println(password);
+            ScreenBuilder screen = new ScreenBuilderImpl();
+            Routes.ADMIN(screen);
         }
     }
 
