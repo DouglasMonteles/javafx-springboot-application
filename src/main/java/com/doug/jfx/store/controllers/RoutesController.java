@@ -7,10 +7,13 @@ import org.springframework.stereotype.Component;
 public class RoutesController {
 
     public static LoginController loginController;
+    public static AdminController adminController;
 
     @Autowired
-    public RoutesController(final LoginController loginController) {
+    public RoutesController(final LoginController loginController,
+                            final AdminController adminController) {
         RoutesController.loginController = loginController;
+        RoutesController.adminController = adminController;
     }
 
 }

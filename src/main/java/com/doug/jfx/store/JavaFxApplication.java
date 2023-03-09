@@ -1,8 +1,6 @@
 package com.doug.jfx.store;
 
 
-import com.doug.jfx.store.builders.ScreenBuilder;
-import com.doug.jfx.store.builders.impl.ScreenBuilderImpl;
 import com.doug.jfx.store.enums.Routes;
 import javafx.application.Application;
 import javafx.application.Platform;

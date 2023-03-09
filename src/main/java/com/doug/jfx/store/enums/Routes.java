@@ -5,7 +5,6 @@ import com.doug.jfx.store.builders.impl.ScreenBuilderImpl;
 import com.doug.jfx.store.controllers.RoutesController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -51,8 +50,8 @@ public enum Routes {
 
         @Override
         protected FXMLLoader loadFxmlScreen() {
-            var fxmlLoader = new FXMLLoader(Routes.class.getResource("/screens/login_screen.fxml"));
-            fxmlLoader.setControllerFactory(controller -> RoutesController.loginController);
+            var fxmlLoader = new FXMLLoader(Routes.class.getResource("/screens/admin_screen.fxml"));
+            fxmlLoader.setControllerFactory(controller -> RoutesController.adminController);
 
             return fxmlLoader;
         }
@@ -61,6 +60,8 @@ public enum Routes {
         public void apply() throws IOException {
             screen.setTitle("Admin")
                     .setMaximized(true)
+                    .setMinWidth(600)
+                    .setMinHeight(450)
                     .setScene(handleFxmlScene(ADMIN.loadFxmlScreen()))
                     .build();
         }
