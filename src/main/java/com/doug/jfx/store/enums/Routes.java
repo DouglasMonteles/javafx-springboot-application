@@ -1,6 +1,7 @@
 package com.doug.jfx.store.enums;
 
 import com.doug.jfx.store.builders.ScreenBuilder;
+import com.doug.jfx.store.builders.impl.ScreenBuilderImpl;
 import com.doug.jfx.store.controllers.RoutesController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -17,49 +18,71 @@ import java.io.IOException;
 public enum Routes {
 
     LOGIN () {
-        public FXMLLoader loadFxmlScreen() {
+        private final ScreenBuilder screen = new ScreenBuilderImpl();
+
+        @Override
+        protected FXMLLoader loadFxmlScreen() {
             var fxmlLoader = new FXMLLoader(Routes.class.getResource("/screens/login_screen.fxml"));
             fxmlLoader.setControllerFactory(controller -> RoutesController.loginController);
 
             return fxmlLoader;
+        }
+
+        @Override
+        public void apply() throws IOException {
+            screen.setTitle("Login")
+                    .setResizable(false)
+                    .setFullScreen(false)
+                    .setWidth(600)
+                    .setHeight(440)
+                    .setAlwaysOnTop(true)
+                    .setScene(handleFxmlScene(LOGIN.loadFxmlScreen()))
+                    .build();
+        }
+
+        @Override
+        public void close() {
+            screen.destroy();
         }
     },
 
     ADMIN () {
-        public FXMLLoader loadFxmlScreen() {
+        private final ScreenBuilder screen = new ScreenBuilderImpl();
+
+        @Override
+        protected FXMLLoader loadFxmlScreen() {
             var fxmlLoader = new FXMLLoader(Routes.class.getResource("/screens/login_screen.fxml"));
             fxmlLoader.setControllerFactory(controller -> RoutesController.loginController);
 
             return fxmlLoader;
         }
+
+        @Override
+        public void apply() throws IOException {
+            screen.setTitle("Admin")
+                    .setMaximized(true)
+                    .setScene(handleFxmlScene(ADMIN.loadFxmlScreen()))
+                    .build();
+        }
+
+        @Override
+        public void close() {
+            screen.destroy();
+        }
     };
 
-    public static void LOGIN(@NotNull ScreenBuilder screen) throws IOException {
-        screen.setTitle("Login")
-                .setResizable(false)
-                .setFullScreen(false)
-                .setWidth(600)
-                .setHeight(440)
-                .setAlwaysOnTop(true)
-                .setScene(handleFxmlScene(LOGIN.loadFxmlScreen()))
-                .build();
-    }
+    protected abstract FXMLLoader loadFxmlScreen();
 
-    public static void ADMIN(@NotNull ScreenBuilder screen) throws IOException {
-        screen.setTitle("Admin")
-                .setResizable(false)
-                .setFullScreen(false)
-                .setWidth(-1)
-                .setHeight(-1)
-                .setAlwaysOnTop(true)
-                .setScene(handleFxmlScene(LOGIN.loadFxmlScreen()))
-                .build();
+    public abstract void apply() throws IOException;
+
+    public abstract void close();
+
+    public static void redirectTo(Routes route) throws IOException {
+        route.apply();
     }
 
     private static Scene handleFxmlScene(FXMLLoader fxmlLoader) throws IOException {
         return new Scene(fxmlLoader.load());
     }
-
-    public abstract FXMLLoader loadFxmlScreen();
 
 }

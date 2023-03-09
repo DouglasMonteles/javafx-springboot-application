@@ -25,8 +25,7 @@ public class JavaFxApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        ScreenBuilder screen = new ScreenBuilderImpl(stage);
-        Routes.LOGIN(screen);
+        Routes.redirectTo(Routes.LOGIN);
     }
 
     @Override

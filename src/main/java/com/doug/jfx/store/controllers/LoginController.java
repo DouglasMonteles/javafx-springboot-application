@@ -43,8 +43,8 @@ public class LoginController implements Initializable {
     @FXML
     void doLogin(ActionEvent event) throws IOException {
         if (username.getText() != null && password.getText() != null) {
-            ScreenBuilder screen = new ScreenBuilderImpl();
-            Routes.ADMIN(screen);
+            Routes.LOGIN.close();
+            Routes.redirectTo(Routes.ADMIN);
         }
     }
 

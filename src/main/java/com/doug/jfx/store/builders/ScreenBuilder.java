@@ -11,6 +11,10 @@ public interface ScreenBuilder {
     ScreenBuilder setHeight(double height);
     ScreenBuilder setAlwaysOnTop(boolean isAlwaysOnTop);
     ScreenBuilder setScene(Scene scene);
+    ScreenBuilder setMinWidth(double minWidth);
+    ScreenBuilder setMinHeight(double minHeight);
+    ScreenBuilder setMaximized(boolean isMaximized);
     void build();
+    void destroy();
 
 }

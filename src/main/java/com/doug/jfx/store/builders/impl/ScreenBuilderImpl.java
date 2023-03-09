@@ -65,8 +65,31 @@ public class ScreenBuilderImpl implements ScreenBuilder {
     }
 
     @Override
+    public ScreenBuilder setMinWidth(double minWidth) {
+        this.stage.setMinWidth(minWidth);
+        return this;
+    }
+
+    @Override
+    public ScreenBuilder setMinHeight(double minHeight) {
+        this.stage.setMinHeight(minHeight);
+        return this;
+    }
+
+    @Override
+    public ScreenBuilder setMaximized(boolean isMaximized) {
+        this.stage.setMaximized(isMaximized);
+        return this;
+    }
+
+    @Override
     public void build() {
         this.stage.show();
+    }
+
+    @Override
+    public void destroy() {
+        this.stage.close();
     }
 
 
