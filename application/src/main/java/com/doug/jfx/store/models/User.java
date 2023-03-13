@@ -33,19 +33,22 @@ public class User implements Serializable {
     @Column(length = 20, nullable = false)
     private String password;
 
-    //@Column(columnDefinition = "DEFAULT 1")
+    @Column(nullable = false)
     private boolean isActive = true;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "tb_user_roles",
-            joinColumns = {@JoinColumn(name = "user_id", nullable = false, unique = true)},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", nullable = false, unique = true)}
+            joinColumns = {@JoinColumn(name = "user_id", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", nullable = false)}
     )
     private final List<Role> roles = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "tb_phone")
+    @CollectionTable(
+            name = "tb_phone",
+            joinColumns = {@JoinColumn(name = "user_id")}
+    )
     @Column(name = "phone", length = 20)
     private final Set<String> phones = new HashSet<>();
 
