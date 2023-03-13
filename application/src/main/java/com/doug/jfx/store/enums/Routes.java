@@ -79,16 +79,19 @@ public enum Routes {
         protected FXMLLoader loadFxmlScreen() {
             var fxmlLoader = getResource("insert_user_screen");
             fxmlLoader.setControllerFactory(controller -> RoutesController.userController);
-            return null;
+
+            return fxmlLoader;
         }
 
         @Override
         public void apply() throws IOException {
             screen.setTitle("Cadastro de Usuário")
                     .setWidth(800)
-                    .setHeight(720)
+                    .setHeight(680)
+                    .setMinWidth(500)
+                    .setMinHeight(500)
                     .setAlwaysOnTop(true)
-                    .setResizable(false)
+                    .setResizable(true)
                     .setScene(Routes.handleFxmlScene(Routes.INSERT_USER.loadFxmlScreen()))
                     .build();
         }

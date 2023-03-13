@@ -2,6 +2,7 @@ package com.doug.jfx.store.controllers;
 
 import com.doug.jfx.store.builders.TableBuilder;
 import com.doug.jfx.store.builders.impl.TableBuilderImpl;
+import com.doug.jfx.store.enums.Routes;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,6 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
@@ -38,8 +40,9 @@ public class AdminController implements Initializable {
         borderPane.setCenter(new Label("Bem vindo!"));
     }
 
-    public void handleUserRegister() {
-
+    @FXML
+    public void handleUserRegister() throws IOException {
+        Routes.redirectTo(Routes.INSERT_USER);
     }
 
 }
