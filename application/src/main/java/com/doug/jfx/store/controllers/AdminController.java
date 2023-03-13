@@ -38,4 +38,8 @@ public class AdminController implements Initializable {
         borderPane.setCenter(new Label("Bem vindo!"));
     }
 
+    public void handleUserRegister() {
+
+    }
+
 }

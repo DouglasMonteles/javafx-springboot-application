@@ -21,7 +21,7 @@ public enum Routes {
 
         @Override
         protected FXMLLoader loadFxmlScreen() {
-            var fxmlLoader = new FXMLLoader(Routes.class.getResource("/screens/login_screen.fxml"));
+            var fxmlLoader = getResource("login_screen");
             fxmlLoader.setControllerFactory(controller -> RoutesController.loginController);
 
             return fxmlLoader;
@@ -50,7 +50,7 @@ public enum Routes {
 
         @Override
         protected FXMLLoader loadFxmlScreen() {
-            var fxmlLoader = new FXMLLoader(Routes.class.getResource("/screens/admin_screen.fxml"));
+            var fxmlLoader = getResource("admin_screen");
             fxmlLoader.setControllerFactory(controller -> RoutesController.adminController);
 
             return fxmlLoader;
@@ -63,6 +63,33 @@ public enum Routes {
                     .setMinWidth(600)
                     .setMinHeight(450)
                     .setScene(handleFxmlScene(ADMIN.loadFxmlScreen()))
+                    .build();
+        }
+
+        @Override
+        public void close() {
+            screen.destroy();
+        }
+    },
+
+    INSERT_USER () {
+        private final ScreenBuilder screen = new ScreenBuilderImpl();
+
+        @Override
+        protected FXMLLoader loadFxmlScreen() {
+            var fxmlLoader = getResource("insert_user_screen");
+            fxmlLoader.setControllerFactory(controller -> RoutesController.userController);
+            return null;
+        }
+
+        @Override
+        public void apply() throws IOException {
+            screen.setTitle("Cadastro de Usuário")
+                    .setWidth(800)
+                    .setHeight(720)
+                    .setAlwaysOnTop(true)
+                    .setResizable(false)
+                    .setScene(Routes.handleFxmlScene(Routes.INSERT_USER.loadFxmlScreen()))
                     .build();
         }
 
@@ -84,6 +111,10 @@ public enum Routes {
 
     private static Scene handleFxmlScene(FXMLLoader fxmlLoader) throws IOException {
         return new Scene(fxmlLoader.load());
+    }
+
+    protected FXMLLoader getResource(String screenName) {
+        return new FXMLLoader(Routes.class.getResource("/screens/" + screenName + ".fxml"));
     }
 
 }
