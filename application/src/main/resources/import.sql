@@ -7,6 +7,7 @@ INSERT INTO tb_user (name, email, password, is_active) VALUES ('douglas', 'dougl
 INSERT INTO tb_user (name, email, password, is_active) VALUES ('lucas', 'lucas@gmail.com', '123', true);
 
 INSERT INTO tb_phone (user_id, phone) VALUES (1, '+5561999999999');
+INSERT INTO tb_phone (user_id, phone) VALUES (1, '+5561999999998');
 INSERT INTO tb_phone (user_id, phone) VALUES (2, '+5561999999999');
 
 INSERT INTO tb_user_roles (user_id, role_id) VALUES (1, 1);
