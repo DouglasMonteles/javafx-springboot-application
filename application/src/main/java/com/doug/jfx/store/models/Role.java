@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Data
@@ -15,6 +16,9 @@ import java.io.Serializable;
 @Entity
 @Table(name = "tb_role")
 public class Role implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -3415254530102172747L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

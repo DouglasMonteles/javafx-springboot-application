@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,6 +20,9 @@ import java.util.Set;
 @Entity
 @Table(name = "tb_user")
 public class User implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 3636310806734662599L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
