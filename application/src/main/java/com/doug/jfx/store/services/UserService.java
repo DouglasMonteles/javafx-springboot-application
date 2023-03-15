@@ -13,9 +13,9 @@ public class UserService {
     private UserRepository userRepository;
 
     @Transactional
-    public boolean insert(User user) {
+    public User insert(User user) {
         var newUser = this.userRepository.save(user);
-        return newUser.getId() > 0;
+        return newUser;
     }
 
 }
