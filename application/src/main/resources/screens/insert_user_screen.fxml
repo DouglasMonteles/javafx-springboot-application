@@ -44,7 +44,7 @@
                         <Font size="16.0" />
                      </font>
                   </MFXTextField>
-                  <MFXPasswordField borderGap="0.0" floatMode="ABOVE" floatingText="Senha" prefHeight="40.0" prefWidth="300.0" promptText="Combine letras e números" viewOrder="2.0">
+                  <MFXPasswordField fx:id="password" borderGap="0.0" floatMode="ABOVE" floatingText="Senha" prefHeight="40.0" prefWidth="300.0" promptText="Combine letras e números" viewOrder="2.0">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -82,7 +82,7 @@
             </HBox>
             <HBox alignment="CENTER">
                <children>
-                  <MFXButton fx:id="btnInsertUser" alignment="CENTER" contentDisplay="CENTER" onAction="#insertUser" rippleAnimateShadow="true" style="-fx-background-color: #197FEA; -fx-text-fill: #fff;" text="Cadastrar usuário" textAlignment="CENTER" viewOrder="6.0">
+                  <MFXButton fx:id="insertUserButton" alignment="CENTER" contentDisplay="CENTER" onAction="#insertUser" rippleAnimateShadow="true" style="-fx-background-color: #197FEA; -fx-text-fill: #fff;" text="Cadastrar usuário" textAlignment="CENTER" viewOrder="6.0">
                      <font>
                         <Font size="16.0" />
                      </font>

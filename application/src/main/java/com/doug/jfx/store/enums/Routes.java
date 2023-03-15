@@ -92,7 +92,7 @@ public enum Routes {
                     .setMinHeight(500)
                     .setAlwaysOnTop(true)
                     .setResizable(true)
-                    .setScene(Routes.handleFxmlScene(Routes.INSERT_USER.loadFxmlScreen()))
+                    .setScene(handleFxmlScene(Routes.INSERT_USER.loadFxmlScreen()))
                     .build();
         }
 
