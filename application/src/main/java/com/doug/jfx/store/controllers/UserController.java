@@ -1,5 +1,6 @@
 package com.doug.jfx.store.controllers;
 
+import com.doug.jfx.store.enums.Routes;
 import com.doug.jfx.store.helpers.Validators;
 import com.doug.jfx.store.models.User;
 import com.doug.jfx.store.services.UserService;
@@ -62,6 +63,7 @@ public class UserController implements Initializable {
 
         if (isRegisteredUser) {
             System.out.println("Usuário " + user.getName() + " cadastrado com sucesso!");
+            Routes.INSERT_USER.close();
         } else {
             System.out.println("deu ruim :(");
         }
