@@ -1,0 +1,31 @@
+* {
+    -primary: #197FEA;
+    -secondary: #fff;
+}
+
+.title {
+    -fx-font-size: 1.5em;
+}
+
+.form-group {
+    -fx-font-size: 1.2em;
+}
+
+.form-input {
+    -fx-font-size: 1.1em;
+    -fx-background-color: -secondary;
+}
+
+.btn-primary {
+    -fx-background-color:  -primary;
+    -fx-text-fill: #fff;
+    -fx-font-size: 1.2em;
+}
+
+.bg-primary {
+    -fx-background-color: -secondary;
+}
+
+.mfx-text-field:floating .floating-text {
+	-fx-background-color: rgba(0,0,0,0);
+}
