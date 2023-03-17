@@ -1,5 +1,7 @@
 package com.doug.jfx.store.helpers;
 
+import com.doug.jfx.store.builders.DialogBuilder;
+import com.doug.jfx.store.builders.impl.DialogBuilderImpl;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
@@ -8,43 +10,33 @@ import java.util.Optional;
 public class Dialog {
 
     public static void infoDialog(String title, String headerText, String contentText) {
-        var alert = new Alert(Alert.AlertType.INFORMATION);
-
-        alert.setTitle(title);
-        alert.setHeaderText(headerText);
-        alert.setContentText(contentText);
-
-        alert.showAndWait();
+        DialogBuilder alert = baseDialog(Alert.AlertType.INFORMATION, title, headerText, contentText);
+        alert.build();
     }
 
     public static void waringDialog(String title, String headerText, String contentText) {
-        var alert = new Alert(Alert.AlertType.WARNING);
-
-        alert.setTitle(title);
-        alert.setHeaderText(headerText);
-        alert.setContentText(contentText);
-
-        alert.showAndWait();
+        DialogBuilder alert = baseDialog(Alert.AlertType.WARNING, title, headerText, contentText);
+        alert.build();
     }
 
     public static void errorDialog(String title, String headerText, String contentText) {
-        var alert = new Alert(Alert.AlertType.ERROR);
-
-        alert.setTitle(title);
-        alert.setHeaderText(headerText);
-        alert.setContentText(contentText);
-
-        alert.showAndWait();
+        DialogBuilder alert = baseDialog(Alert.AlertType.ERROR, title, headerText, contentText);
+        alert.build();
     }
 
     public static Optional<ButtonType> confirmationDialog(String title, String headerText, String contentText) {
-        var alert = new Alert(Alert.AlertType.CONFIRMATION);
+        DialogBuilder alert = baseDialog(Alert.AlertType.INFORMATION, title, headerText, contentText);
+        return alert.build();
+    }
 
-        alert.setTitle(title);
-        alert.setHeaderText(headerText);
-        alert.setContentText(contentText);
+    private static DialogBuilder baseDialog(Alert.AlertType type, String title, String headerText, String contentText) {
+        DialogBuilder alert = new DialogBuilderImpl(type);
 
-        return alert.showAndWait();
+        alert.setTitle(title)
+            .setHeaderText(headerText)
+            .setContentText(contentText);
+
+        return alert;
     }
 
 }
