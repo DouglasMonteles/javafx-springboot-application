@@ -18,3 +18,14 @@ spring:
       settings:
         trace: false
         web-allow-others: false
+  config:
+    import:
+      - classpath:messages.properties
+
+#messages:
+#  insert_user:
+#    title: Cadastro de Usuário
+#    success: Usuário cadastrado com sucesso!
+#    error: Erro ao cadastrar usuário
+#  default:
+#    error: Por favor, tente novamente ou contate o suporte caso o erro continue a acontecer.

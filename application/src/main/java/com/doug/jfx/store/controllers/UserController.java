@@ -12,12 +12,11 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TextField;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -48,10 +47,21 @@ public class UserController implements Initializable {
     @Autowired
     private UserService userService;
 
+    @Value("${messages.insert_user.title}")
+    private String screenTitle;
+
+    @Value("${messages.insert_user.success}")
+    private String successMessage;
+
+    @Value("${messages.insert_user.error}")
+    private String errorMessage;
+
+    @Value("${messages.default.error}")
+    private String defaultErrorMessage;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         insertUserButton.setDisable(true);
-
         validateRequiredFields();
     }
 
@@ -63,10 +73,10 @@ public class UserController implements Initializable {
         boolean isRegisteredUser = user.getId() > 0;
 
         if (isRegisteredUser) {
-            Dialog.infoDialog("Cadastro de usuário", "Usuário cadastro com sucesso!", "Usuário " + user.getName() + " cadastrado!");
+            Dialog.infoDialog(screenTitle, successMessage, "Usuário " + user.getName() + " cadastrado!");
             Routes.INSERT_USER.close();
         } else {
-            Dialog.errorDialog("Cadastro de usuário", "Erro ao cadastrar usuário!", "Por favor, tente novamente ou contate o suporte caso o erro continue a acontecer.");
+            Dialog.errorDialog(screenTitle, errorMessage, defaultErrorMessage);
         }
     }
 
