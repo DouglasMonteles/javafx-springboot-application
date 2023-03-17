@@ -1,6 +1,7 @@
 package com.doug.jfx.store.controllers;
 
 import com.doug.jfx.store.enums.Routes;
+import com.doug.jfx.store.helpers.Dialog;
 import com.doug.jfx.store.helpers.Validators;
 import com.doug.jfx.store.models.User;
 import com.doug.jfx.store.services.UserService;
@@ -62,10 +63,10 @@ public class UserController implements Initializable {
         boolean isRegisteredUser = user.getId() > 0;
 
         if (isRegisteredUser) {
-            System.out.println("Usuário " + user.getName() + " cadastrado com sucesso!");
+            Dialog.infoDialog("Cadastro de usuário", "Usuário cadastro com sucesso!", "Usuário " + user.getName() + " cadastrado!");
             Routes.INSERT_USER.close();
         } else {
-            System.out.println("deu ruim :(");
+            Dialog.errorDialog("Cadastro de usuário", "Erro ao cadastrar usuário!", "Por favor, tente novamente ou contate o suporte caso o erro continue a acontecer.");
         }
     }
 
