@@ -1,6 +1,11 @@
 * {
     -primary: #197FEA;
     -secondary: #fff;
+    -container-space: 40;
+}
+
+.container {
+    -fx-padding: 40;
 }
 
 .title {
@@ -26,6 +31,7 @@
     -fx-background-color: -secondary;
 }
 
+/* Class overwrite to prevent the default behavior (background-color with white color)*/
 .mfx-text-field:floating .floating-text {
 	-fx-background-color: rgba(0,0,0,0);
 }

@@ -55,7 +55,7 @@ public class UserController implements Initializable {
     }
 
     @FXML
-    void insertUser(ActionEvent event) {
+    public void insertUser(ActionEvent event) {
         var user = new User(null, name.getText(), email.getText(), password.getText(), isUserActive.isSelected());
         user = userService.insert(user);
 
