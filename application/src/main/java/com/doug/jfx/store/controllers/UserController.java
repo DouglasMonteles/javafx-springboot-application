@@ -72,10 +72,11 @@ public class UserController implements Initializable {
         var userDTO = new UserDTO(null, name.getText(), email.getText(), password.getText(), List.of(Role.CLIENT.getDescription()), isUserActive.isSelected());
         userDTO = userService.insert(userDTO);
 
-        boolean isRegisteredUser = userDTO.id() > 0;
+        boolean isRegisteredUser = userDTO.getId() > 0;
 
         if (isRegisteredUser) {
-            Dialog.infoDialog(screenTitle, successMessage, "Usuário " + userDTO.name() + " cadastrado!");
+            userService.updateTableData();
+            Dialog.infoDialog(screenTitle, successMessage, "Usuário " + userDTO.getName() + " cadastrado!");
             Routes.INSERT_USER.close();
         } else {
             Dialog.errorDialog(screenTitle, errorMessage, defaultErrorMessage);

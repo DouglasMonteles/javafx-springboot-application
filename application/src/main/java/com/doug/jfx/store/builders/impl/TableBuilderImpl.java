@@ -16,7 +16,6 @@ public class TableBuilderImpl<S> implements TableBuilder {
 
     public TableBuilderImpl() {
         this.table = new TableView<>();
-        this.tableData = FXCollections.observableArrayList();
     }
 
     @Override
@@ -32,7 +31,13 @@ public class TableBuilderImpl<S> implements TableBuilder {
 
     public TableBuilder setData(List<?> tableData) {
         List<S> convertedTableData = tableData.stream().map(item -> (S) item).toList();
-        this.tableData = FXCollections.observableArrayList(convertedTableData);
+
+        if (this.tableData == null) {
+            this.tableData = FXCollections.observableArrayList(convertedTableData);
+        } else {
+            this.tableData.clear();
+            this.tableData.addAll(convertedTableData);
+        }
 
         return this;
     }

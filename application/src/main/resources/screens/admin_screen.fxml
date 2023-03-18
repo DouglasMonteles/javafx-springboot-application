@@ -13,7 +13,7 @@
         <menus>
           <Menu mnemonicParsing="false" text="Usuários">
             <items>
-              <MenuItem fx:id="listUsersMenuItem" mnemonicParsing="false" text="Listar" />
+              <MenuItem fx:id="listUsersMenuItem" mnemonicParsing="false" onAction="#listUsers" text="Listar" />
                   <MenuItem fx:id="insertUserMenuItem" mnemonicParsing="false" onAction="#handleUserRegister" text="Cadastrar" />
             </items>
           </Menu>
