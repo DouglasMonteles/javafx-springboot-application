@@ -1,24 +1,24 @@
 package com.doug.jfx.store.controllers;
 
-import com.doug.jfx.store.builders.TableBuilder;
-import com.doug.jfx.store.builders.impl.TableBuilderImpl;
 import com.doug.jfx.store.enums.Routes;
-import javafx.collections.FXCollections;
+import com.doug.jfx.store.services.UserService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
-import java.util.List;
 import java.util.ResourceBundle;
 
 @Component
 public class AdminController implements Initializable {
+
+    @Autowired
+    private UserService userService;
 
     @FXML
     private BorderPane borderPane;

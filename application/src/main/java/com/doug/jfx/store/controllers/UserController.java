@@ -1,10 +1,12 @@
 package com.doug.jfx.store.controllers;
 
+import com.doug.jfx.store.enums.Role;
 import com.doug.jfx.store.enums.Routes;
 import com.doug.jfx.store.helpers.Dialog;
 import com.doug.jfx.store.helpers.Validators;
 import com.doug.jfx.store.models.User;
-import com.doug.jfx.store.services.UserService;
+import com.doug.jfx.store.models.dtos.UserDTO;
+import com.doug.jfx.store.services.impl.UserServiceImpl;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
@@ -22,6 +24,9 @@ import java.util.ResourceBundle;
 
 @Component
 public class UserController implements Initializable {
+
+    @Autowired
+    private UserServiceImpl userService;
 
     @FXML
     private MFXButton insertUserButton;
@@ -44,9 +49,6 @@ public class UserController implements Initializable {
     @FXML
     private MFXTextField phone2;
 
-    @Autowired
-    private UserService userService;
-
     @Value("${messages.insert_user.title}")
     private String screenTitle;
 
@@ -67,13 +69,13 @@ public class UserController implements Initializable {
 
     @FXML
     public void insertUser(ActionEvent event) {
-        var user = new User(null, name.getText(), email.getText(), password.getText(), isUserActive.isSelected());
-        user = userService.insert(user);
+        var userDTO = new UserDTO(null, name.getText(), email.getText(), password.getText(), List.of(Role.CLIENT.getDescription()), isUserActive.isSelected());
+        userDTO = userService.insert(userDTO);
 
-        boolean isRegisteredUser = user.getId() > 0;
+        boolean isRegisteredUser = userDTO.id() > 0;
 
         if (isRegisteredUser) {
-            Dialog.infoDialog(screenTitle, successMessage, "Usuário " + user.getName() + " cadastrado!");
+            Dialog.infoDialog(screenTitle, successMessage, "Usuário " + userDTO.name() + " cadastrado!");
             Routes.INSERT_USER.close();
         } else {
             Dialog.errorDialog(screenTitle, errorMessage, defaultErrorMessage);
