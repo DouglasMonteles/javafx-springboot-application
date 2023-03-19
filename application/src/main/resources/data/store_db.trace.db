@@ -2798,3 +2798,9 @@ Caused by: org.h2.mvstore.MVStoreException: The file is locked: /home/douglas/Do
 	at org.h2.mvstore.FileStore.open(FileStore.java:163)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:444)
 	... 39 more
+2023-03-18 22:34:57 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "NAME CHARACTER VARYING(50)": "'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' (70)"; SQL statement:
+insert into tb_user (id, email, is_active, name, password) values (default, ?, ?, ?, ?) [22001-214]
+2023-03-18 22:34:59 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "NAME CHARACTER VARYING(50)": "'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' (70)"; SQL statement:
+insert into tb_user (id, email, is_active, name, password) values (default, ?, ?, ?, ?) [22001-214]

@@ -81,7 +81,6 @@ public class UserController implements Initializable {
                 .setRoles(List.of(Role.CLIENT.getDescription()))
                 .isActive(isUserActive.isSelected());
 
-        //var userDTO = new UserDTO(null, name.getText(), email.getText(), password.getText(), List.of(Role.CLIENT.getDescription()), isUserActive.isSelected());
         var userDTO = userService.insert(userBuilder);
 
         boolean isRegisteredUser = userDTO.getId() > 0;

@@ -48,7 +48,7 @@ public class User implements Serializable {
     )
     private final List<Role> roles = new ArrayList<>();
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name = "tb_phone",
             joinColumns = {@JoinColumn(name = "user_id")}
