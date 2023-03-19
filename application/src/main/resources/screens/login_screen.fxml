@@ -4,42 +4,44 @@
 <?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #032A82;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.doug.jfx.store.controllers.LoginController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="100.0" prefHeight="400.0" prefWidth="600.0" styleClass="bg-primary" stylesheets="@styles/login_screen.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.doug.jfx.store.controllers.LoginController">
    <center>
-      <AnchorPane nodeOrientation="LEFT_TO_RIGHT" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles/main.css" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" spacing="20.0" styleClass="container" BorderPane.alignment="CENTER">
          <children>
-            <MFXTextField fx:id="username" floatMode="BORDER" floatingText="Nome de usuário" graphicTextGap="5.0" layoutX="180.0" layoutY="80.0" prefHeight="40.0" prefWidth="240.0" textLimit="50" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="160.0" AnchorPane.topAnchor="100.0">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </MFXTextField>
-            <MFXPasswordField fx:id="password" floatMode="BORDER" floatingText="Senha" layoutX="180.0" layoutY="142.0" prefHeight="40.0" prefWidth="240.0" viewOrder="1.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="160.0" AnchorPane.topAnchor="160.0">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </MFXPasswordField>
-            <MFXButton fx:id="loginButton" alignment="CENTER" layoutX="180.0" layoutY="250.0" onAction="#doLogin" prefHeight="40.0" prefWidth="240.0" rippleColor="#c3b5b5" style="-fx-background-color: #197FEA;" text="Entrar" textAlignment="CENTER" textFill="WHITE" viewOrder="2.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="160.0">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </MFXButton>
-            <Text fill="WHITE" focusTraversable="true" layoutX="324.0" layoutY="228.0" onMouseClicked="#doForgotPasswordRecovery" strokeType="OUTSIDE" strokeWidth="0.0" text="Esqueceu a senha?" textAlignment="RIGHT">
-               <font>
-                  <Font size="12.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Text>
+            <VBox alignment="CENTER" prefHeight="405.0" prefWidth="600.0" spacing="20.0">
+               <children>
+                  <HBox alignment="CENTER" minWidth="100.0" prefHeight="40.0" prefWidth="200.0" styleClass="form-group">
+                     <children>
+                        <MFXTextField fx:id="username" floatingText="Usuário" minWidth="100.0" prefHeight="40.0" prefWidth="720.0" styleClass="form-input" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" styleClass="form-group">
+                     <children>
+                        <MFXPasswordField fx:id="password" floatingText="Senha" prefHeight="40.0" prefWidth="720.0" styleClass="form-input" viewOrder="1.0" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_RIGHT" maxWidth="720.0" prefHeight="40.0" prefWidth="200.0">
+                     <children>
+                        <Text onMouseClicked="#doForgotPasswordRecovery" strokeType="OUTSIDE" strokeWidth="0.0" text="Esqueceu a senha?" underline="true">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Text>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" styleClass="form-group">
+                     <children>
+                        <MFXButton fx:id="loginButton" defaultButton="true" onAction="#doLogin" prefWidth="100.0" styleClass="btn-primary" text="Entrar" viewOrder="3.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
          </children>
-      </AnchorPane>
+      </VBox>
    </center>
 </BorderPane>

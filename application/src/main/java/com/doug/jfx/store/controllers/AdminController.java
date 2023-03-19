@@ -64,17 +64,20 @@ public class AdminController implements Initializable {
 
         userTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             int selectedIndex = userTable.getSelectionModel().getSelectedIndex();
-            var selectedUser = (UserDTO) userTable.getItems().get(selectedIndex);
 
-            selectedUserInformation.getChildren().clear();
-            selectedUserInformation.getChildren().addAll(
-                    new HBox(new Text("Dados do usuário selecinado")),
-                    new HBox(new Text("Nome: " + selectedUser.getName())),
-                    new HBox(new Text("E-mail: " + selectedUser.getEmail())),
-                    new HBox(new Text("Telefone(s): " + selectedUser.getPhones().toString())),
-                    new HBox(new Text("Perfis: " + selectedUser.getRoles().toString())),
-                    new HBox(new Text("Ativo: " + selectedUser.isActive()))
-            );
+            if (selectedIndex >= 0) {
+                var selectedUser = (UserDTO) userTable.getItems().get(selectedIndex);
+
+                selectedUserInformation.getChildren().clear();
+                selectedUserInformation.getChildren().addAll(
+                        new HBox(new Text("Dados do usuário selecinado")),
+                        new HBox(new Text("Nome: " + selectedUser.getName())),
+                        new HBox(new Text("E-mail: " + selectedUser.getEmail())),
+                        new HBox(new Text("Telefone(s): " + selectedUser.getPhones().toString())),
+                        new HBox(new Text("Perfis: " + selectedUser.getRoles().toString())),
+                        new HBox(new Text("Ativo: " + selectedUser.isActive()))
+                );
+            }
         });
 
         userTable.setMinWidth(800);
