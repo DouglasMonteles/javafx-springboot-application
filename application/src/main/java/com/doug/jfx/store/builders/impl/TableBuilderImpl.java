@@ -1,27 +1,21 @@
 package com.doug.jfx.store.builders.impl;
 
 import com.doug.jfx.store.builders.TableBuilder;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.springframework.stereotype.Component;
 
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
-public class TableBuilderImpl<S> implements TableBuilder, Initializable {
+public class TableBuilderImpl<S> implements TableBuilder {
 
-    private TableView<S> table;
+    private final TableView<S> table;
     private ObservableList<S> tableData;
 
-    public TableBuilderImpl() {}
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public TableBuilderImpl() {
         this.table = new TableView<>();
         this.table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
