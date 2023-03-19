@@ -59,6 +59,7 @@ public class UserBuilderImpl implements UserBuilder {
 
     @Override
     public UserBuilder isActive(boolean isActive) {
+        this.user.setActive(isActive);
         return this;
     }
 

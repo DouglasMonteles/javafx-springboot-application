@@ -33,8 +33,23 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll().stream().map(UserDTO::new).toList();
     }
 
+    @Override
     @Transactional
     public UserDTO insert(UserBuilder userBuilder) {
+        var user = userBuilder.build();
+        var roles = roleRepository.findAllByNames(user.getRoles().stream().map(Role::getAuthority).toList());
+
+        user.getRoles().clear();
+        user.getRoles().addAll(roles);
+
+        var newUser = this.userRepository.save(user);
+
+        return new UserDTO(newUser);
+    }
+
+    @Override
+    @Transactional
+    public UserDTO update(UserBuilder userBuilder) {
         var user = userBuilder.build();
         var roles = roleRepository.findAllByNames(user.getRoles().stream().map(Role::getAuthority).toList());
 
@@ -59,6 +74,7 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    @Override
     public void updateTableData() {
         var users = findAll();
         tableBuilder.setData(users);

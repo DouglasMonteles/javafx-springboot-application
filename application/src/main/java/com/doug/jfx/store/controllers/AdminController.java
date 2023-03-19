@@ -4,9 +4,13 @@ import com.doug.jfx.store.enums.Routes;
 import com.doug.jfx.store.models.User;
 import com.doug.jfx.store.models.dtos.UserDTO;
 import com.doug.jfx.store.services.UserService;
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -68,14 +72,26 @@ public class AdminController implements Initializable {
             if (selectedIndex >= 0) {
                 var selectedUser = (UserDTO) userTable.getItems().get(selectedIndex);
 
+                var infoButton = new MFXButton("Ver", 140, 40);
+                infoButton.setStyle("-fx-background-color:#ccc;-fx-text-fill:#fff;-fx-font-size: 1.3em;");
+                infoButton.setOnMouseClicked(infoEvent -> {});
+
+                var editButton = new MFXButton("Editar", 140, 40);
+                editButton.setStyle("-fx-background-color:orange;-fx-text-fill:#fff;-fx-font-size: 1.3em;");
+                editButton.setOnMouseClicked(editEvent -> {
+                    UserController.userData = selectedUser;
+                    Routes.redirectTo(Routes.UPDATE_USER);
+                });
+
+                var deleteButton = new MFXButton("Excluir", 140, 40);
+                deleteButton.setStyle("-fx-background-color:red;-fx-text-fill:#fff;-fx-font-size: 1.3em;");
+                deleteButton.setOnMouseClicked(deleteEvent -> {});
+
                 selectedUserInformation.getChildren().clear();
                 selectedUserInformation.getChildren().addAll(
-                        new HBox(new Text("Dados do usuário selecinado")),
-                        new HBox(new Text("Nome: " + selectedUser.getName())),
-                        new HBox(new Text("E-mail: " + selectedUser.getEmail())),
-                        new HBox(new Text("Telefone(s): " + selectedUser.getPhones().toString())),
-                        new HBox(new Text("Perfis: " + selectedUser.getRoles().toString())),
-                        new HBox(new Text("Ativo: " + selectedUser.isActive()))
+                        new HBox(infoButton),
+                        new HBox(editButton),
+                        new HBox(deleteButton)
                 );
             }
         });
@@ -83,8 +99,11 @@ public class AdminController implements Initializable {
         userTable.setMinWidth(800);
         userTable.getSelectionModel().selectFirst();
 
+        selectedUserInformation.setAlignment(Pos.TOP_CENTER);
+        selectedUserInformation.setSpacing(10);
+        selectedUserInformation.setPadding(new Insets(10));
+
         container.setAlignment(Pos.CENTER_LEFT);
-        container.setSpacing(20);
 
         HBox.setHgrow(userTable, Priority.ALWAYS);
         HBox.setHgrow(selectedUserInformation, Priority.NEVER);

@@ -3,6 +3,8 @@ package com.doug.jfx.store.enums;
 import com.doug.jfx.store.builders.ScreenBuilder;
 import com.doug.jfx.store.builders.impl.ScreenBuilderImpl;
 import com.doug.jfx.store.controllers.RoutesController;
+import com.doug.jfx.store.controllers.UserController;
+import com.doug.jfx.store.models.dtos.UserDTO;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 
@@ -28,7 +30,7 @@ public enum Routes {
         }
 
         @Override
-        public void apply() throws IOException {
+        public void apply() {
             screen.setTitle("Login")
                     .setResizable(false)
                     .setFullScreen(false)
@@ -57,7 +59,7 @@ public enum Routes {
         }
 
         @Override
-        public void apply() throws IOException {
+        public void apply() {
             screen.setTitle("Admin")
                     .setMaximized(true)
                     .setMinWidth(600)
@@ -84,7 +86,7 @@ public enum Routes {
         }
 
         @Override
-        public void apply() throws IOException {
+        public void apply() {
             screen.setTitle("Cadastro de Usuário")
                     .setWidth(800)
                     .setHeight(680)
@@ -99,20 +101,53 @@ public enum Routes {
         public void close() {
             screen.destroy();
         }
+    },
+
+    UPDATE_USER () {
+        private final ScreenBuilder screen = new ScreenBuilderImpl();
+
+        @Override
+        protected FXMLLoader loadFxmlScreen() {
+            var fxmlLoader = getResource("update_user_screen");
+            fxmlLoader.setControllerFactory(controller -> RoutesController.userController);
+
+            return fxmlLoader;
+        }
+
+        @Override
+        public void apply() {
+            screen.setTitle("Atualização de Usuário")
+                    .setWidth(800)
+                    .setHeight(680)
+                    .setMinWidth(500)
+                    .setMinHeight(500)
+                    .setResizable(true)
+                    .setScene(handleFxmlScene(Routes.UPDATE_USER.loadFxmlScreen()))
+                    .build();
+        }
+
+        @Override
+        public void close() {
+            screen.destroy();
+        }
     };
 
     protected abstract FXMLLoader loadFxmlScreen();
 
-    public abstract void apply() throws IOException;
+    public abstract void apply();
 
     public abstract void close();
 
-    public static void redirectTo(Routes route) throws IOException {
+    public static void redirectTo(Routes route) {
         route.apply();
     }
 
-    private static Scene handleFxmlScene(FXMLLoader fxmlLoader) throws IOException {
-        return new Scene(fxmlLoader.load());
+    private static Scene handleFxmlScene(FXMLLoader fxmlLoader) {
+        try {
+            return new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected FXMLLoader getResource(String screenName) {

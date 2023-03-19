@@ -12,8 +12,9 @@ public interface UserService {
 
     UserDTO insert(UserBuilder userBuilder);
 
+    UserDTO update(UserBuilder userBuilder);
+
     TableView<?> buildUserTable();
 
     void updateTableData();
-
 }

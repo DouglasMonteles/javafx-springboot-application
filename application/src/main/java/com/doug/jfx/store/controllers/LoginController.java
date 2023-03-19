@@ -11,7 +11,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -34,7 +33,7 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    void doLogin(ActionEvent event) throws IOException {
+    void doLogin(ActionEvent event) {
         if (username.getText() != null && password.getText() != null) {
             Routes.LOGIN.close();
             Routes.redirectTo(Routes.ADMIN);
