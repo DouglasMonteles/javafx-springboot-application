@@ -15,19 +15,19 @@ public class JavaFxApplication extends Application {
     private ConfigurableApplicationContext context;
 
     @Override
-    public void init() throws Exception {
+    public void init() {
         SpringApplication.run(StoreApplication.class)
                 .getAutowireCapableBeanFactory()
                 .autowireBean(this);
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         Routes.redirectTo(Routes.LOGIN);
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         context.close();
         Platform.exit();
     }
