@@ -11,6 +11,11 @@
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
+            <Menu mnemonicParsing="false" text="Home">
+              <items>
+                <MenuItem fx:id="home" mnemonicParsing="false" onAction="#redirectToHome" text="Principal" />
+              </items>
+            </Menu>
           <Menu mnemonicParsing="false" text="Usuários">
             <items>
               <MenuItem fx:id="listUsersMenuItem" mnemonicParsing="false" onAction="#listUsers" text="Listar" />

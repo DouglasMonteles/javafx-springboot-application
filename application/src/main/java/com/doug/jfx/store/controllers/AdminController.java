@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.*;
@@ -31,6 +32,9 @@ public class AdminController implements Initializable {
     private BorderPane borderPane;
 
     @FXML
+    private MenuItem home;
+
+    @FXML
     private MenuItem aboutMenuItem;
 
     @FXML
@@ -44,7 +48,7 @@ public class AdminController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        borderPane.setCenter(new Label("Bem vindo!"));
+        redirectToHome(null);
     }
 
     @FXML
@@ -84,6 +88,11 @@ public class AdminController implements Initializable {
         container.getChildren().addAll(userTable, selectedUserInformation);
 
         borderPane.setCenter(container);
+    }
+
+    @FXML
+    public void redirectToHome(ActionEvent event) {
+        borderPane.setCenter(new Label("Bem vindo!"));
     }
 
 }
