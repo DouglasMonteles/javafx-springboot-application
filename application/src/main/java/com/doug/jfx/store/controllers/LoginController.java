@@ -35,8 +35,8 @@ public class LoginController implements Initializable {
     @FXML
     void doLogin(ActionEvent event) {
         if (username.getText() != null && password.getText() != null) {
-            Routes.LOGIN.close();
             Routes.redirectTo(Routes.ADMIN);
+            Routes.LOGIN.close();
         }
     }
 
