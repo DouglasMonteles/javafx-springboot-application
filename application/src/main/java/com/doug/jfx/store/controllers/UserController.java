@@ -1,5 +1,7 @@
 package com.doug.jfx.store.controllers;
 
+import com.doug.jfx.store.builders.UserBuilder;
+import com.doug.jfx.store.builders.impl.UserBuilderImpl;
 import com.doug.jfx.store.enums.Role;
 import com.doug.jfx.store.enums.Routes;
 import com.doug.jfx.store.helpers.Dialog;
@@ -69,8 +71,18 @@ public class UserController implements Initializable {
 
     @FXML
     public void insertUser(ActionEvent event) {
-        var userDTO = new UserDTO(null, name.getText(), email.getText(), password.getText(), List.of(Role.CLIENT.getDescription()), isUserActive.isSelected());
-        userDTO = userService.insert(userDTO);
+        UserBuilder userBuilder = new UserBuilderImpl();
+
+        userBuilder.setName(name.getText())
+                .setEmail(email.getText())
+                .setPassword(password.getText())
+                .setPhone1(phone1.getText())
+                .setPhone2(phone2.getText())
+                .setRoles(List.of(Role.CLIENT.getDescription()))
+                .isActive(isUserActive.isSelected());
+
+        //var userDTO = new UserDTO(null, name.getText(), email.getText(), password.getText(), List.of(Role.CLIENT.getDescription()), isUserActive.isSelected());
+        var userDTO = userService.insert(userBuilder);
 
         boolean isRegisteredUser = userDTO.getId() > 0;
 

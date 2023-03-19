@@ -52,8 +52,8 @@ public class UserBuilderImpl implements UserBuilder {
     }
 
     @Override
-    public UserBuilder setRoles(List<Role> roles) {
-        this.user.getRoles().addAll(roles);
+    public UserBuilder setRoles(List<String> roles) {
+        this.user.getRoles().addAll(roles.stream().map(role -> new Role(null, role)).toList());
         return this;
     }
 

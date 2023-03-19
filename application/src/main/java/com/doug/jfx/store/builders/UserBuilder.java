@@ -1,6 +1,6 @@
 package com.doug.jfx.store.builders;
 
-import com.doug.jfx.store.models.Role;
+import com.doug.jfx.store.enums.Role;
 import com.doug.jfx.store.models.User;
 import com.doug.jfx.store.models.dtos.UserDTO;
 
@@ -20,7 +20,7 @@ public interface UserBuilder {
 
     UserBuilder setPhone2(String phone2);
 
-    UserBuilder setRoles(List<Role> roles);
+    UserBuilder setRoles(List<String> roles);
 
     UserBuilder isActive(boolean isActive);
 

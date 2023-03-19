@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -25,10 +26,11 @@ public class UserDTO implements Serializable {
     private String email;
     private String password;
     private List<String> roles;
+    private Set<String> phones;
     boolean isActive;
 
     public UserDTO(User user) {
-        this(user.getId(), user.getName(), user.getEmail(), user.getPassword(), user.getRoles().stream().map(Role::getAuthority).toList(), user.isActive());
+        this(user.getId(), user.getName(), user.getEmail(), user.getPassword(), user.getRoles().stream().map(Role::getAuthority).toList(), user.getPhones(), user.isActive());
     }
 
 }

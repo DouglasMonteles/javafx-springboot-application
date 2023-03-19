@@ -1,7 +1,9 @@
 package com.doug.jfx.store.services.impl;
 
 import com.doug.jfx.store.builders.TableBuilder;
+import com.doug.jfx.store.builders.UserBuilder;
 import com.doug.jfx.store.builders.impl.TableBuilderImpl;
+import com.doug.jfx.store.models.Role;
 import com.doug.jfx.store.models.User;
 import com.doug.jfx.store.models.dtos.UserDTO;
 import com.doug.jfx.store.repositories.RoleRepository;
@@ -32,9 +34,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    public UserDTO insert(UserDTO userDTO) {
-        var user = new User(null, userDTO.getName(), userDTO.getEmail(), userDTO.getPassword(), userDTO.isActive());
-        var roles = roleRepository.findAllByNames(userDTO.getRoles());
+    public UserDTO insert(UserBuilder userBuilder) {
+        var user = userBuilder.build();
+        var roles = roleRepository.findAllByNames(user.getRoles().stream().map(Role::getAuthority).toList());
+
+        user.getRoles().clear();
         user.getRoles().addAll(roles);
 
         var newUser = this.userRepository.save(user);
