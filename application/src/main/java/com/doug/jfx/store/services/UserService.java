@@ -17,4 +17,6 @@ public interface UserService {
     TableView<?> buildUserTable();
 
     void updateTableData();
+
+    UserDTO inactive(Long id);
 }

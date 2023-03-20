@@ -25,7 +25,7 @@ public class Dialog {
     }
 
     public static Optional<ButtonType> confirmationDialog(String title, String headerText, String contentText) {
-        DialogBuilder alert = baseDialog(Alert.AlertType.INFORMATION, title, headerText, contentText);
+        DialogBuilder alert = baseDialog(Alert.AlertType.CONFIRMATION, title, headerText, contentText);
         return alert.build();
     }
 

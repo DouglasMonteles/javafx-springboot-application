@@ -62,6 +62,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO inactive(Long id) {
+        var user = userRepository.findById(id)
+                .orElseThrow();
+
+        user.setActive(false);
+        user = userRepository.save(user);
+
+        return new UserDTO(user);
+    }
+
+    @Override
     public TableView<?> buildUserTable() {
         var users = findAll();
 

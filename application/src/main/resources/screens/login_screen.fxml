@@ -17,15 +17,15 @@
                <children>
                   <HBox alignment="CENTER" minWidth="100.0" prefHeight="40.0" prefWidth="200.0" styleClass="form-group">
                      <children>
-                        <MFXTextField fx:id="username" floatingText="Usuário" minWidth="100.0" prefHeight="40.0" prefWidth="720.0" styleClass="form-input" />
+                        <MFXTextField fx:id="username" floatingText="Usuário" minWidth="100.0" prefHeight="59.0" prefWidth="450.0" styleClass="form-input" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" styleClass="form-group">
                      <children>
-                        <MFXPasswordField fx:id="password" floatingText="Senha" prefHeight="40.0" prefWidth="720.0" styleClass="form-input" viewOrder="1.0" />
+                        <MFXPasswordField fx:id="password" floatingText="Senha" prefHeight="40.0" prefWidth="450.0" styleClass="form-input" viewOrder="1.0" />
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_RIGHT" maxWidth="720.0" prefHeight="40.0" prefWidth="200.0">
+                  <HBox alignment="CENTER_RIGHT" maxWidth="450.0" prefHeight="40.0" prefWidth="200.0">
                      <children>
                         <Text onMouseClicked="#doForgotPasswordRecovery" strokeType="OUTSIDE" strokeWidth="0.0" text="Esqueceu a senha?" underline="true">
                            <cursor>
