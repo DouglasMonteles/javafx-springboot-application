@@ -130,6 +130,35 @@ public enum Routes {
         public void close() {
             screen.destroy();
         }
+    },
+
+    INFO_USER () {
+        private final ScreenBuilder screen = new ScreenBuilderImpl();
+
+        @Override
+        protected FXMLLoader loadFxmlScreen() {
+            var fxmlLoader = getResource("info_user_screen");
+            fxmlLoader.setControllerFactory(controller -> RoutesController.userController);
+
+            return fxmlLoader;
+        }
+
+        @Override
+        public void apply() {
+            screen.setTitle("Informações de Usuário")
+                    .setWidth(800)
+                    .setHeight(680)
+                    .setMinWidth(500)
+                    .setMinHeight(500)
+                    .setResizable(true)
+                    .setScene(handleFxmlScene(Routes.INFO_USER.loadFxmlScreen()))
+                    .build();
+        }
+
+        @Override
+        public void close() {
+            screen.destroy();
+        }
     };
 
     protected abstract FXMLLoader loadFxmlScreen();

@@ -2,6 +2,7 @@ package com.doug.jfx.store.controllers;
 
 import com.doug.jfx.store.enums.Routes;
 import com.doug.jfx.store.helpers.Dialog;
+import com.doug.jfx.store.models.User;
 import com.doug.jfx.store.models.dtos.UserDTO;
 import com.doug.jfx.store.services.UserService;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -59,24 +60,29 @@ public class AdminController implements Initializable {
 
     @FXML
     public void listUsers(ActionEvent event) {
-        var userTable = userService.buildUserTable();
-        var container = new HBox();
-        var selectedUserInformation = new VBox();
+        var mainContainer = new HBox();
 
-        userTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            int selectedIndex = userTable.getSelectionModel().getSelectedIndex();
+        var userTableContent = userService.buildUserTable();
+        var optionsContent = new VBox();
+
+        userTableContent.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            int selectedIndex = userTableContent.getSelectionModel().getSelectedIndex();
 
             if (selectedIndex >= 0) {
-                var selectedUser = (UserDTO) userTable.getItems().get(selectedIndex);
+                var selectedUser = (UserDTO) userTableContent.getItems().get(selectedIndex);
 
                 var infoButton = new MFXButton("Ver", 140, 40);
                 infoButton.setStyle("-fx-background-color:#ccc;-fx-text-fill:#fff;-fx-font-size: 1.3em;");
-                infoButton.setOnMouseClicked(infoEvent -> {});
+                infoButton.setOnMouseClicked(infoEvent -> {
+                    UserController.isFormEnable(false);
+                    UserController.setUserData(selectedUser);
+                    Routes.redirectTo(Routes.INFO_USER);
+                });
 
                 var editButton = new MFXButton("Editar", 140, 40);
                 editButton.setStyle("-fx-background-color:orange;-fx-text-fill:#fff;-fx-font-size: 1.3em;");
                 editButton.setOnMouseClicked(editEvent -> {
-                    UserController.userData = selectedUser;
+                    UserController.setUserData(selectedUser);
                     Routes.redirectTo(Routes.UPDATE_USER);
                 });
 
@@ -84,21 +90,21 @@ public class AdminController implements Initializable {
                 deleteButton.setStyle("-fx-background-color:red;-fx-text-fill:#fff;-fx-font-size: 1.3em;");
                 deleteButton.setOnMouseClicked(deleteEvent -> {
                     Dialog.confirmationDialog("Exclusão de usuário", "Deseja realmente apagar teste usuário?", "Se clicar em confirmar, o usuário será inativado do sistema.")
-                            .filter(response -> response == ButtonType.OK)
-                            .ifPresent(response -> {
-                                var userDTO = userService.inactive(selectedUser.getId());
+                        .filter(response -> response == ButtonType.OK)
+                        .ifPresent(response -> {
+                            var userDTO = userService.inactive(selectedUser.getId());
 
-                                if (!userDTO.isActive()) {
-                                    Dialog.infoDialog("Exclusão de usuário", "Usuário inativado com sucesso!", "Usuário " + userDTO.getName() + " foi inativado");
-                                    userService.updateTableData();
-                                } else {
-                                    Dialog.errorDialog("Exclusão de usuário", "Não foi possível inativar o usuário", defaultErrorMessage);
-                                }
-                            });
+                            if (!userDTO.isActive()) {
+                                Dialog.infoDialog("Exclusão de usuário", "Usuário inativado com sucesso!", "Usuário " + userDTO.getName() + " foi inativado");
+                                userService.updateTableData();
+                            } else {
+                                Dialog.errorDialog("Exclusão de usuário", "Não foi possível inativar o usuário", defaultErrorMessage);
+                            }
+                        });
                 });
 
-                selectedUserInformation.getChildren().clear();
-                selectedUserInformation.getChildren().addAll(
+                optionsContent.getChildren().clear();
+                optionsContent.getChildren().addAll(
                         new HBox(infoButton),
                         new HBox(editButton),
                         new HBox(deleteButton)
@@ -106,20 +112,20 @@ public class AdminController implements Initializable {
             }
         });
 
-        userTable.setMinWidth(800);
-        userTable.getSelectionModel().selectFirst();
+        userTableContent.setMinWidth(800);
+        userTableContent.getSelectionModel().selectFirst();
 
-        selectedUserInformation.setAlignment(Pos.TOP_CENTER);
-        selectedUserInformation.setSpacing(10);
-        selectedUserInformation.setPadding(new Insets(10));
+        optionsContent.setAlignment(Pos.TOP_CENTER);
+        optionsContent.setSpacing(10);
+        optionsContent.setPadding(new Insets(10));
 
-        container.setAlignment(Pos.CENTER_LEFT);
+        mainContainer.setAlignment(Pos.CENTER_LEFT);
 
-        HBox.setHgrow(userTable, Priority.ALWAYS);
-        HBox.setHgrow(selectedUserInformation, Priority.NEVER);
-        container.getChildren().addAll(userTable, selectedUserInformation);
+        HBox.setHgrow(userTableContent, Priority.ALWAYS);
+        HBox.setHgrow(optionsContent, Priority.NEVER);
+        mainContainer.getChildren().addAll(userTableContent, optionsContent);
 
-        borderPane.setCenter(container);
+        borderPane.setCenter(mainContainer);
     }
 
     @FXML

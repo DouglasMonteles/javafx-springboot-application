@@ -29,7 +29,9 @@ public class UserController implements Initializable {
     @Autowired
     private UserServiceImpl userService;
 
-    public static UserDTO userData;
+    public static UserDTO userData = null;
+
+    public static boolean isFormEnable = true;
 
     @FXML
     private MFXButton insertUserButton;
@@ -84,24 +86,16 @@ public class UserController implements Initializable {
         }
 
         if (updateUserButton != null) {
-            var phones = userData.getPhones().stream().toList();
-
-            updateUserButton.setDisable(true);
-            name.setText(userData.getName());
-            email.setText(userData.getEmail());
-            password.setText(userData.getPassword());
-
-            if (phones.size() == 1) {
-                phone1.setText(phones.get(0));
-            } else if (phones.size() == 2) {
-                phone1.setText(phones.get(0));
-                phone2.setText(phones.get(1));
-            }
-
-            isUserActive.setSelected(userData.isActive());
+            populateFormWithUserData(false);
 
             updateUserButton.setDisable(false);
             validateRequiredFields(updateUserButton);
+        }
+
+        var isShowUserInfo = (insertUserButton == null && updateUserButton == null);
+
+        if (isShowUserInfo) {
+            populateFormWithUserData(true);
         }
     }
 
@@ -161,8 +155,43 @@ public class UserController implements Initializable {
         Validators.validateFormSubmitButton(requiredFields, submitButton);
     }
 
+    public static void setUserData(UserDTO data) {
+        UserController.userData = data;
+    }
+
     private UserDTO getUserData() {
         return userData;
+    }
+
+    public static void isFormEnable(boolean isFormEnable) {
+        UserController.isFormEnable = isFormEnable;
+    }
+
+    private void populateFormWithUserData(boolean isFormDisable) {
+        var phones = userData.getPhones().stream().toList();
+
+        name.setText(userData.getName());
+        name.setDisable(isFormDisable);
+
+        email.setText(userData.getEmail());
+        email.setDisable(isFormDisable);
+
+        password.setText(userData.getPassword());
+        password.setDisable(isFormDisable);
+
+        if (phones.size() == 1) {
+            phone1.setText(phones.get(0));
+            phone1.setDisable(isFormDisable);
+        } else if (phones.size() == 2) {
+            phone1.setText(phones.get(0));
+            phone2.setText(phones.get(1));
+
+            phone1.setDisable(isFormDisable);
+            phone2.setDisable(isFormDisable);
+        }
+
+        isUserActive.setSelected(userData.isActive());
+        isUserActive.setDisable(isFormDisable);
     }
 
 }
