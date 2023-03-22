@@ -92,11 +92,8 @@ public class UserController implements Initializable {
             validateRequiredFields(updateUserButton);
         }
 
-        var isShowUserInfo = (insertUserButton == null && updateUserButton == null);
-
-        if (isShowUserInfo) {
+        if (!isFormEnable)
             populateFormWithUserData(true);
-        }
     }
 
     @FXML
