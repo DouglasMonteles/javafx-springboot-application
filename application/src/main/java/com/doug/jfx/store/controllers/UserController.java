@@ -2,16 +2,16 @@ package com.doug.jfx.store.controllers;
 
 import com.doug.jfx.store.builders.UserBuilder;
 import com.doug.jfx.store.builders.impl.UserBuilderImpl;
-import com.doug.jfx.store.enums.Role;
 import com.doug.jfx.store.enums.Routes;
 import com.doug.jfx.store.helpers.Dialog;
 import com.doug.jfx.store.helpers.Validators;
+import com.doug.jfx.store.models.Role;
 import com.doug.jfx.store.models.dtos.UserDTO;
-import com.doug.jfx.store.services.impl.UserServiceImpl;
-import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXCheckbox;
-import io.github.palexdev.materialfx.controls.MFXPasswordField;
-import io.github.palexdev.materialfx.controls.MFXTextField;
+import com.doug.jfx.store.services.UserService;
+import com.doug.jfx.store.services.impl.RoleService;
+import com.sun.javafx.collections.UnmodifiableObservableMap;
+import io.github.palexdev.materialfx.controls.*;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,7 +27,10 @@ import java.util.ResourceBundle;
 public class UserController implements Initializable {
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
 
     public static UserDTO userData = null;
 
@@ -57,6 +60,9 @@ public class UserController implements Initializable {
     @FXML
     private MFXTextField phone2;
 
+    @FXML
+    private MFXCheckListView<String> rolesCheckList;
+
     @Value("${messages.insert_user.title}")
     private String insertUserTitle;
 
@@ -80,20 +86,26 @@ public class UserController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (insertUserButton != null) {
+        var roles = roleService.findAll();
+
+        rolesCheckList.setItems(FXCollections.observableArrayList(
+                roles.stream().map(Role::getAuthority).toList()
+        ));
+
+        if (userData == null) {
+            // Insert operation
             insertUserButton.setDisable(true);
             validateRequiredFields(insertUserButton);
-        }
-
-        if (updateUserButton != null) {
+        } else if (isFormEnable) {
+            // Edit operation
             populateFormWithUserData(false);
 
             updateUserButton.setDisable(false);
             validateRequiredFields(updateUserButton);
-        }
-
-        if (!isFormEnable)
+        } else {
+            // Info operation
             populateFormWithUserData(true);
+        }
     }
 
     @FXML
@@ -105,7 +117,7 @@ public class UserController implements Initializable {
                 .setPassword(password.getText())
                 .setPhone1(phone1.getText())
                 .setPhone2(phone2.getText())
-                .setRoles(List.of(Role.CLIENT.getDescription()))
+                .setRoles(rolesCheckList.getSelectionModel().getSelectedValues())
                 .isActive(isUserActive.isSelected());
 
         var userDTO = userService.insert(userBuilder);
@@ -131,7 +143,7 @@ public class UserController implements Initializable {
                 .setPassword(password.getText())
                 .setPhone1(phone1.getText())
                 .setPhone2(phone2.getText())
-                .setRoles(List.of(Role.CLIENT.getDescription()))
+                .setRoles(rolesCheckList.getSelectionModel().getSelectedValues())
                 .isActive(isUserActive.isSelected());
 
         var userDTO = userService.update(userBuilder);
@@ -154,10 +166,6 @@ public class UserController implements Initializable {
 
     public static void setUserData(UserDTO data) {
         UserController.userData = data;
-    }
-
-    private UserDTO getUserData() {
-        return userData;
     }
 
     public static void isFormEnable(boolean isFormEnable) {
@@ -186,6 +194,9 @@ public class UserController implements Initializable {
             phone1.setDisable(isFormDisable);
             phone2.setDisable(isFormDisable);
         }
+
+        userData.getRoles()
+                .forEach(authority -> rolesCheckList.getSelectionModel().selectItem(authority));
 
         isUserActive.setSelected(userData.isActive());
         isUserActive.setDisable(isFormDisable);
