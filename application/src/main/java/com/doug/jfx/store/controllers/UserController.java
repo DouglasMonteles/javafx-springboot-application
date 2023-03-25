@@ -71,6 +71,7 @@ public class UserController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         if (insertUserContainer != null) {
             var formInsertUser = new FormUserRegisterController(this.roleService);
+            formInsertUser.setTitle("Cadastro de Usuário");
             formInsertUser.setSubmitAction(this::insertUser);
 
             insertUserContainer.getChildren().add(formInsertUser);
@@ -78,6 +79,7 @@ public class UserController implements Initializable {
 
         if (updateUserContainer != null) {
             var formUpdateUser = new FormUserRegisterController(this.roleService);
+            formUpdateUser.setTitle("Atualização de Usuário");
             formUpdateUser.setSubmitAction(this::updateUser);
             formUpdateUser.setUserDTO(userDTO);
 
@@ -87,6 +89,7 @@ public class UserController implements Initializable {
 
         if (infoUserContainer != null) {
             var formInfoUser = new FormUserRegisterController(this.roleService);
+            formInfoUser.setTitle("Informações sobre o usuário");
             formInfoUser.setFormDisabled(true);
             formInfoUser.setUserDTO(userDTO);
 

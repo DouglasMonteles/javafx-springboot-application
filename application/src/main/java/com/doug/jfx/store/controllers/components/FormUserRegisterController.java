@@ -14,7 +14,9 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +29,9 @@ import java.util.ResourceBundle;
 public class FormUserRegisterController extends VBox implements Initializable {
 
     private final RoleService roleService;
+
+    @FXML
+    private Text title;
 
     @FXML
     private MFXTextField email;
@@ -82,10 +87,10 @@ public class FormUserRegisterController extends VBox implements Initializable {
         rolesCheckList.setItems(FXCollections.observableArrayList(
                 roles.stream().map(Role::getAuthority).toList()
         ));
+    }
 
-        if (isFormDisabled()) {
-            submitButton.setVisible(false);
-        }
+    public void setTitle(String title) {
+        this.title.setText(title);
     }
 
     public void setSubmitAction(SubmitAction submitAction) {
@@ -130,6 +135,8 @@ public class FormUserRegisterController extends VBox implements Initializable {
         boolean isFormDisable = isFormDisabled();
         var phones = userDTO.getPhones().stream().toList();
 
+        submitButton.setText("Atualizar usuário");
+
         name.setText(userDTO.getName());
         name.setDisable(isFormDisable);
 
@@ -160,6 +167,8 @@ public class FormUserRegisterController extends VBox implements Initializable {
 
         isUserActive.setSelected(userDTO.isActive());
         isUserActive.setDisable(isFormDisable);
+
+        submitButton.setVisible(!isFormDisable);
     }
 
     private void validateRequiredFields(MFXButton submitButton) {
