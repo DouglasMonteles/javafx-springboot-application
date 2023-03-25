@@ -1,6 +1,5 @@
 package com.doug.jfx.store.services;
 
-import com.doug.jfx.store.builders.UserBuilder;
 import com.doug.jfx.store.models.dtos.UserDTO;
 import javafx.scene.control.TableView;
 
@@ -10,9 +9,9 @@ public interface UserService {
 
     List<UserDTO> findAll();
 
-    UserDTO insert(UserBuilder userBuilder);
+    UserDTO insert(UserDTO userDTO);
 
-    UserDTO update(UserBuilder userBuilder);
+    UserDTO update(UserDTO userDTO);
 
     TableView<?> buildUserTable();
 

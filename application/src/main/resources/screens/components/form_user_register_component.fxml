@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXCheckListView?>
+<?import io.github.palexdev.materialfx.controls.MFXCheckbox?>
+<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" prefHeight="530.0" prefWidth="600.0" styleClass="container" stylesheets="@../styles/insert_user_screen.css">
+    <children>
+        <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="555.0" prefWidth="517.0" spacing="40.0" styleClass="container">
+            <children>
+                <HBox alignment="CENTER" prefHeight="40.0" prefWidth="600.0" styleClass="title">
+                    <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cadastro de Usuário" textAlignment="CENTER">
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin></Text>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="20.0" />
+                    </VBox.margin>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0" spacing="20.0" styleClass="form-group">
+                    <children>
+                        <MFXTextField fx:id="name" borderGap="0.0" floatMode="ABOVE" floatingText="Nome" prefHeight="40.0" prefWidth="720.0" styleClass="form-input">
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin>
+                        </MFXTextField>
+                    </children>
+                </HBox>
+                <HBox alignment="BASELINE_LEFT" prefHeight="40.0" prefWidth="200.0" spacing="20.0" styleClass="form-group">
+                    <children>
+                        <MFXTextField fx:id="email" borderGap="0.0" floatMode="ABOVE" floatingText="E-mail" prefHeight="40.0" prefWidth="400.0" styleClass="form-input" viewOrder="1.0">
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin>
+                        </MFXTextField>
+                        <MFXPasswordField fx:id="password" borderGap="0.0" floatMode="ABOVE" floatingText="Senha" prefHeight="40.0" prefWidth="300.0" styleClass="form-input" viewOrder="2.0" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0" spacing="20.0" styleClass="form-group">
+                    <children>
+                        <MFXTextField fx:id="phone1" borderGap="0.0" floatMode="ABOVE" floatingText="Telefone 1" prefHeight="40.0" prefWidth="720.0" styleClass="form-input" viewOrder="3.0">
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin>
+                        </MFXTextField>
+                        <MFXTextField fx:id="phone2" borderGap="0.0" floatMode="ABOVE" floatingText="Telefone 2" prefHeight="40.0" prefWidth="720.0" styleClass="form-input" viewOrder="4.0" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" prefHeight="77.0" prefWidth="437.0" spacing="40.0" styleClass="form-group">
+                    <children>
+                        <VBox alignment="CENTER_LEFT" spacing="5.0" styleClass="form-input">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Perfis" />
+                                <MFXCheckListView fx:id="rolesCheckList" depthLevel="LEVEL1" minHeight="80.0" prefHeight="22.0" prefWidth="205.0" styleClass="form-input">
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                </MFXCheckListView>
+                            </children>
+                        </VBox>
+                        <MFXCheckbox fx:id="isUserActive" contentDisposition="RIGHT" prefHeight="22.0" prefWidth="128.0" selected="true" styleClass="form-input" text="Usuário ativo" viewOrder="6.0">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="100.0" />
+                            </HBox.margin></MFXCheckbox>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0" spacing="20.0" styleClass="form-group">
+                    <children>
+                        <MFXButton fx:id="submitButton" buttonType="RAISED" defaultButton="true" onAction="#submit" styleClass="btn-primary" text="Cadastrar usuário" viewOrder="7.0">
+                            <HBox.margin>
+                                <Insets bottom="10.0" top="10.0" />
+                            </HBox.margin>
+                        </MFXButton>
+                    </children>
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </HBox>
+            </children>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+        </VBox>
+    </children>
+</fx:root>

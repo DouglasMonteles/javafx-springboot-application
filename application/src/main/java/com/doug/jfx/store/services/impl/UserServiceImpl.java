@@ -1,7 +1,6 @@
 package com.doug.jfx.store.services.impl;
 
 import com.doug.jfx.store.builders.TableBuilder;
-import com.doug.jfx.store.builders.UserBuilder;
 import com.doug.jfx.store.builders.impl.TableBuilderImpl;
 import com.doug.jfx.store.models.Role;
 import com.doug.jfx.store.models.User;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,8 +33,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDTO insert(UserBuilder userBuilder) {
-        var user = userBuilder.build();
+    public UserDTO insert(UserDTO userDTO) {
+        var user = new User(userDTO);
         var roles = roleRepository.findAllByNames(user.getRoles().stream().map(Role::getAuthority).toList());
 
         user.getRoles().clear();
@@ -49,8 +47,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDTO update(UserBuilder userBuilder) {
-        var user = userBuilder.build();
+    public UserDTO update(UserDTO userDTO) {
+        var user = new User(userDTO);
         var roles = roleRepository.findAllByNames(user.getRoles().stream().map(Role::getAuthority).toList());
 
         user.getRoles().clear();

@@ -1,27 +1,24 @@
 package com.doug.jfx.store.controllers;
 
-import com.doug.jfx.store.builders.UserBuilder;
-import com.doug.jfx.store.builders.impl.UserBuilderImpl;
+import com.doug.jfx.store.controllers.components.FormUserRegisterController;
 import com.doug.jfx.store.enums.Routes;
 import com.doug.jfx.store.helpers.Dialog;
-import com.doug.jfx.store.helpers.Validators;
-import com.doug.jfx.store.models.Role;
 import com.doug.jfx.store.models.dtos.UserDTO;
 import com.doug.jfx.store.services.UserService;
 import com.doug.jfx.store.services.impl.RoleService;
-import com.sun.javafx.collections.UnmodifiableObservableMap;
-import io.github.palexdev.materialfx.controls.*;
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
+import io.github.palexdev.materialfx.controls.MFXButton;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
+
+import static javafx.scene.input.MouseEvent.MOUSE_ENTERED_TARGET;
 
 @Component
 public class UserController implements Initializable {
@@ -32,36 +29,19 @@ public class UserController implements Initializable {
     @Autowired
     private RoleService roleService;
 
-    public static UserDTO userData = null;
+    private static UserDTO userDTO;
 
-    public static boolean isFormEnable = true;
+    @FXML
+    private VBox insertUserContainer;
+
+    @FXML
+    private VBox updateUserContainer;
 
     @FXML
     private MFXButton insertUserButton;
 
     @FXML
     private MFXButton updateUserButton;
-
-    @FXML
-    private MFXTextField email;
-
-    @FXML
-    private MFXCheckbox isUserActive;
-
-    @FXML
-    private MFXTextField name;
-
-    @FXML
-    private MFXPasswordField password;
-
-    @FXML
-    private MFXTextField phone1;
-
-    @FXML
-    private MFXTextField phone2;
-
-    @FXML
-    private MFXCheckListView<String> rolesCheckList;
 
     @Value("${messages.insert_user.title}")
     private String insertUserTitle;
@@ -86,67 +66,40 @@ public class UserController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        var roles = roleService.findAll();
+        if (insertUserContainer != null) {
+            var formInsertUser = new FormUserRegisterController(this.roleService);
+            formInsertUser.setSubmitAction(this::insertUser);
 
-        rolesCheckList.setItems(FXCollections.observableArrayList(
-                roles.stream().map(Role::getAuthority).toList()
-        ));
+            insertUserContainer.getChildren().add(formInsertUser);
+        }
 
-        if (userData == null) {
-            // Insert operation
-            insertUserButton.setDisable(true);
-            validateRequiredFields(insertUserButton);
-        } else if (isFormEnable) {
-            // Edit operation
-            populateFormWithUserData(false);
+        if (updateUserContainer != null) {
+            var formUpdateUser = new FormUserRegisterController(this.roleService);
+            formUpdateUser.setSubmitAction(this::updateUser);
+            formUpdateUser.setUserDTO(userDTO);
 
-            updateUserButton.setDisable(false);
-            validateRequiredFields(updateUserButton);
-        } else {
-            // Info operation
-            populateFormWithUserData(true);
+            updateUserContainer.getChildren().clear();
+            updateUserContainer.getChildren().add(formUpdateUser);
         }
     }
 
-    @FXML
-    public void insertUser(ActionEvent event) {
-        UserBuilder userBuilder = new UserBuilderImpl();
+    private void insertUser(UserDTO newUserDTO) {
+        var newUser = userService.insert(newUserDTO);
 
-        userBuilder.setName(name.getText())
-                .setEmail(email.getText())
-                .setPassword(password.getText())
-                .setPhone1(phone1.getText())
-                .setPhone2(phone2.getText())
-                .setRoles(rolesCheckList.getSelectionModel().getSelectedValues())
-                .isActive(isUserActive.isSelected());
-
-        var userDTO = userService.insert(userBuilder);
-
-        boolean isRegisteredUser = userDTO.getId() > 0;
+        boolean isRegisteredUser = newUser.getId() > 0;
 
         if (isRegisteredUser) {
             userService.updateTableData();
-            Dialog.infoDialog(insertUserTitle, insertUserSuccessMessage, "Usuário " + userDTO.getName() + " cadastrado!");
+            Dialog.infoDialog(insertUserTitle, insertUserSuccessMessage, "Usuário " + newUser.getName() + " cadastrado!");
             Routes.INSERT_USER.close();
         } else {
             Dialog.errorDialog(insertUserTitle, insertUserErrorMessage, defaultErrorMessage);
         }
     }
 
-    @FXML
-    public void updateUser(ActionEvent event) {
-        UserBuilder userBuilder = new UserBuilderImpl();
-
-        userBuilder.setId(userData.getId())
-                .setName(name.getText())
-                .setEmail(email.getText())
-                .setPassword(password.getText())
-                .setPhone1(phone1.getText())
-                .setPhone2(phone2.getText())
-                .setRoles(rolesCheckList.getSelectionModel().getSelectedValues())
-                .isActive(isUserActive.isSelected());
-
-        var userDTO = userService.update(userBuilder);
+    public void updateUser(UserDTO updatedUserDTO) {
+        updatedUserDTO.setId(userDTO.getId());
+        var userDTO = userService.update(updatedUserDTO);
 
         boolean isRegisteredUser = userDTO.getId() > 0;
 
@@ -159,47 +112,8 @@ public class UserController implements Initializable {
         }
     }
 
-    private void validateRequiredFields(MFXButton submitButton) {
-        var requiredFields = List.of(name, email, password);
-        Validators.validateFormSubmitButton(requiredFields, submitButton);
-    }
-
-    public static void setUserData(UserDTO data) {
-        UserController.userData = data;
-    }
-
-    public static void isFormEnable(boolean isFormEnable) {
-        UserController.isFormEnable = isFormEnable;
-    }
-
-    private void populateFormWithUserData(boolean isFormDisable) {
-        var phones = userData.getPhones().stream().toList();
-
-        name.setText(userData.getName());
-        name.setDisable(isFormDisable);
-
-        email.setText(userData.getEmail());
-        email.setDisable(isFormDisable);
-
-        password.setText(userData.getPassword());
-        password.setDisable(isFormDisable);
-
-        if (phones.size() == 1) {
-            phone1.setText(phones.get(0));
-            phone1.setDisable(isFormDisable);
-        } else if (phones.size() == 2) {
-            phone1.setText(phones.get(0));
-            phone2.setText(phones.get(1));
-
-            phone1.setDisable(isFormDisable);
-            phone2.setDisable(isFormDisable);
-        }
-
-        userData.getRoles()
-                .forEach(authority -> rolesCheckList.getSelectionModel().selectItem(authority));
-
-        isUserActive.setSelected(userData.isActive());
-        isUserActive.setDisable(isFormDisable);
+    public static void setSelectedUser(UserDTO userDTO) {
+        UserController.userDTO = userDTO;
     }
 
 }

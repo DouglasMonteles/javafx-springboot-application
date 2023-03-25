@@ -87,7 +87,6 @@ public enum Routes {
 
         @Override
         public void apply() {
-            UserController.setUserData(null);
             screen.setTitle("Cadastro de Usuário")
                     .setWidth(800)
                     .setHeight(680)

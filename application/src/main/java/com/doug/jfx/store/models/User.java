@@ -1,5 +1,6 @@
 package com.doug.jfx.store.models;
 
+import com.doug.jfx.store.models.dtos.UserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -55,6 +56,16 @@ public class User implements Serializable {
     )
     @Column(name = "phone", length = 20)
     private final Set<String> phones = new HashSet<>();
+
+    public User(UserDTO userDTO) {
+        this(userDTO.getId(), userDTO.getName(), userDTO.getEmail(), userDTO.getPassword(), userDTO.isActive());
+
+        this.phones.clear();
+        this.phones.addAll(userDTO.getPhones());
+
+        this.roles.clear();
+        this.roles.addAll(userDTO.getRoles().stream().map(authority -> new Role(null, authority)).toList());
+    }
 
     public boolean hasAuthority(String authority) {
         return this.roles

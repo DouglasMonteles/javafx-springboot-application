@@ -74,16 +74,13 @@ public class AdminController implements Initializable {
                 var infoButton = new MFXButton("Ver", 140, 40);
                 infoButton.setStyle("-fx-background-color:#ccc;-fx-text-fill:#fff;-fx-font-size: 1.3em;");
                 infoButton.setOnMouseClicked(infoEvent -> {
-                    UserController.isFormEnable(false);
-                    UserController.setUserData(selectedUser);
                     Routes.redirectTo(Routes.INFO_USER);
                 });
 
                 var editButton = new MFXButton("Editar", 140, 40);
                 editButton.setStyle("-fx-background-color:orange;-fx-text-fill:#fff;-fx-font-size: 1.3em;");
                 editButton.setOnMouseClicked(editEvent -> {
-                    UserController.isFormEnable(true);
-                    UserController.setUserData(selectedUser);
+                    UserController.setSelectedUser(selectedUser);
                     Routes.redirectTo(Routes.UPDATE_USER);
                 });
 
