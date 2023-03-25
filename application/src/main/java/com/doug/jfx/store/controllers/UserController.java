@@ -38,6 +38,9 @@ public class UserController implements Initializable {
     private VBox updateUserContainer;
 
     @FXML
+    private VBox infoUserContainer;
+
+    @FXML
     private MFXButton insertUserButton;
 
     @FXML
@@ -81,6 +84,15 @@ public class UserController implements Initializable {
             updateUserContainer.getChildren().clear();
             updateUserContainer.getChildren().add(formUpdateUser);
         }
+
+        if (infoUserContainer != null) {
+            var formInfoUser = new FormUserRegisterController(this.roleService);
+            formInfoUser.setFormDisabled(true);
+            formInfoUser.setUserDTO(userDTO);
+
+            infoUserContainer.getChildren().clear();
+            infoUserContainer.getChildren().add(formInfoUser);
+        }
     }
 
     private void insertUser(UserDTO newUserDTO) {
@@ -99,6 +111,7 @@ public class UserController implements Initializable {
 
     public void updateUser(UserDTO updatedUserDTO) {
         updatedUserDTO.setId(userDTO.getId());
+
         var userDTO = userService.update(updatedUserDTO);
 
         boolean isRegisteredUser = userDTO.getId() > 0;

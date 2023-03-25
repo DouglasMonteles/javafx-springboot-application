@@ -18,7 +18,7 @@
             <children>
                 <HBox alignment="CENTER" prefHeight="40.0" prefWidth="600.0" styleClass="title">
                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cadastro de Usuário" textAlignment="CENTER">
+                        <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="Cadastro de Usuário" textAlignment="CENTER">
                             <HBox.margin>
                                 <Insets />
                             </HBox.margin></Text>

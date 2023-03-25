@@ -64,7 +64,6 @@ public class FormUserRegisterController extends VBox implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/screens/components/form_user_register_component.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
-        fxmlLoader.setControllerFactory(controller -> RoutesController.formUserRegisterController);
 
         try {
             fxmlLoader.load();
@@ -83,6 +82,10 @@ public class FormUserRegisterController extends VBox implements Initializable {
         rolesCheckList.setItems(FXCollections.observableArrayList(
                 roles.stream().map(Role::getAuthority).toList()
         ));
+
+        if (isFormDisabled()) {
+            submitButton.setVisible(false);
+        }
     }
 
     public void setSubmitAction(SubmitAction submitAction) {
@@ -151,6 +154,9 @@ public class FormUserRegisterController extends VBox implements Initializable {
                 .forEach(authority -> rolesCheckList
                         .getSelectionModel()
                         .selectItem(authority));
+
+        rolesCheckList.setDisable(isFormDisable);
+        rolesCheckList.setMinHeight(140);
 
         isUserActive.setSelected(userDTO.isActive());
         isUserActive.setDisable(isFormDisable);
