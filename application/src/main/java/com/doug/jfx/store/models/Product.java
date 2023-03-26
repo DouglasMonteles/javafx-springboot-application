@@ -53,4 +53,8 @@ public class Product implements Serializable {
     )
     private List<Category> categories = new ArrayList<>();
 
+
+    @OneToMany(mappedBy = "product")
+    private List<Picture> pictures = new ArrayList<>();
+
 }

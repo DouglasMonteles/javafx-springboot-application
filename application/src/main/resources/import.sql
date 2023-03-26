@@ -27,3 +27,6 @@ INSERT INTO tb_product (name, price, description, measurement_type, measurement,
 INSERT INTO tb_product_category (product_id, category_id) VALUES (1, 3);
 INSERT INTO tb_product_category (product_id, category_id) VALUES (2, 2);
 
+INSERT INTO tb_picture (picture, type, product_id) VALUES ('https://img.itdg.com.br/tdg/images/recipes/000/000/770/323683/323683_original.jpg', 2, 1);
+INSERT INTO tb_picture (picture, type, product_id) VALUES ('https://karsten.vtexassets.com/arquivos/ids/171343/3582923_01.jpg?v=637256802131200000', 2, 2);
+
