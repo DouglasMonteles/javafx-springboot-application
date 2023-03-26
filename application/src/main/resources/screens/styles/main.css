@@ -1,6 +1,9 @@
 * {
     -primary: #197FEA;
     -secondary: #fff;
+    -info: #9D9D9D;
+    -warn: #E14D2A;
+    -delete: #E21818;
     -container-space: 40;
 }
 

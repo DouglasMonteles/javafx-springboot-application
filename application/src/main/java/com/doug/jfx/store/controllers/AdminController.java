@@ -1,5 +1,6 @@
 package com.doug.jfx.store.controllers;
 
+import com.doug.jfx.store.controllers.components.SideOptionsComponent;
 import com.doug.jfx.store.enums.Routes;
 import com.doug.jfx.store.helpers.Dialog;
 import com.doug.jfx.store.models.User;
@@ -45,6 +46,12 @@ public class AdminController implements Initializable {
     @FXML
     private MenuItem listUsersMenuItem;
 
+    @FXML
+    private MenuItem listCategoriesMenuItem;
+
+    @FXML
+    private MenuItem insertCategoryMenuItem;
+
     @Value("${messages.default.error}")
     private String defaultErrorMessage;
 
@@ -63,7 +70,7 @@ public class AdminController implements Initializable {
         var mainContainer = new HBox();
 
         var userTableContent = userService.buildUserTable();
-        var optionsContent = new VBox();
+        var sideOptionsContent = new SideOptionsComponent();
 
         userTableContent.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             int selectedIndex = userTableContent.getSelectionModel().getSelectedIndex();
@@ -71,23 +78,17 @@ public class AdminController implements Initializable {
             if (selectedIndex >= 0) {
                 var selectedUser = (UserDTO) userTableContent.getItems().get(selectedIndex);
 
-                var infoButton = new MFXButton("Ver", 140, 40);
-                infoButton.setStyle("-fx-background-color:#ccc;-fx-text-fill:#fff;-fx-font-size: 1.3em;");
-                infoButton.setOnMouseClicked(infoEvent -> {
-                    UserController.setSelectedUser(selectedUser);
+                UserController.setSelectedUser(selectedUser);
+
+                sideOptionsContent.setInfoAction(() -> {
                     Routes.redirectTo(Routes.INFO_USER);
                 });
 
-                var editButton = new MFXButton("Editar", 140, 40);
-                editButton.setStyle("-fx-background-color:orange;-fx-text-fill:#fff;-fx-font-size: 1.3em;");
-                editButton.setOnMouseClicked(editEvent -> {
-                    UserController.setSelectedUser(selectedUser);
+                sideOptionsContent.setEditAction(() -> {
                     Routes.redirectTo(Routes.UPDATE_USER);
                 });
 
-                var deleteButton = new MFXButton("Excluir", 140, 40);
-                deleteButton.setStyle("-fx-background-color:red;-fx-text-fill:#fff;-fx-font-size: 1.3em;");
-                deleteButton.setOnMouseClicked(deleteEvent -> {
+                sideOptionsContent.setDeleteAction(() -> {
                     Dialog.confirmationDialog("Exclusão de usuário", "Deseja realmente apagar teste usuário?", "Se clicar em confirmar, o usuário será inativado do sistema.")
                         .filter(response -> response == ButtonType.OK)
                         .ifPresent(response -> {
@@ -101,28 +102,17 @@ public class AdminController implements Initializable {
                             }
                         });
                 });
-
-                optionsContent.getChildren().clear();
-                optionsContent.getChildren().addAll(
-                        new HBox(infoButton),
-                        new HBox(editButton),
-                        new HBox(deleteButton)
-                );
             }
+
         });
 
         userTableContent.setMinWidth(800);
         userTableContent.getSelectionModel().selectFirst();
 
-        optionsContent.setAlignment(Pos.TOP_CENTER);
-        optionsContent.setSpacing(10);
-        optionsContent.setPadding(new Insets(10));
-
-        mainContainer.setAlignment(Pos.CENTER_LEFT);
-
         HBox.setHgrow(userTableContent, Priority.ALWAYS);
-        HBox.setHgrow(optionsContent, Priority.NEVER);
-        mainContainer.getChildren().addAll(userTableContent, optionsContent);
+        HBox.setHgrow(sideOptionsContent, Priority.ALWAYS);
+
+        mainContainer.getChildren().addAll(userTableContent, sideOptionsContent);
 
         borderPane.setCenter(mainContainer);
     }
@@ -132,4 +122,10 @@ public class AdminController implements Initializable {
         borderPane.setCenter(new Label("Bem vindo!"));
     }
 
+    public void listCategories(ActionEvent actionEvent) {
+
+    }
+
+    public void handleCategoryRegister(ActionEvent actionEvent) {
+    }
 }

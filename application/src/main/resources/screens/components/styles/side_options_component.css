@@ -1,0 +1,16 @@
+@import "../../styles/main.css";
+
+.info-button {
+    -fx-text-fill: #fff;
+    -fx-background-color: -info;
+}
+
+.edit-button {
+    -fx-text-fill: #fff;
+    -fx-background-color: -warn;
+}
+
+.delete-button {
+    -fx-text-fill: #fff;
+    -fx-background-color: -delete;
+}
