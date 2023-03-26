@@ -4,7 +4,9 @@ import com.doug.jfx.store.controllers.components.SideOptionsComponent;
 import com.doug.jfx.store.enums.Routes;
 import com.doug.jfx.store.helpers.Dialog;
 import com.doug.jfx.store.models.User;
+import com.doug.jfx.store.models.dtos.CategoryDTO;
 import com.doug.jfx.store.models.dtos.UserDTO;
+import com.doug.jfx.store.services.CategoryService;
 import com.doug.jfx.store.services.UserService;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
@@ -27,6 +29,9 @@ public class AdminController implements Initializable {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @FXML
     private BorderPane borderPane;
@@ -123,7 +128,53 @@ public class AdminController implements Initializable {
     }
 
     public void listCategories(ActionEvent actionEvent) {
+        var mainContainer = new VBox();
 
+        var categoryTableComponent = categoryService.buildCategoryTable();
+        var sideOptionsComponent = new SideOptionsComponent();
+
+        categoryTableComponent.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+            int selectedIndex = categoryTableComponent.getSelectionModel().getSelectedIndex();
+
+            if (selectedIndex >= 0) {
+                var selectedCategory = (CategoryDTO) categoryTableComponent.getItems().get(selectedIndex);
+
+                CategoryController.setSelectedCategory(selectedCategory);
+
+                sideOptionsComponent.setInfoAction(() -> {
+
+                });
+
+                sideOptionsComponent.setEditAction(() -> {
+
+                });
+
+                sideOptionsComponent.setDeleteAction(() -> {
+                    Dialog.confirmationDialog("Exclusão de categoria", "Deseja realmente apagar essa categoria?", "Se clicar em confirmar, a categoria será inativado do sistema.")
+                            .filter(response -> response == ButtonType.OK)
+                            .ifPresent(response -> {
+//                                var userDTO = userService.inactive(selectedUser.getId());
+
+//                                if (!userDTO.isActive()) {
+//                                    Dialog.infoDialog("Exclusão de usuário", "Usuário inativado com sucesso!", "Usuário " + userDTO.getName() + " foi inativado");
+//                                    userService.updateTableData();
+//                                } else {
+//                                    Dialog.errorDialog("Exclusão de usuário", "Não foi possível inativar o usuário", defaultErrorMessage);
+//                                }
+                            });
+                });
+            }
+        });
+
+        categoryTableComponent.setMinWidth(800);
+        categoryTableComponent.getSelectionModel().selectFirst();
+
+        HBox.setHgrow(categoryTableComponent, Priority.ALWAYS);
+        HBox.setHgrow(sideOptionsComponent, Priority.ALWAYS);
+
+        mainContainer.getChildren().addAll(categoryTableComponent, sideOptionsComponent);
+
+        borderPane.setCenter(mainContainer);
     }
 
     public void handleCategoryRegister(ActionEvent actionEvent) {
