@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<fx:root alignment="CENTER" prefHeight="231.0" prefWidth="600.0" styleClass="container" stylesheets="@../styles/insert_user_screen.css" type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/19" fx:controller="com.doug.jfx.store.controllers.CategoryController">
+    <children>
+        <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="288.0" prefWidth="517.0" spacing="40.0" styleClass="container">
+            <children>
+                <HBox alignment="CENTER" prefHeight="40.0" prefWidth="600.0" styleClass="title">
+                    <children>
+                        <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="Cadastro de Categoria" textAlignment="CENTER">
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin></Text>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="20.0" />
+                    </VBox.margin>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0" spacing="20.0" styleClass="form-group">
+                    <children>
+                        <MFXTextField fx:id="name" borderGap="0.0" floatMode="ABOVE" floatingText="Nome" prefHeight="40.0" prefWidth="720.0" styleClass="form-input">
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin>
+                        </MFXTextField>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0" spacing="20.0" styleClass="form-group">
+                    <children>
+                        <MFXButton fx:id="submitButton" buttonType="RAISED" defaultButton="true" onAction="#submit" styleClass="btn-primary" text="Cadastrar categoria" viewOrder="7.0">
+                            <HBox.margin>
+                                <Insets bottom="10.0" top="10.0" />
+                            </HBox.margin>
+                        </MFXButton>
+                    </children>
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </HBox>
+            </children>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+        </VBox>
+    </children>
+</fx:root>

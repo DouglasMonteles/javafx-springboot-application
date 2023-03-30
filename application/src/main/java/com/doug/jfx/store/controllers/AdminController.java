@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,8 +73,6 @@ public class AdminController implements Initializable {
 
     @FXML
     public void listUsers(ActionEvent event) {
-        var mainContainer = new HBox();
-
         var userTableContent = userService.buildUserTable();
         var sideOptionsContent = new SideOptionsComponent();
 
@@ -111,15 +110,7 @@ public class AdminController implements Initializable {
 
         });
 
-        userTableContent.setMinWidth(800);
-        userTableContent.getSelectionModel().selectFirst();
-
-        HBox.setHgrow(userTableContent, Priority.ALWAYS);
-        HBox.setHgrow(sideOptionsContent, Priority.ALWAYS);
-
-        mainContainer.getChildren().addAll(userTableContent, sideOptionsContent);
-
-        borderPane.setCenter(mainContainer);
+        buildAdminScreen(userTableContent, sideOptionsContent);
     }
 
     @FXML
@@ -128,8 +119,6 @@ public class AdminController implements Initializable {
     }
 
     public void listCategories(ActionEvent actionEvent) {
-        var mainContainer = new VBox();
-
         var categoryTableComponent = categoryService.buildCategoryTable();
         var sideOptionsComponent = new SideOptionsComponent();
 
@@ -166,17 +155,21 @@ public class AdminController implements Initializable {
             }
         });
 
-        categoryTableComponent.setMinWidth(800);
-        categoryTableComponent.getSelectionModel().selectFirst();
-
-        HBox.setHgrow(categoryTableComponent, Priority.ALWAYS);
-        HBox.setHgrow(sideOptionsComponent, Priority.ALWAYS);
-
-        mainContainer.getChildren().addAll(categoryTableComponent, sideOptionsComponent);
-
-        borderPane.setCenter(mainContainer);
+        buildAdminScreen(categoryTableComponent, sideOptionsComponent);
     }
 
     public void handleCategoryRegister(ActionEvent actionEvent) {
     }
+
+    private void buildAdminScreen(TableView<?> centerComponent, Node rightComponent) {
+        centerComponent.setMinWidth(800);
+        centerComponent.getSelectionModel().selectFirst();
+
+        HBox.setHgrow(centerComponent, Priority.ALWAYS);
+        HBox.setHgrow(rightComponent, Priority.ALWAYS);
+
+        borderPane.setCenter(centerComponent);
+        borderPane.setRight(rightComponent);
+    }
+
 }

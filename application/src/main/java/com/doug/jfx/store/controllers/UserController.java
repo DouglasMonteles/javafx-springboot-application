@@ -1,8 +1,10 @@
 package com.doug.jfx.store.controllers;
 
 import com.doug.jfx.store.controllers.components.FormUserRegisterController;
+import com.doug.jfx.store.controllers.components.SubmitAction;
 import com.doug.jfx.store.enums.Routes;
 import com.doug.jfx.store.helpers.Dialog;
+import com.doug.jfx.store.models.User;
 import com.doug.jfx.store.models.dtos.UserDTO;
 import com.doug.jfx.store.services.UserService;
 import com.doug.jfx.store.services.impl.RoleService;
@@ -72,7 +74,7 @@ public class UserController implements Initializable {
         if (insertUserContainer != null) {
             var formInsertUser = new FormUserRegisterController(this.roleService);
             formInsertUser.setTitle("Cadastro de Usuário");
-            formInsertUser.setSubmitAction(this::insertUser);
+            formInsertUser.setSubmitAction((SubmitAction<UserDTO>) this::insertUser);
 
             insertUserContainer.getChildren().add(formInsertUser);
         }
@@ -80,7 +82,7 @@ public class UserController implements Initializable {
         if (updateUserContainer != null) {
             var formUpdateUser = new FormUserRegisterController(this.roleService);
             formUpdateUser.setTitle("Atualização de Usuário");
-            formUpdateUser.setSubmitAction(this::updateUser);
+            formUpdateUser.setSubmitAction((SubmitAction<UserDTO>) this::updateUser);
             formUpdateUser.setUserDTO(userDTO);
 
             updateUserContainer.getChildren().clear();
@@ -98,21 +100,7 @@ public class UserController implements Initializable {
         }
     }
 
-    private void insertUser(UserDTO newUserDTO) {
-        var newUser = userService.insert(newUserDTO);
-
-        boolean isRegisteredUser = newUser.getId() > 0;
-
-        if (isRegisteredUser) {
-            userService.updateTableData();
-            Dialog.infoDialog(insertUserTitle, insertUserSuccessMessage, "Usuário " + newUser.getName() + " cadastrado!");
-            Routes.INSERT_USER.close();
-        } else {
-            Dialog.errorDialog(insertUserTitle, insertUserErrorMessage, defaultErrorMessage);
-        }
-    }
-
-    public void updateUser(UserDTO updatedUserDTO) {
+    private void updateUser(UserDTO updatedUserDTO) {
         updatedUserDTO.setId(userDTO.getId());
 
         var userDTO = userService.update(updatedUserDTO);
@@ -125,6 +113,20 @@ public class UserController implements Initializable {
             Routes.UPDATE_USER.close();
         } else {
             Dialog.errorDialog(updateUserTitle, updateUserErrorMessage, defaultErrorMessage);
+        }
+    }
+
+    private void insertUser(UserDTO newUserDTO) {
+        var newUser = userService.insert(newUserDTO);
+
+        boolean isRegisteredUser = newUser.getId() > 0;
+
+        if (isRegisteredUser) {
+            userService.updateTableData();
+            Dialog.infoDialog(insertUserTitle, insertUserSuccessMessage, "Usuário " + newUser.getName() + " cadastrado!");
+            Routes.INSERT_USER.close();
+        } else {
+            Dialog.errorDialog(insertUserTitle, insertUserErrorMessage, defaultErrorMessage);
         }
     }
 
