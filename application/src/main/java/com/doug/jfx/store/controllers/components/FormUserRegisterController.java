@@ -2,22 +2,17 @@ package com.doug.jfx.store.controllers.components;
 
 import com.doug.jfx.store.builders.UserBuilder;
 import com.doug.jfx.store.builders.impl.UserBuilderImpl;
-import com.doug.jfx.store.controllers.RoutesController;
 import com.doug.jfx.store.helpers.Validators;
 import com.doug.jfx.store.models.Role;
-import com.doug.jfx.store.models.User;
 import com.doug.jfx.store.models.dtos.UserDTO;
-import com.doug.jfx.store.services.impl.RoleService;
-import com.doug.jfx.store.services.impl.RoleServiceImpl;
+import com.doug.jfx.store.services.RoleService;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

@@ -1,5 +1,6 @@
 package com.doug.jfx.store.models;
 
+import com.doug.jfx.store.models.dtos.CategoryDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,5 +31,14 @@ public class Category implements Serializable {
 
     @ManyToMany(mappedBy = "categories")
     private List<Product> products = new ArrayList<>();
+
+    public Category(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Category(CategoryDTO categoryDTO) {
+        this(categoryDTO.getId(), categoryDTO.getName());
+    }
 
 }

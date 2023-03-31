@@ -139,17 +139,16 @@ public class AdminController implements Initializable {
                 });
 
                 sideOptionsComponent.setDeleteAction(() -> {
-                    Dialog.confirmationDialog("Exclusão de categoria", "Deseja realmente apagar essa categoria?", "Se clicar em confirmar, a categoria será inativado do sistema.")
+                    var categoryName = selectedCategory.getName().toUpperCase();
+
+                    Dialog.confirmationDialog("Exclusão de categoria", "Deseja realmente apagar essa categoria?", "Se clicar em confirmar, a categoria \"" + categoryName + "\" será excluída do sistema.")
                             .filter(response -> response == ButtonType.OK)
                             .ifPresent(response -> {
-//                                var userDTO = userService.inactive(selectedUser.getId());
+                                categoryService.delete(selectedCategory.getId());
 
-//                                if (!userDTO.isActive()) {
-//                                    Dialog.infoDialog("Exclusão de usuário", "Usuário inativado com sucesso!", "Usuário " + userDTO.getName() + " foi inativado");
-//                                    userService.updateTableData();
-//                                } else {
-//                                    Dialog.errorDialog("Exclusão de usuário", "Não foi possível inativar o usuário", defaultErrorMessage);
-//                                }
+                                Dialog.infoDialog("Exclusão de categoria", "Categoria excluída com sucesso!", "Esta categoria não consta mais no sistema");
+                                categoryService.updateTableData();
+                                categoryTableComponent.getSelectionModel().selectFirst();
                             });
                 });
             }

@@ -1,4 +1,4 @@
-package com.doug.jfx.store.services.impl;
+package com.doug.jfx.store.services;
 
 import com.doug.jfx.store.models.Role;
 

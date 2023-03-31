@@ -4,12 +4,10 @@ import com.doug.jfx.store.controllers.components.FormUserRegisterController;
 import com.doug.jfx.store.controllers.components.SubmitAction;
 import com.doug.jfx.store.enums.Routes;
 import com.doug.jfx.store.helpers.Dialog;
-import com.doug.jfx.store.models.User;
 import com.doug.jfx.store.models.dtos.UserDTO;
 import com.doug.jfx.store.services.UserService;
-import com.doug.jfx.store.services.impl.RoleService;
+import com.doug.jfx.store.services.RoleService;
 import io.github.palexdev.materialfx.controls.MFXButton;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
@@ -19,8 +17,6 @@ import org.springframework.stereotype.Component;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import static javafx.scene.input.MouseEvent.MOUSE_ENTERED_TARGET;
 
 @Component
 public class UserController implements Initializable {

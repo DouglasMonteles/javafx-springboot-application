@@ -9,6 +9,12 @@ public interface CategoryService {
 
     List<CategoryDTO> findAll();
 
+    CategoryDTO insert(CategoryDTO categoryDTO);
+
+    CategoryDTO update(CategoryDTO categoryDTO);
+
+    void delete(Long id);
+
     TableView<?> buildCategoryTable();
 
     void updateTableData();
