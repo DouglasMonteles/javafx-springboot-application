@@ -22,6 +22,10 @@ public class TableBuilderImpl<S> implements TableBuilder {
 
     @Override
     public <T> TableBuilder addColumn(String label, String name) {
+        if (isColumnAlreadyCreated(label)) {
+            return this;
+        }
+
         var column = new TableColumn<S, T>();
         column.setText(label);
         column.setCellValueFactory(new PropertyValueFactory<>(name));
@@ -48,6 +52,12 @@ public class TableBuilderImpl<S> implements TableBuilder {
     public TableView<S> build() {
         this.table.setItems(this.tableData);
         return table;
+    }
+
+    private boolean isColumnAlreadyCreated(String label) {
+        return table.getColumns()
+                .stream()
+                .anyMatch(column -> column.getText().equals(label));
     }
 
 }
