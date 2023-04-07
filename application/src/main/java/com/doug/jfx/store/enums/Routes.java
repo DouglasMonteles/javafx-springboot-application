@@ -159,6 +159,93 @@ public enum Routes {
         public void close() {
             screen.destroy();
         }
+    },
+
+    INFO_CATEGORY () {
+        private final ScreenBuilder screen = new ScreenBuilderImpl();
+
+        @Override
+        protected FXMLLoader loadFxmlScreen() {
+            var fxmlLoader = getResource("info_category_screen");
+            fxmlLoader.setControllerFactory(controller -> RoutesController.categoryController);
+
+            return fxmlLoader;
+        }
+
+        @Override
+        public void apply() {
+            screen.setTitle("Informações de Usuário")
+                    .setWidth(800)
+                    .setHeight(680)
+                    .setMinWidth(500)
+                    .setMinHeight(500)
+                    .setResizable(true)
+                    .setScene(handleFxmlScene(Routes.INFO_USER.loadFxmlScreen()))
+                    .build();
+        }
+
+        @Override
+        public void close() {
+            screen.destroy();
+        }
+    },
+
+    INSERT_CATEGORY () {
+        private final ScreenBuilder screen = new ScreenBuilderImpl();
+
+        @Override
+        protected FXMLLoader loadFxmlScreen() {
+            var fxmlLoader = getResource("insert_category_screen");
+            fxmlLoader.setControllerFactory(controller -> RoutesController.categoryController);
+
+            return fxmlLoader;
+        }
+
+        @Override
+        public void apply() {
+            screen.setTitle("Informações da Categoria")
+                    .setWidth(600)
+                    .setHeight(450)
+                    .setMinWidth(200)
+                    .setMinHeight(200)
+                    .setResizable(true)
+                    .setScene(handleFxmlScene(Routes.INSERT_CATEGORY.loadFxmlScreen()))
+                    .build();
+        }
+
+        @Override
+        public void close() {
+            screen.destroy();
+        }
+    },
+
+    UPDATE_CATEGORY () {
+        private final ScreenBuilder screen = new ScreenBuilderImpl();
+
+        @Override
+        protected FXMLLoader loadFxmlScreen() {
+            var fxmlLoader = getResource("update_category_screen");
+            fxmlLoader.setControllerFactory(controller -> RoutesController.categoryController);
+
+            return fxmlLoader;
+        }
+
+        @Override
+        public void apply() {
+            screen.setTitle("Informações de Usuário")
+                    .setWidth(800)
+                    .setHeight(680)
+                    .setMinWidth(500)
+                    .setMinHeight(500)
+                    .setResizable(true)
+                    .setScene(handleFxmlScene(Routes.UPDATE_CATEGORY.loadFxmlScreen()))
+                    .build();
+        }
+
+        @Override
+        public void close() {
+            screen.destroy();
+        }
     };
 
     protected abstract FXMLLoader loadFxmlScreen();

@@ -52,7 +52,7 @@ public class FormUserRegisterController extends VBox implements Initializable {
     @FXML
     private MFXButton submitButton;
 
-    private SubmitAction submitAction;
+    private SubmitAction<UserDTO> submitAction;
 
     private UserDTO userDTO;
 
@@ -88,11 +88,11 @@ public class FormUserRegisterController extends VBox implements Initializable {
         this.title.setText(title);
     }
 
-    public void setSubmitAction(SubmitAction submitAction) {
+    public void setSubmitAction(SubmitAction<UserDTO> submitAction) {
         this.submitAction = submitAction;
     }
 
-    public SubmitAction getSubmitAction() {
+    public SubmitAction<UserDTO> getSubmitAction() {
         return submitAction;
     }
 

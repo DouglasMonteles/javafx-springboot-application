@@ -70,7 +70,7 @@ public class UserController implements Initializable {
         if (insertUserContainer != null) {
             var formInsertUser = new FormUserRegisterController(this.roleService);
             formInsertUser.setTitle("Cadastro de Usuário");
-            formInsertUser.setSubmitAction((SubmitAction<UserDTO>) this::insertUser);
+            formInsertUser.setSubmitAction(this::insertUser);
 
             insertUserContainer.getChildren().add(formInsertUser);
         }
@@ -78,7 +78,7 @@ public class UserController implements Initializable {
         if (updateUserContainer != null) {
             var formUpdateUser = new FormUserRegisterController(this.roleService);
             formUpdateUser.setTitle("Atualização de Usuário");
-            formUpdateUser.setSubmitAction((SubmitAction<UserDTO>) this::updateUser);
+            formUpdateUser.setSubmitAction(this::updateUser);
             formUpdateUser.setUserDTO(userDTO);
 
             updateUserContainer.getChildren().clear();
@@ -96,6 +96,20 @@ public class UserController implements Initializable {
         }
     }
 
+    private void insertUser(UserDTO newUserDTO) {
+        var newUser = userService.insert(newUserDTO);
+
+        boolean isRegisteredUser = newUser.getId() > 0;
+
+        if (isRegisteredUser) {
+            userService.updateTableData();
+            Dialog.infoDialog(insertUserTitle, insertUserSuccessMessage, "Usuário " + newUser.getName() + " cadastrado!");
+            Routes.INSERT_USER.close();
+        } else {
+            Dialog.errorDialog(insertUserTitle, insertUserErrorMessage, defaultErrorMessage);
+        }
+    }
+
     private void updateUser(UserDTO updatedUserDTO) {
         updatedUserDTO.setId(userDTO.getId());
 
@@ -109,20 +123,6 @@ public class UserController implements Initializable {
             Routes.UPDATE_USER.close();
         } else {
             Dialog.errorDialog(updateUserTitle, updateUserErrorMessage, defaultErrorMessage);
-        }
-    }
-
-    private void insertUser(UserDTO newUserDTO) {
-        var newUser = userService.insert(newUserDTO);
-
-        boolean isRegisteredUser = newUser.getId() > 0;
-
-        if (isRegisteredUser) {
-            userService.updateTableData();
-            Dialog.infoDialog(insertUserTitle, insertUserSuccessMessage, "Usuário " + newUser.getName() + " cadastrado!");
-            Routes.INSERT_USER.close();
-        } else {
-            Dialog.errorDialog(insertUserTitle, insertUserErrorMessage, defaultErrorMessage);
         }
     }
 

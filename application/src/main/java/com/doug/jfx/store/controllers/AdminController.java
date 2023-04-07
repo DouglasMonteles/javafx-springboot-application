@@ -67,8 +67,13 @@ public class AdminController implements Initializable {
     }
 
     @FXML
-    public void handleUserRegister(ActionEvent event) throws IOException {
+    public void handleUserRegister(ActionEvent event) {
         Routes.redirectTo(Routes.INSERT_USER);
+    }
+
+    @FXML
+    public void handleCategoryRegister(ActionEvent event) {
+        Routes.redirectTo(Routes.INSERT_CATEGORY);
     }
 
     @FXML
@@ -131,11 +136,11 @@ public class AdminController implements Initializable {
                 CategoryController.setSelectedCategory(selectedCategory);
 
                 sideOptionsComponent.setInfoAction(() -> {
-
+                    Routes.redirectTo(Routes.INFO_CATEGORY);
                 });
 
                 sideOptionsComponent.setEditAction(() -> {
-
+                    Routes.redirectTo(Routes.INSERT_CATEGORY);
                 });
 
                 sideOptionsComponent.setDeleteAction(() -> {
@@ -155,9 +160,6 @@ public class AdminController implements Initializable {
         });
 
         buildAdminScreen(categoryTableComponent, sideOptionsComponent);
-    }
-
-    public void handleCategoryRegister(ActionEvent actionEvent) {
     }
 
     private void buildAdminScreen(TableView<?> centerComponent, Node rightComponent) {
