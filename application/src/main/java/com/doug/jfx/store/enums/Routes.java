@@ -37,7 +37,7 @@ public enum Routes {
                     .setWidth(600)
                     .setHeight(440)
                     .setAlwaysOnTop(true)
-                    .setScene(handleFxmlScene(LOGIN.loadFxmlScreen()))
+                    .setScene(handleFxmlScene(loadFxmlScreen()))
                     .build();
         }
 
@@ -64,7 +64,7 @@ public enum Routes {
                     .setMaximized(true)
                     .setMinWidth(600)
                     .setMinHeight(450)
-                    .setScene(handleFxmlScene(ADMIN.loadFxmlScreen()))
+                    .setScene(handleFxmlScene(loadFxmlScreen()))
                     .build();
         }
 
@@ -93,7 +93,7 @@ public enum Routes {
                     .setMinWidth(500)
                     .setMinHeight(500)
                     .setResizable(true)
-                    .setScene(handleFxmlScene(Routes.INSERT_USER.loadFxmlScreen()))
+                    .setScene(handleFxmlScene(loadFxmlScreen()))
                     .build();
         }
 
@@ -122,7 +122,7 @@ public enum Routes {
                     .setMinWidth(500)
                     .setMinHeight(500)
                     .setResizable(true)
-                    .setScene(handleFxmlScene(Routes.UPDATE_USER.loadFxmlScreen()))
+                    .setScene(handleFxmlScene(loadFxmlScreen()))
                     .build();
         }
 
@@ -151,7 +151,7 @@ public enum Routes {
                     .setMinWidth(500)
                     .setMinHeight(500)
                     .setResizable(true)
-                    .setScene(handleFxmlScene(Routes.INFO_USER.loadFxmlScreen()))
+                    .setScene(handleFxmlScene(loadFxmlScreen()))
                     .build();
         }
 
@@ -174,13 +174,13 @@ public enum Routes {
 
         @Override
         public void apply() {
-            screen.setTitle("Informações de Usuário")
+            screen.setTitle("Informações da Categoria")
                     .setWidth(800)
                     .setHeight(680)
                     .setMinWidth(500)
                     .setMinHeight(500)
                     .setResizable(true)
-                    .setScene(handleFxmlScene(Routes.INFO_USER.loadFxmlScreen()))
+                    .setScene(handleFxmlScene(loadFxmlScreen()))
                     .build();
         }
 
@@ -203,13 +203,13 @@ public enum Routes {
 
         @Override
         public void apply() {
-            screen.setTitle("Informações da Categoria")
+            screen.setTitle("Cadastro de Categoria")
                     .setWidth(600)
                     .setHeight(450)
                     .setMinWidth(200)
                     .setMinHeight(200)
                     .setResizable(true)
-                    .setScene(handleFxmlScene(Routes.INSERT_CATEGORY.loadFxmlScreen()))
+                    .setScene(handleFxmlScene(loadFxmlScreen()))
                     .build();
         }
 
@@ -232,13 +232,13 @@ public enum Routes {
 
         @Override
         public void apply() {
-            screen.setTitle("Informações de Usuário")
-                    .setWidth(800)
-                    .setHeight(680)
-                    .setMinWidth(500)
-                    .setMinHeight(500)
+            screen.setTitle("Atualização da Categoria")
+                    .setWidth(600)
+                    .setHeight(450)
+                    .setMinWidth(200)
+                    .setMinHeight(200)
                     .setResizable(true)
-                    .setScene(handleFxmlScene(Routes.UPDATE_CATEGORY.loadFxmlScreen()))
+                    .setScene(handleFxmlScene(loadFxmlScreen()))
                     .build();
         }
 
