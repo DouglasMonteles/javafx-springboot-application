@@ -4,7 +4,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="100.0" spacing="10.0" stylesheets="@styles/side_options_component.css" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="100.0" spacing="10.0" stylesheets="@styles/side_options_component.css" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/15" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <MFXButton fx:id="infoButton" minWidth="100.0" onAction="#doInfo" styleClass="info-button" text="Ver" />
       <MFXButton fx:id="editButton" minWidth="100.0" onAction="#doEdit" styleClass="edit-button" text="Editar" />

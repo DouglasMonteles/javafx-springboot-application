@@ -1,0 +1,2 @@
+# H2 database file
+/src/main/resources/data/*.db
