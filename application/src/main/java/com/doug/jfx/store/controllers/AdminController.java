@@ -140,7 +140,7 @@ public class AdminController implements Initializable {
                 });
 
                 sideOptionsComponent.setEditAction(() -> {
-                    Routes.redirectTo(Routes.INSERT_CATEGORY);
+                    Routes.redirectTo(Routes.UPDATE_CATEGORY);
                 });
 
                 sideOptionsComponent.setDeleteAction(() -> {
@@ -150,8 +150,6 @@ public class AdminController implements Initializable {
                             .filter(response -> response == ButtonType.OK)
                             .ifPresent(response -> {
                                 categoryService.delete(selectedCategory.getId());
-
-                                Dialog.infoDialog("Exclusão de categoria", "Categoria excluída com sucesso!", "Esta categoria não consta mais no sistema");
                                 categoryService.updateTableData();
                                 categoryTableComponent.getSelectionModel().selectFirst();
                             });
@@ -160,6 +158,12 @@ public class AdminController implements Initializable {
         });
 
         buildAdminScreen(categoryTableComponent, sideOptionsComponent);
+    }
+
+    public void handleExitApplication(ActionEvent actionEvent) {
+        Dialog.confirmationDialog("Finalizar a aplicação", "Você está prestes a finalizar a execução da aplicação", "Tem certeza que deseja prosseguir?")
+                .filter(response -> response == ButtonType.OK)
+                .ifPresent(response -> System.exit(0));
     }
 
     private void buildAdminScreen(TableView<?> centerComponent, Node rightComponent) {

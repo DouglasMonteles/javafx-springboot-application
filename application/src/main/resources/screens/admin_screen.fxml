@@ -29,7 +29,7 @@
           <Menu mnemonicParsing="false" text="Sistema">
             <items>
                   <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" text="Sobre" />
-              <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" text="Sair" />
+              <MenuItem fx:id="exitMenuItem" onAction="#handleExitApplication" mnemonicParsing="false" text="Sair" />
             </items>
           </Menu>
         </menus>
