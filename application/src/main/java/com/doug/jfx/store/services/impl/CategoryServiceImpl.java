@@ -54,6 +54,7 @@ public class CategoryServiceImpl implements CategoryService {
     public void delete(Long id) {
         try {
             categoryRepository.deleteById(id);
+            Dialog.infoDialog("Exclusão de categoria", "Categoria excluída com sucesso!", "Esta categoria não consta mais no sistema");
         } catch (DataIntegrityViolationException e) {
             Dialog.errorDialog("Exclusão de categoria", "Erro ao tentar excluir a categoria", "Erro de integridade de dados: Você está tentando excluir uma categoria que possui produtos vinculados a ela. \n\nDica: Desvincule estes produtos e tente novamente.");
         }

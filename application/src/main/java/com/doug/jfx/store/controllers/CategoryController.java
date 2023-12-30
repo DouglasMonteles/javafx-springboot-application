@@ -43,6 +43,12 @@ public class CategoryController implements Initializable {
     @FXML
     private VBox insertCategoryContainer;
 
+    @FXML
+    private VBox updateCategoryContainer;
+
+    @FXML
+    private VBox infoCategoryContainer;
+
     @Value("${messages.insert_category.title}")
     private String insertCategoryTitle;
 
@@ -73,6 +79,27 @@ public class CategoryController implements Initializable {
 
             insertCategoryContainer.getChildren().add(formInsertCategory);
         }
+
+        if (updateCategoryContainer != null) {
+            var formUpdateCategory = new FormCategoryRegisterController();
+            formUpdateCategory.setTitle("Atualização da categoria");
+            formUpdateCategory.setFormDisabled(false);
+            formUpdateCategory.setSubmitAction(this::updateCategory);
+            formUpdateCategory.setCategoryDTO(selectedCategory);
+
+            updateCategoryContainer.getChildren().clear();
+            updateCategoryContainer.getChildren().add(formUpdateCategory);
+        }
+
+        if (infoCategoryContainer != null) {
+            var formInfoCategory = new FormCategoryRegisterController();
+            formInfoCategory.setTitle("Informações sobre a categoria");
+            formInfoCategory.setFormDisabled(true);
+            formInfoCategory.setCategoryDTO(selectedCategory);
+
+            infoCategoryContainer.getChildren().clear();
+            infoCategoryContainer.getChildren().add(formInfoCategory);
+        }
     }
 
     public static void setSelectedCategory(CategoryDTO selectedCategory) {
@@ -82,6 +109,22 @@ public class CategoryController implements Initializable {
     @FXML
     public void submit(ActionEvent event) {
         submitAction.handleSubmit(selectedCategory);
+    }
+
+    private void updateCategory(CategoryDTO updateCategoryDTO) {
+        updateCategoryDTO.setId(selectedCategory.getId());
+
+        var categoryDTO = categoryService.update(updateCategoryDTO);
+
+        boolean categoryExists = categoryDTO.getId() > 0;
+
+        if (categoryExists) {
+            categoryService.updateTableData();
+            Dialog.infoDialog(updateCategoryTitle, updateCategorySuccessMessage, String.format("Categoria %s atualizada com sucesso!", categoryDTO.getName()));
+            Routes.UPDATE_CATEGORY.close();
+        } else {
+            Dialog.errorDialog(updateCategoryTitle, updateCategoryErrorMessage, defaultErrorMessage);
+        }
     }
 
     private void insertCategory(CategoryDTO categoryDTO) {

@@ -1,0 +1,3 @@
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="infoCategoryContainer" xmlns="http://javafx.com/javafx/15" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.doug.jfx.store.controllers.CategoryController" />
