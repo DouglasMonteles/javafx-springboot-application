@@ -18,6 +18,8 @@ import java.util.ResourceBundle;
 @Component
 public class LoginController implements Initializable {
 
+    private static final Boolean DISABLE_LOGIN_BUTTON_BY_DEFAULT = false;
+
     @FXML
     private MFXButton loginButton;
 
@@ -46,7 +48,7 @@ public class LoginController implements Initializable {
     }
 
     private void validateLogin() {
-        this.loginButton.setDisable(true);
+        this.loginButton.setDisable(DISABLE_LOGIN_BUTTON_BY_DEFAULT);
         Validators.validateFormSubmitButton(List.of(username, password), loginButton);
     }
 
