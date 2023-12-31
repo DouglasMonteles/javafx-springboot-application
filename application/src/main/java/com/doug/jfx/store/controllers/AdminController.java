@@ -58,6 +58,12 @@ public class AdminController implements Initializable {
     @FXML
     private MenuItem insertCategoryMenuItem;
 
+    @FXML
+    public MenuItem listProductsMenuItem;
+
+    @FXML
+    public MenuItem insertProductMenuItem;
+
     @Value("${messages.default.error}")
     private String defaultErrorMessage;
 
@@ -74,6 +80,11 @@ public class AdminController implements Initializable {
     @FXML
     public void handleCategoryRegister(ActionEvent event) {
         Routes.redirectTo(Routes.INSERT_CATEGORY);
+    }
+
+    @FXML
+    public void handleProductRegister(ActionEvent event) {
+        Routes.redirectTo(Routes.INSERT_PRODUCT);
     }
 
     @FXML
@@ -158,6 +169,10 @@ public class AdminController implements Initializable {
         });
 
         buildAdminScreen(categoryTableComponent, sideOptionsComponent);
+    }
+
+    public void listProducts(ActionEvent actionEvent) {
+
     }
 
     public void handleExitApplication(ActionEvent actionEvent) {

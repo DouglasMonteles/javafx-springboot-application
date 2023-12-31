@@ -28,6 +28,12 @@
                     <MenuItem fx:id="insertCategoryMenuItem" mnemonicParsing="false" onAction="#handleCategoryRegister" text="Cadastrar" />
                 </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Produtos">
+               <items>
+                  <MenuItem fx:id="listProductsMenuItem" mnemonicParsing="false" onAction="#listProducts" text="Listar" />
+                  <MenuItem fx:id="insertProductMenuItem" mnemonicParsing="false" onAction="#handleProductRegister" text="Cadastrar" />
+               </items>
+            </Menu>
           <Menu mnemonicParsing="false" text="Sistema">
             <items>
                   <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" text="Sobre" />

@@ -246,6 +246,35 @@ public enum Routes {
         public void close() {
             screen.destroy();
         }
+    },
+
+    INSERT_PRODUCT () {
+        private final ScreenBuilder screen = new ScreenBuilderImpl();
+
+        @Override
+        protected FXMLLoader loadFxmlScreen() {
+            var fxmlLoader = getResource("insert_product_screen");
+            fxmlLoader.setControllerFactory(controller -> RoutesController.productController);
+
+            return fxmlLoader;
+        }
+
+        @Override
+        public void apply() {
+            screen.setTitle("Cadastro de Produto")
+                    .setWidth(600)
+                    .setHeight(450)
+                    .setMinWidth(200)
+                    .setMinHeight(200)
+                    .setResizable(true)
+                    .setScene(handleFxmlScene(loadFxmlScreen()))
+                    .build();
+        }
+
+        @Override
+        public void close() {
+            screen.destroy();
+        }
     };
 
     protected abstract FXMLLoader loadFxmlScreen();
