@@ -263,7 +263,7 @@ public enum Routes {
         public void apply() {
             screen.setTitle("Cadastro de Produto")
                     .setWidth(600)
-                    .setHeight(450)
+                    .setHeight(720)
                     .setMinWidth(200)
                     .setMinHeight(200)
                     .setResizable(true)

@@ -3,6 +3,7 @@
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXCheckListView?>
 <?import io.github.palexdev.materialfx.controls.MFXCheckbox?>
+<?import io.github.palexdev.materialfx.controls.MFXFilterComboBox?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
@@ -11,7 +12,7 @@
 
 <fx:root alignment="CENTER" prefHeight="599.0" prefWidth="600.0" styleClass="container" stylesheets="@../styles/insert_user_screen.css" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="565.0" prefWidth="517.0" spacing="40.0" styleClass="container">
+        <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="585.0" prefWidth="517.0" spacing="40.0" styleClass="container">
             <children>
                 <HBox alignment="CENTER" prefHeight="40.0" prefWidth="600.0" styleClass="title">
                     <children>
@@ -47,20 +48,26 @@
                   </MFXTextField>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="154.0" prefWidth="437.0" spacing="20.0" styleClass="form-group">
+            <HBox alignment="CENTER" prefHeight="40.0" prefWidth="437.0" spacing="20.0" styleClass="form-group">
+               <children>
+                  <MFXFilterComboBox fx:id="measurementType" accessibleRole="COMBO_BOX" borderGap="0.0" floatMode="ABOVE" floatingText="Tipo de medição" floatingTextGap="10.0" measureUnitGap="0.0" popupOffsetY="10.0" prefHeight="40.0" prefWidth="720.0" viewOrder="3.0" />
+                  <MFXTextField fx:id="measurement" borderGap="0.0" floatMode="ABOVE" floatingText="Valor da medição" prefWidth="720.0" styleClass="form-input" viewOrder="4.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="150.0" prefWidth="437.0" spacing="20.0" styleClass="form-group">
                <children>
                   <VBox spacing="8.0">
                      <children>
                         <Text fill="#403f3f" strokeType="OUTSIDE" strokeWidth="0.0" text="Categorias" />
-                        <MFXCheckListView fx:id="measurementType" depthLevel="LEVEL1" prefHeight="500.0" prefWidth="720.0" viewOrder="3.0" />
+                        <MFXCheckListView fx:id="categories" depthLevel="LEVEL1" prefHeight="500.0" prefWidth="720.0" viewOrder="5.0" />
                      </children>
                   </VBox>
-                  <MFXCheckbox fx:id="isAvailable" contentDisposition="RIGHT" selected="true" text="Disponível" viewOrder="4.0" />
+                  <MFXCheckbox fx:id="isAvailable" contentDisposition="RIGHT" selected="true" text="Disponível" viewOrder="6.0" />
                </children>
             </HBox>
                 <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0" spacing="20.0" styleClass="form-group">
                     <children>
-                        <MFXButton fx:id="submitButton" buttonType="RAISED" defaultButton="true" onAction="#submit" styleClass="btn-primary" text="Cadastrar produto" viewOrder="5.0">
+                        <MFXButton fx:id="submitButton" buttonType="RAISED" defaultButton="true" onAction="#submit" styleClass="btn-primary" text="Cadastrar produto" viewOrder="7.0">
                             <HBox.margin>
                                 <Insets bottom="10.0" top="10.0" />
                             </HBox.margin>

@@ -4,13 +4,8 @@
 <?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-
-<?import com.doug.jfx.store.controllers.components.FormUserRegisterController?>
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="100.0" prefHeight="400.0" prefWidth="600.0" styleClass="bg-primary" stylesheets="@styles/login_screen.css" xmlns="http://javafx.com/javafx/15" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.doug.jfx.store.controllers.LoginController">
    <center>
       <VBox alignment="CENTER" spacing="20.0" styleClass="container" BorderPane.alignment="CENTER">

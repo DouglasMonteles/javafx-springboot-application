@@ -26,4 +26,13 @@ public class CategoryDTO implements Serializable {
         this(category.getId(), category.getName());
     }
 
+    /*
+    * Método utilizado no MFXCheckListView para exibir somente a
+    * propriedade do nome, mas o valor será o objeto inteiro
+    * */
+    @Override
+    public String toString() {
+        return name;
+    }
+
 }

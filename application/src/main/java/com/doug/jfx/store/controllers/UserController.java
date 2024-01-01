@@ -1,12 +1,11 @@
 package com.doug.jfx.store.controllers;
 
 import com.doug.jfx.store.controllers.components.FormUserRegisterController;
-import com.doug.jfx.store.controllers.components.SubmitAction;
 import com.doug.jfx.store.enums.Routes;
 import com.doug.jfx.store.helpers.Dialog;
 import com.doug.jfx.store.models.dtos.UserDTO;
-import com.doug.jfx.store.services.UserService;
 import com.doug.jfx.store.services.RoleService;
+import com.doug.jfx.store.services.UserService;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

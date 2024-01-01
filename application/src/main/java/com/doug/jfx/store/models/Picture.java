@@ -1,6 +1,7 @@
 package com.doug.jfx.store.models;
 
 import com.doug.jfx.store.enums.PictureType;
+import com.doug.jfx.store.models.dtos.PictureDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,5 +35,9 @@ public class Picture implements Serializable {
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false, foreignKey = @ForeignKey(name = "FK_PRODUCT_IMAGE"))
     private Product product;
+
+    public Picture(PictureDTO pictureDTO) {
+        this(pictureDTO.getId(), pictureDTO.getPicture(), pictureDTO.getType(), pictureDTO.getProduct());
+    }
 
 }
