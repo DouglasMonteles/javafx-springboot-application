@@ -4,8 +4,10 @@ import com.doug.jfx.store.controllers.components.SideOptionsComponent;
 import com.doug.jfx.store.enums.Routes;
 import com.doug.jfx.store.helpers.Dialog;
 import com.doug.jfx.store.models.dtos.CategoryDTO;
+import com.doug.jfx.store.models.dtos.ProductDTO;
 import com.doug.jfx.store.models.dtos.UserDTO;
 import com.doug.jfx.store.services.CategoryService;
+import com.doug.jfx.store.services.ProductService;
 import com.doug.jfx.store.services.UserService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,6 +35,9 @@ public class AdminController implements Initializable {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ProductService productService;
 
     @FXML
     private BorderPane borderPane;
@@ -172,7 +177,40 @@ public class AdminController implements Initializable {
     }
 
     public void listProducts(ActionEvent actionEvent) {
+        var productTableComponent = productService.buildProductTable();
+        var sideOptionsComponent = new SideOptionsComponent();
 
+        productTableComponent.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+            int selectedIndex = productTableComponent.getSelectionModel().getSelectedIndex();
+
+            if (selectedIndex >= 0) {
+                var selectedProduct = (ProductDTO) productTableComponent.getItems().get(selectedIndex);
+
+                ProductController.setSelectedProduct(selectedProduct);
+
+                sideOptionsComponent.setInfoAction(() -> {
+                    Routes.redirectTo(Routes.INFO_CATEGORY);
+                });
+
+                sideOptionsComponent.setEditAction(() -> {
+                    Routes.redirectTo(Routes.UPDATE_CATEGORY);
+                });
+
+                sideOptionsComponent.setDeleteAction(() -> {
+                    var productName = selectedProduct.getName().toUpperCase();
+
+                    Dialog.confirmationDialog("Exclusão de Produto", "Deseja realmente apagar esse produto?", "Se clicar em confirmar, o produto \"" + productName + "\" será excluído do sistema.")
+                            .filter(response -> response == ButtonType.OK)
+                            .ifPresent(response -> {
+                                productService.delete(selectedProduct.getId());
+                                productService.updateTableData();
+                                productTableComponent.getSelectionModel().selectFirst();
+                            });
+                });
+            }
+        });
+
+        buildAdminScreen(productTableComponent, sideOptionsComponent);
     }
 
     public void handleExitApplication(ActionEvent actionEvent) {

@@ -2,12 +2,17 @@ package com.doug.jfx.store.services.impl;
 
 import com.doug.jfx.store.builders.TableBuilder;
 import com.doug.jfx.store.builders.impl.TableBuilderImpl;
+import com.doug.jfx.store.enums.PictureType;
 import com.doug.jfx.store.helpers.Dialog;
+import com.doug.jfx.store.models.Picture;
 import com.doug.jfx.store.models.Product;
+import com.doug.jfx.store.models.dtos.PictureDTO;
 import com.doug.jfx.store.models.dtos.ProductDTO;
 import com.doug.jfx.store.repositories.CategoryRepository;
+import com.doug.jfx.store.repositories.PictureRepository;
 import com.doug.jfx.store.repositories.ProductRepository;
 import com.doug.jfx.store.services.ProductService;
+import com.doug.jfx.store.services.UploadFileService;
 import jakarta.transaction.Transactional;
 import javafx.scene.control.TableView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +30,12 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private UploadFileService uploadFileService;
+
+    @Autowired
+    private PictureRepository pictureRepository;
+
     private final TableBuilder tableBuilder = new TableBuilderImpl<ProductDTO>();
 
     @Override
@@ -41,6 +52,17 @@ public class ProductServiceImpl implements ProductService {
         product.setId(null);
 
         product = productRepository.save(product);
+
+        for (PictureDTO pictureDTO : productDTO.getPictures()) {
+            String path = "/upload/images/products/prod" + product.getId() + "-";
+
+            pictureDTO.setPath(path);
+            pictureDTO.setType(PictureType.URL);
+            pictureDTO.setProduct(product);
+
+            pictureRepository.save(new Picture(pictureDTO));
+            uploadFileService.uploadFile(pictureDTO.getPicture(), path);
+        }
 
         return new ProductDTO(product);
     }

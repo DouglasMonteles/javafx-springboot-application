@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.File;
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -22,12 +23,13 @@ public class PictureDTO implements Serializable {
     private static final long serialVersionUID = 6626905976242780205L;
 
     private Long id;
-    private String picture;
+    private String path;
     private PictureType type;
     private Product product;
+    private File picture;
 
     public PictureDTO(Picture picture) {
-        this(picture.getId(), picture.getPicture(), picture.getType(), picture.getProduct());
+        this(picture.getId(), picture.getPath(), picture.getType(), picture.getProduct(), picture.getPicture());
     }
 
 }

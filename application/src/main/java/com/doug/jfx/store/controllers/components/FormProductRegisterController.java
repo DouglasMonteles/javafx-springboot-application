@@ -5,9 +5,11 @@ import com.doug.jfx.store.builders.impl.ProductBuilderImpl;
 import com.doug.jfx.store.enums.ProductMeasurement;
 import com.doug.jfx.store.helpers.Validators;
 import com.doug.jfx.store.models.dtos.CategoryDTO;
+import com.doug.jfx.store.models.dtos.PictureDTO;
 import com.doug.jfx.store.models.dtos.ProductDTO;
 import com.doug.jfx.store.services.CategoryService;
 import com.doug.jfx.store.services.ProductService;
+import com.doug.jfx.store.services.impl.UploadFileServiceImpl;
 import io.github.palexdev.materialfx.controls.*;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -82,6 +84,7 @@ public class FormProductRegisterController extends VBox implements Initializable
 
     public FormProductRegisterController(ProductService productService,
                                          CategoryService categoryService) {
+        this.productDTO = new ProductDTO();
         this.productService = productService;
         this.categoryService = categoryService;
 
@@ -139,16 +142,12 @@ public class FormProductRegisterController extends VBox implements Initializable
     void handleProductsPicturesUpload(ActionEvent event) {
         HBox container = new HBox();
 
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Selecione uma ou mais imagens...");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Imagens", "*.jpg", "*.jpeg", "*.png", "*.gif")
-        );
-
         Stage stage = (Stage) picturesButton.getScene().getWindow();
-        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(stage);
+        List<File> selectedFiles = UploadFileServiceImpl.openFileChooser(stage);
 
         if (selectedFiles != null && !selectedFiles.isEmpty()) {
+            productDTO.getPictures().clear();
+
             for (File picture : selectedFiles) {
                 Image image = new Image(picture.toURI().toString());
                 ImageView imageView = new ImageView(image);
@@ -160,15 +159,10 @@ public class FormProductRegisterController extends VBox implements Initializable
 
                 container.getChildren().add(imageView);
 
-                long instant = System.currentTimeMillis();
+                PictureDTO pictureDTO = new PictureDTO();
+                pictureDTO.setPicture(picture);
 
-                File destination = new File(System.getProperty("user.dir") + "/src/main/resources/upload/images/products/prod" + instant);
-
-                try {
-                    Files.copy(picture.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                } catch (IOException e) {
-                    System.out.println("Erro no upload da imagem. Erro: " + e.getMessage());
-                }
+                productDTO.getPictures().add(pictureDTO);
             }
 
             picturesPreviewContainer.setContent(container);
@@ -187,7 +181,7 @@ public class FormProductRegisterController extends VBox implements Initializable
             .setMeasurementType(measurementType.getSelectedItem())
             .setMeasurement(Integer.parseInt(measurement.getText()))
             .setCategories(categories.getItems())
-            .setPictures(List.of())
+            .setPictures(productDTO.getPictures())
             .isAvailable(isAvailable.isSelected())
             .buildAndConvertToDTO();
 

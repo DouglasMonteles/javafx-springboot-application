@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.File;
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -26,8 +27,8 @@ public class Picture implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private String picture;
+    @Column(nullable = false)
+    private String path;
 
     @Column(nullable = false)
     private PictureType type;
@@ -36,8 +37,11 @@ public class Picture implements Serializable {
     @JoinColumn(name = "product_id", nullable = false, foreignKey = @ForeignKey(name = "FK_PRODUCT_IMAGE"))
     private Product product;
 
+    @Transient
+    private File picture;
+
     public Picture(PictureDTO pictureDTO) {
-        this(pictureDTO.getId(), pictureDTO.getPicture(), pictureDTO.getType(), pictureDTO.getProduct());
+        this(pictureDTO.getId(), pictureDTO.getPath(), pictureDTO.getType(), pictureDTO.getProduct(), pictureDTO.getPicture());
     }
 
 }
