@@ -8,7 +8,9 @@ public interface ScreenBuilder {
     ScreenBuilder setResizable(boolean isResizable);
     ScreenBuilder setFullScreen(boolean isFullScreen);
     ScreenBuilder setWidth(double width);
+    ScreenBuilder setMaxWidth(double maxWidth);
     ScreenBuilder setHeight(double height);
+    ScreenBuilder setMaxHeight(double maxHeight);
     ScreenBuilder setAlwaysOnTop(boolean isAlwaysOnTop);
     ScreenBuilder setScene(Scene scene);
     ScreenBuilder setMinWidth(double minWidth);

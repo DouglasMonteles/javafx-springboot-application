@@ -4,83 +4,94 @@
 <?import io.github.palexdev.materialfx.controls.MFXCheckListView?>
 <?import io.github.palexdev.materialfx.controls.MFXCheckbox?>
 <?import io.github.palexdev.materialfx.controls.MFXFilterComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXScrollPane?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<fx:root alignment="CENTER" prefHeight="599.0" prefWidth="600.0" styleClass="container" stylesheets="@../styles/insert_user_screen.css" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-        <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="585.0" prefWidth="517.0" spacing="40.0" styleClass="container">
-            <children>
-                <HBox alignment="CENTER" prefHeight="40.0" prefWidth="600.0" styleClass="title">
-                    <children>
-                        <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="Cadastro de Produto" textAlignment="CENTER">
-                            <HBox.margin>
-                                <Insets />
-                            </HBox.margin></Text>
-                    </children>
-                    <VBox.margin>
-                        <Insets bottom="20.0" />
-                    </VBox.margin>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0" spacing="20.0" styleClass="form-group">
-                    <children>
-                        <MFXTextField fx:id="name" borderGap="0.0" floatMode="ABOVE" floatingText="Nome" prefHeight="40.0" prefWidth="720.0" styleClass="form-input">
-                            <HBox.margin>
-                                <Insets />
-                            </HBox.margin>
+
+<fx:root type="Pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <MFXScrollPane fx:id="picturesPreviewContainer" fitToWidth="true" hbarPolicy="NEVER" stylesheets="@../styles/insert_user_screen.css">
+         <content>
+              <VBox alignment="TOP_CENTER" spacing="40.0" styleClass="container">
+                  <children>
+                      <HBox alignment="CENTER" styleClass="title">
+                          <children>
+                              <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="Cadastro de Produto" textAlignment="CENTER">
+                                  <HBox.margin>
+                                      <Insets />
+                                  </HBox.margin>
+                        </Text>
+                          </children>
+                          <VBox.margin>
+                              <Insets bottom="20.0" />
+                          </VBox.margin>
+                      </HBox>
+                      <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0" spacing="20.0" styleClass="form-group">
+                          <children>
+                              <MFXTextField fx:id="name" borderGap="0.0" floatMode="ABOVE" floatingText="Nome" prefHeight="40.0" prefWidth="720.0" styleClass="form-input">
+                                  <HBox.margin>
+                                      <Insets />
+                                  </HBox.margin>
+                              </MFXTextField>
+                        <MFXTextField fx:id="price" borderGap="0.0" floatMode="ABOVE" floatingText="Preço (R$)" prefHeight="40.0" prefWidth="720.0" styleClass="form-input" viewOrder="1.0">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
                         </MFXTextField>
-                  <MFXTextField fx:id="price" borderGap="0.0" floatMode="ABOVE" floatingText="Preço (R$)" prefHeight="40.0" prefWidth="720.0" styleClass="form-input" viewOrder="1.0">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </MFXTextField>
-                    </children>
-                </HBox>
-            <HBox alignment="CENTER" prefHeight="40.0" prefWidth="437.0" spacing="20.0" styleClass="form-group">
-               <children>
-                  <MFXTextField fx:id="description" borderGap="0.0" floatMode="ABOVE" floatingText="Descrição" prefHeight="40.0" prefWidth="720.0" styleClass="form-input" viewOrder="2.0">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </MFXTextField>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="40.0" prefWidth="437.0" spacing="20.0" styleClass="form-group">
-               <children>
-                  <MFXFilterComboBox fx:id="measurementType" accessibleRole="COMBO_BOX" borderGap="0.0" floatMode="ABOVE" floatingText="Tipo de medição" floatingTextGap="10.0" measureUnitGap="0.0" popupOffsetY="10.0" prefHeight="40.0" prefWidth="720.0" viewOrder="3.0" />
-                  <MFXTextField fx:id="measurement" borderGap="0.0" floatMode="ABOVE" floatingText="Valor da medição" prefWidth="720.0" styleClass="form-input" viewOrder="4.0" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="150.0" prefWidth="437.0" spacing="20.0" styleClass="form-group">
-               <children>
-                  <VBox spacing="8.0">
+                          </children>
+                      </HBox>
+                  <HBox alignment="CENTER" prefHeight="40.0" prefWidth="437.0" spacing="20.0" styleClass="form-group">
                      <children>
-                        <Text fill="#403f3f" strokeType="OUTSIDE" strokeWidth="0.0" text="Categorias" />
-                        <MFXCheckListView fx:id="categories" depthLevel="LEVEL1" prefHeight="500.0" prefWidth="720.0" viewOrder="5.0" />
+                        <MFXTextField fx:id="description" borderGap="0.0" floatMode="ABOVE" floatingText="Descrição" prefHeight="40.0" prefWidth="720.0" styleClass="form-input" viewOrder="2.0">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </MFXTextField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="40.0" prefWidth="437.0" spacing="20.0" styleClass="form-group">
+                     <children>
+                        <MFXFilterComboBox fx:id="measurementType" accessibleRole="COMBO_BOX" borderGap="0.0" floatMode="ABOVE" floatingText="Tipo de medição" floatingTextGap="10.0" measureUnitGap="0.0" popupOffsetY="10.0" prefHeight="40.0" prefWidth="720.0" viewOrder="3.0" />
+                        <MFXTextField fx:id="measurement" borderGap="0.0" floatMode="ABOVE" floatingText="Valor da medição" prefWidth="720.0" styleClass="form-input" viewOrder="4.0" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="150.0" prefWidth="437.0" spacing="20.0" styleClass="form-group">
+                     <children>
+                        <VBox spacing="8.0">
+                           <children>
+                              <Text fill="#403f3f" strokeType="OUTSIDE" strokeWidth="0.0" text="Categorias" />
+                              <MFXCheckListView fx:id="categories" depthLevel="LEVEL1" prefHeight="500.0" prefWidth="720.0" viewOrder="5.0" />
+                           </children>
+                        </VBox>
+                        <MFXCheckbox fx:id="isAvailable" contentDisposition="RIGHT" selected="true" text="Disponível" viewOrder="6.0" />
+                     </children>
+                  </HBox>
+                  <VBox alignment="TOP_CENTER" prefHeight="204.0" prefWidth="437.0" spacing="10.0">
+                     <children>
+                        <MFXButton fx:id="picturesButton" buttonType="RAISED" onAction="#handleProductsPicturesUpload" prefHeight="30.0" prefWidth="130.0" text="Adicionar imagens" />
+                        <MFXScrollPane fx:id="picturesPreviewContainer" prefHeight="163.0" prefWidth="437.0" />
                      </children>
                   </VBox>
-                  <MFXCheckbox fx:id="isAvailable" contentDisposition="RIGHT" selected="true" text="Disponível" viewOrder="6.0" />
-               </children>
-            </HBox>
-                <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0" spacing="20.0" styleClass="form-group">
-                    <children>
-                        <MFXButton fx:id="submitButton" buttonType="RAISED" defaultButton="true" onAction="#submit" styleClass="btn-primary" text="Cadastrar produto" viewOrder="7.0">
-                            <HBox.margin>
-                                <Insets bottom="10.0" top="10.0" />
-                            </HBox.margin>
-                        </MFXButton>
-                    </children>
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
-                </HBox>
-            </children>
-            <VBox.margin>
-                <Insets />
-            </VBox.margin>
-        </VBox>
-    </children>
+                      <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0" spacing="20.0" styleClass="form-group">
+                          <children>
+                              <MFXButton fx:id="submitButton" buttonType="RAISED" defaultButton="true" onAction="#submit" styleClass="btn-primary" text="Cadastrar produto" viewOrder="7.0">
+                                  <HBox.margin>
+                                      <Insets bottom="10.0" top="10.0" />
+                                  </HBox.margin>
+                              </MFXButton>
+                          </children>
+                          <VBox.margin>
+                              <Insets />
+                          </VBox.margin>
+                      </HBox>
+                  </children>
+              </VBox>
+         </content>
+      </MFXScrollPane>
+   </children>
 </fx:root>

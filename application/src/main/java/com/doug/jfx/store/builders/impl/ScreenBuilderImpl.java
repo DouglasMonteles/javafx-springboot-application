@@ -47,8 +47,20 @@ public class ScreenBuilderImpl implements ScreenBuilder {
     }
 
     @Override
+    public ScreenBuilder setMaxWidth(double maxWidth) {
+        this.stage.setMaxWidth(maxWidth);
+        return this;
+    }
+
+    @Override
     public ScreenBuilder setHeight(double height) {
         this.stage.setHeight(height);
+        return this;
+    }
+
+    @Override
+    public ScreenBuilder setMaxHeight(double maxHeight) {
+        this.stage.setMaxHeight(maxHeight);
         return this;
     }
 
