@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface UploadFileService {
 
-    void uploadFile(File file, String destinationPath);
+    String uploadFile(File file, String destinationPath);
 
-    void uploadFile(List<File> files, String destinationPath);
+    List<String> uploadFile(List<File> files, String destinationPath);
 
 }

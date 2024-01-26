@@ -193,7 +193,7 @@ public class AdminController implements Initializable {
                 });
 
                 sideOptionsComponent.setEditAction(() -> {
-                    Routes.redirectTo(Routes.UPDATE_CATEGORY);
+                    Routes.redirectTo(Routes.UPDATE_PRODUCT);
                 });
 
                 sideOptionsComponent.setDeleteAction(() -> {

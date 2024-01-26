@@ -55,13 +55,13 @@ public class ProductServiceImpl implements ProductService {
 
         for (PictureDTO pictureDTO : productDTO.getPictures()) {
             String path = "/upload/images/products/prod" + product.getId() + "-";
+            String finalPath = uploadFileService.uploadFile(pictureDTO.getPicture(), path);
 
-            pictureDTO.setPath(path);
+            pictureDTO.setPath(finalPath);
             pictureDTO.setType(PictureType.URL);
             pictureDTO.setProduct(product);
 
             pictureRepository.save(new Picture(pictureDTO));
-            uploadFileService.uploadFile(pictureDTO.getPicture(), path);
         }
 
         return new ProductDTO(product);
@@ -73,6 +73,21 @@ public class ProductServiceImpl implements ProductService {
         var product = new Product(productDTO);
 
         product = productRepository.save(product);
+
+        for (PictureDTO pictureDTO : productDTO.getPictures()) {
+            if (pictureDTO.getPicture() != null) {
+                String path = "/upload/images/products/prod" + product.getId() + "-";
+                String finalPath = uploadFileService.uploadFile(pictureDTO.getPicture(), path);
+
+                if (finalPath != null) {
+                    pictureDTO.setPath(finalPath);
+                    pictureDTO.setType(PictureType.URL);
+                    pictureDTO.setProduct(product);
+
+                    pictureRepository.save(new Picture(pictureDTO));
+                }
+            }
+        }
 
         return new ProductDTO(product);
     }

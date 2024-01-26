@@ -33,6 +33,7 @@ import java.net.URL;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -75,6 +76,8 @@ public class FormProductRegisterController extends VBox implements Initializable
 
     @FXML
     private MFXButton submitButton;
+
+    List<PictureDTO> pictures = new ArrayList<>();
 
     private SubmitAction<ProductDTO> submitAction;
 
@@ -139,15 +142,13 @@ public class FormProductRegisterController extends VBox implements Initializable
     }
 
     @FXML
-    void handleProductsPicturesUpload(ActionEvent event) {
+    void handleProductsPicturesUpload() {
         HBox container = new HBox();
 
         Stage stage = (Stage) picturesButton.getScene().getWindow();
         List<File> selectedFiles = UploadFileServiceImpl.openFileChooser(stage);
 
         if (selectedFiles != null && !selectedFiles.isEmpty()) {
-            productDTO.getPictures().clear();
-
             for (File picture : selectedFiles) {
                 Image image = new Image(picture.toURI().toString());
                 ImageView imageView = new ImageView(image);
@@ -162,7 +163,7 @@ public class FormProductRegisterController extends VBox implements Initializable
                 PictureDTO pictureDTO = new PictureDTO();
                 pictureDTO.setPicture(picture);
 
-                productDTO.getPictures().add(pictureDTO);
+                pictures.add(pictureDTO);
             }
 
             picturesPreviewContainer.setContent(container);
@@ -178,10 +179,10 @@ public class FormProductRegisterController extends VBox implements Initializable
             .setName(name.getText())
             .setDescription(description.getText())
             .setPrice(new BigDecimal(price.getText()))
-            .setMeasurementType(measurementType.getSelectedItem())
+            .setMeasurementType(measurementType.getValue())
             .setMeasurement(Integer.parseInt(measurement.getText()))
-            .setCategories(categories.getItems())
-            .setPictures(productDTO.getPictures())
+            .setCategories(categories.getSelectionModel().getSelectedValues())
+            .setPictures(pictures)
             .isAvailable(isAvailable.isSelected())
             .buildAndConvertToDTO();
 
@@ -195,6 +196,50 @@ public class FormProductRegisterController extends VBox implements Initializable
 
         name.setText(productDTO.getName());
         name.setDisable(isFormDisable);
+
+        price.setText(productDTO.getPrice().toString());
+        price.setDisable(isFormDisable);
+
+        description.setText(productDTO.getDescription());
+        description.setDisable(isFormDisable);
+
+        measurementType.setText(productDTO.getMeasurementType().toString());
+        measurementType.setValue(productDTO.getMeasurementType());
+        measurementType.setDisable(isFormDisable);
+
+        measurement.setText(productDTO.getMeasurement().toString());
+        measurement.setDisable(isFormDisable);
+
+        productDTO.getCategories().forEach(categoryDTO -> {
+            categories.getSelectionModel().selectItem(categoryDTO);
+        });
+
+        productDTO.getPictures().forEach(pictureDTO -> {
+            pictures.addAll(productDTO.getPictures());
+        });
+
+        HBox container = new HBox();
+
+        for (File picture : productDTO.getPictures().stream().map(PictureDTO::getFilePicture).toList()) {
+            if (picture != null) {
+                Image image = new Image(picture.toURI().toString());
+                ImageView imageView = new ImageView(image);
+
+                imageView.setFitWidth(200);
+                imageView.setFitHeight(200);
+                imageView.setPreserveRatio(true);
+                imageView.setCursor(Cursor.HAND);
+
+                container.getChildren().add(imageView);
+
+                PictureDTO pictureDTO = new PictureDTO();
+                pictureDTO.setPicture(picture);
+
+                pictures.add(pictureDTO);
+            }
+        }
+
+        picturesPreviewContainer.setContent(container);
 
         submitButton.setVisible(!isFormDisable);
     }

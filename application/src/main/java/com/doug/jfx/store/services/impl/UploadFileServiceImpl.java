@@ -9,12 +9,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UploadFileServiceImpl implements UploadFileService {
 
-    private static final String BASE_DIRECTORY = System.getProperty("user.dir");
+    public static final String BASE_DIRECTORY = System.getProperty("user.dir");
     private static final String[] PERMITTED_EXTENSIONS = {
             "*.jpg", "*.jpeg", "*.png"
     };
@@ -30,23 +31,34 @@ public class UploadFileServiceImpl implements UploadFileService {
     }
 
     @Override
-    public void uploadFile(List<File> files, String destinationPath) {
+    public List<String> uploadFile(List<File> files, String destinationPath) {
+        List<String> savedPaths = new ArrayList<>();
+
         for (File file : files) {
-            uploadFile(file, destinationPath);
+            String path = uploadFile(file, destinationPath);
+            savedPaths.add(path);
         }
+
+        return savedPaths;
     }
 
     @Override
-    public void uploadFile(File file, String destinationPath) {
-        long instant = System.currentTimeMillis();
+    public String uploadFile(File file, String destinationPath) {
+        if (file != null) {
+            long instant = System.currentTimeMillis();
+            String relativePath = destinationPath + instant + getFileExtension(file.getName());
 
-        File destination = new File(BASE_DIRECTORY + destinationPath + instant + getFileExtension(file.getName()));
+            File destination = new File(BASE_DIRECTORY + relativePath);
 
-        try {
-            Files.copy(file.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            System.out.println("Erro no upload da imagem. Erro: " + e.getMessage());
+            try {
+                Files.copy(file.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                return relativePath;
+            } catch (IOException e) {
+                System.out.println("Erro no upload da imagem. Erro: " + e.getMessage());
+            }
         }
+
+        return null;
     }
 
     private String getFileExtension(String fileName) {

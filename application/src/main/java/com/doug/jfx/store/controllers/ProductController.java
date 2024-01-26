@@ -76,14 +76,14 @@ public class ProductController implements Initializable {
         }
 
         if (updateProductContainer != null) {
-            var formUpdateCategory = new FormProductRegisterController(productService, categoryService);
-            formUpdateCategory.setTitle("Atualização da categoria");
-            formUpdateCategory.setFormDisabled(false);
-            formUpdateCategory.setSubmitAction(this::updateProduct);
-            formUpdateCategory.setProductDTO(selectedProduct);
+            var formUpdateProduct = new FormProductRegisterController(productService, categoryService);
+            formUpdateProduct.setTitle("Atualização do Produto");
+            formUpdateProduct.setFormDisabled(false);
+            formUpdateProduct.setSubmitAction(this::updateProduct);
+            formUpdateProduct.setProductDTO(selectedProduct);
 
             updateProductContainer.getChildren().clear();
-            updateProductContainer.getChildren().add(formUpdateCategory);
+            updateProductContainer.getChildren().add(formUpdateProduct);
         }
 
         if (infoProductContainer != null) {
@@ -115,8 +115,8 @@ public class ProductController implements Initializable {
 
         if (categoryExists) {
             productService.updateTableData();
-            Dialog.infoDialog(updateProductTitle, updateProductSuccessMessage, String.format("Categoria %s atualizada com sucesso!", productDTO.getName()));
-            Routes.UPDATE_CATEGORY.close();
+            Dialog.infoDialog(updateProductTitle, updateProductSuccessMessage, String.format("Produto %s atualizado com sucesso!", productDTO.getName()));
+            Routes.UPDATE_PRODUCT.close();
         } else {
             Dialog.errorDialog(updateProductTitle, updateProductErrorMessage, defaultErrorMessage);
         }

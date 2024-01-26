@@ -3,6 +3,7 @@ package com.doug.jfx.store.models.dtos;
 import com.doug.jfx.store.enums.PictureType;
 import com.doug.jfx.store.models.Picture;
 import com.doug.jfx.store.models.Product;
+import com.doug.jfx.store.services.impl.UploadFileServiceImpl;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,6 +31,10 @@ public class PictureDTO implements Serializable {
 
     public PictureDTO(Picture picture) {
         this(picture.getId(), picture.getPath(), picture.getType(), picture.getProduct(), picture.getPicture());
+    }
+
+    public File getFilePicture() {
+        return new File(UploadFileServiceImpl.BASE_DIRECTORY + path);
     }
 
 }
