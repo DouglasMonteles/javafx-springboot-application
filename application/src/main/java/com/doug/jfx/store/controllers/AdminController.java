@@ -3,20 +3,28 @@ package com.doug.jfx.store.controllers;
 import com.doug.jfx.store.controllers.components.SideOptionsComponent;
 import com.doug.jfx.store.enums.Routes;
 import com.doug.jfx.store.helpers.Dialog;
+import com.doug.jfx.store.models.Product;
 import com.doug.jfx.store.models.dtos.CategoryDTO;
 import com.doug.jfx.store.models.dtos.ProductDTO;
 import com.doug.jfx.store.models.dtos.UserDTO;
 import com.doug.jfx.store.services.CategoryService;
 import com.doug.jfx.store.services.ProductService;
 import com.doug.jfx.store.services.UserService;
+import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import io.github.palexdev.materialfx.filter.LongFilter;
+import io.github.palexdev.materialfx.filter.StringFilter;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -24,8 +32,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.lang.model.AnnotatedConstruct;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Function;
 
 @Component
 public class AdminController implements Initializable {
@@ -68,6 +81,12 @@ public class AdminController implements Initializable {
 
     @FXML
     public MenuItem insertProductMenuItem;
+
+    @FXML
+    private MenuItem listSalesMenuItem;
+
+    @FXML
+    private MenuItem openCashRegisterMenuItem;
 
     @Value("${messages.default.error}")
     private String defaultErrorMessage;
@@ -213,6 +232,45 @@ public class AdminController implements Initializable {
         buildAdminScreen(productTableComponent, sideOptionsComponent);
     }
 
+    @FXML
+    public void listSales(ActionEvent event) {
+
+    }
+
+    @FXML
+    public void openCashRegister(ActionEvent event) {
+        MFXPaginatedTableView<ProductDTO> salesTable = new MFXPaginatedTableView<>();
+
+        salesTable.setCurrentPage(0);
+        salesTable.setPagesToShow(5);
+        salesTable.setRowsPerPage(15);
+
+        MFXTableColumn<ProductDTO> col1 = new MFXTableColumn<>("Id", false, Comparator.comparing(ProductDTO::getId));
+        col1.setRowCellFactory(data -> new MFXTableRowCell<>(ProductDTO::getId));
+
+        MFXTableColumn<ProductDTO> col2 = new MFXTableColumn<>("Nome", false, Comparator.comparing(ProductDTO::getName));
+        col2.setRowCellFactory(data -> new MFXTableRowCell<>(ProductDTO::getName));
+
+        salesTable.getTableColumns().addAll(List.of(col1, col2));
+        salesTable.getFilters().addAll(List.of(
+                new LongFilter<>("id", ProductDTO::getId),
+                new StringFilter<>("name", ProductDTO::getName)
+        ));
+
+        List<ProductDTO> x = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            ProductDTO p1 = new ProductDTO();
+            p1.setId(1L);
+            p1.setName("Teste " + (i+1));
+
+            x.add(p1);
+        }
+
+        salesTable.setItems(FXCollections.observableArrayList(x));
+
+        buildAdminScreen(salesTable, null);
+    }
+
     public void handleExitApplication(ActionEvent actionEvent) {
         Dialog.confirmationDialog("Finalizar a aplicação", "Você está prestes a finalizar a execução da aplicação", "Tem certeza que deseja prosseguir?")
                 .filter(response -> response == ButtonType.OK)
@@ -228,6 +286,25 @@ public class AdminController implements Initializable {
 
         borderPane.setCenter(centerComponent);
         borderPane.setRight(rightComponent);
+    }
+
+    private void buildAdminScreen(MFXTableView<?> centerComponent, Node rightComponent) {
+        centerComponent.setMinWidth(800);
+
+        if (!centerComponent.getItems().isEmpty()) {
+            centerComponent.getSelectionModel().selectIndex(0);
+        }
+
+        HBox.setHgrow(centerComponent, Priority.ALWAYS);
+        //HBox.setHgrow(rightComponent, Priority.ALWAYS);
+
+        AnchorPane.setTopAnchor(centerComponent, 0.0);
+        AnchorPane.setBottomAnchor(centerComponent, 0.0);
+        AnchorPane.setLeftAnchor(centerComponent, 0.0);
+        AnchorPane.setRightAnchor(centerComponent, 0.0);
+
+        borderPane.setCenter(new AnchorPane(centerComponent));
+        //borderPane.setRight(rightComponent);
     }
 
 }
