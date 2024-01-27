@@ -213,10 +213,13 @@ public class FormProductRegisterController extends VBox implements Initializable
         productDTO.getCategories().forEach(categoryDTO -> {
             categories.getSelectionModel().selectItem(categoryDTO);
         });
+        categories.setDisable(isFormDisable);
 
         productDTO.getPictures().forEach(pictureDTO -> {
             pictures.addAll(productDTO.getPictures());
         });
+
+        picturesButton.setDisable(isFormDisable);
 
         HBox container = new HBox();
 

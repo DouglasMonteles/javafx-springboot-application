@@ -189,7 +189,7 @@ public class AdminController implements Initializable {
                 ProductController.setSelectedProduct(selectedProduct);
 
                 sideOptionsComponent.setInfoAction(() -> {
-                    Routes.redirectTo(Routes.INFO_CATEGORY);
+                    Routes.redirectTo(Routes.INFO_PRODUCT);
                 });
 
                 sideOptionsComponent.setEditAction(() -> {
