@@ -1,5 +1,7 @@
 package com.doug.jfx.store.controllers;
 
+import com.doug.jfx.store.builders.PaginatedTableBuilder;
+import com.doug.jfx.store.builders.impl.PaginatedTableBuilderImpl;
 import com.doug.jfx.store.controllers.components.SideOptionsComponent;
 import com.doug.jfx.store.enums.Routes;
 import com.doug.jfx.store.helpers.Dialog;
@@ -239,23 +241,7 @@ public class AdminController implements Initializable {
 
     @FXML
     public void openCashRegister(ActionEvent event) {
-        MFXPaginatedTableView<ProductDTO> salesTable = new MFXPaginatedTableView<>();
-
-        salesTable.setCurrentPage(0);
-        salesTable.setPagesToShow(5);
-        salesTable.setRowsPerPage(15);
-
-        MFXTableColumn<ProductDTO> col1 = new MFXTableColumn<>("Id", false, Comparator.comparing(ProductDTO::getId));
-        col1.setRowCellFactory(data -> new MFXTableRowCell<>(ProductDTO::getId));
-
-        MFXTableColumn<ProductDTO> col2 = new MFXTableColumn<>("Nome", false, Comparator.comparing(ProductDTO::getName));
-        col2.setRowCellFactory(data -> new MFXTableRowCell<>(ProductDTO::getName));
-
-        salesTable.getTableColumns().addAll(List.of(col1, col2));
-        salesTable.getFilters().addAll(List.of(
-                new LongFilter<>("id", ProductDTO::getId),
-                new StringFilter<>("name", ProductDTO::getName)
-        ));
+        PaginatedTableBuilder<ProductDTO> salesTable = new PaginatedTableBuilderImpl<>();
 
         List<ProductDTO> x = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
@@ -266,9 +252,22 @@ public class AdminController implements Initializable {
             x.add(p1);
         }
 
-        salesTable.setItems(FXCollections.observableArrayList(x));
+        try {
+            var salesTableComponent = salesTable
+                    .setCurrentPage(0)
+                    .setPagesToShow(5)
+                    .setRowsPerPage(15)
+                    .addColumn("Id", false, Comparator.comparing(ProductDTO::getId), ProductDTO::getId)
+                    .addColumn("Nome", true, Comparator.comparing(ProductDTO::getName), ProductDTO::getName)
+                    .addFilter(new LongFilter<>("Id", ProductDTO::getId))
+                    .addFilter(new StringFilter<>("Nome", ProductDTO::getName))
+                    .setData(x)
+                    .build();
 
-        buildAdminScreen(salesTable, null);
+            buildAdminScreen(salesTableComponent, null);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Erro ao tentar acessar o indice de uma lista, mas este indice não existe. Erro: " + e.getMessage());
+        }
     }
 
     public void handleExitApplication(ActionEvent actionEvent) {

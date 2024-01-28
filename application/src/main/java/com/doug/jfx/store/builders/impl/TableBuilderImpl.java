@@ -17,7 +17,7 @@ public class TableBuilderImpl<S> implements TableBuilder {
 
     public TableBuilderImpl() {
         this.table = new TableView<>();
-        this.table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        this.table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
     }
 
     @Override
