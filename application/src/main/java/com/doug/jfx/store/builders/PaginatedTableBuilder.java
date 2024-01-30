@@ -21,6 +21,6 @@ public interface PaginatedTableBuilder<S> {
 
     PaginatedTableBuilder<S> setRowsPerPage(int rowsPerPage);
 
-    MFXPaginatedTableView<?> build();
+    MFXPaginatedTableView<S> build();
 
 }

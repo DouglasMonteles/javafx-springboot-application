@@ -1,12 +1,14 @@
 package com.doug.jfx.store.builders.impl;
 
 import com.doug.jfx.store.builders.PaginatedTableBuilder;
+import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXPaginatedTableView;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.base.AbstractFilter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 
 import java.util.Comparator;
 import java.util.List;

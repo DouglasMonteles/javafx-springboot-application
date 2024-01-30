@@ -16,9 +16,15 @@ import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.LongFilter;
 import io.github.palexdev.materialfx.filter.StringFilter;
+import io.github.palexdev.materialfx.utils.others.observables.When;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -26,10 +32,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -246,14 +250,14 @@ public class AdminController implements Initializable {
         List<ProductDTO> x = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             ProductDTO p1 = new ProductDTO();
-            p1.setId(1L);
+            p1.setId((long)(1+i));
             p1.setName("Teste " + (i+1));
 
             x.add(p1);
         }
 
         try {
-            var salesTableComponent = salesTable
+            MFXPaginatedTableView<?> salesTableComponent = salesTable
                     .setCurrentPage(0)
                     .setPagesToShow(5)
                     .setRowsPerPage(15)
@@ -264,7 +268,27 @@ public class AdminController implements Initializable {
                     .setData(x)
                     .build();
 
-            buildAdminScreen(salesTableComponent, null);
+            VBox optionsComponent = new VBox();
+            optionsComponent.setPadding(new Insets(4));
+            optionsComponent.setMinWidth(260);
+            optionsComponent.setPadding(new Insets(5));
+            optionsComponent.setSpacing(10);
+
+            VBox selectedItemsComponent = new VBox();
+
+            MFXButton addItemButton = new MFXButton("Adicionar item");
+            addItemButton.setMinWidth(260);
+            addItemButton.setStyle("-fx-background-color:green");
+            addItemButton.setTextFill(Color.WHITE);
+            addItemButton.setOnAction(addItemEvent -> {
+                ProductDTO selectedProduct = (ProductDTO) salesTableComponent.getSelectionModel().getSelectedValues().getFirst();
+                selectedItemsComponent.getChildren().add(new Label(selectedProduct.getName()));
+            });
+
+            optionsComponent.getChildren().add(addItemButton);
+            optionsComponent.getChildren().add(new MFXScrollPane(selectedItemsComponent));
+
+            buildAdminScreen(salesTableComponent, optionsComponent);
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Erro ao tentar acessar o indice de uma lista, mas este indice não existe. Erro: " + e.getMessage());
         }
@@ -295,7 +319,7 @@ public class AdminController implements Initializable {
         }
 
         HBox.setHgrow(centerComponent, Priority.ALWAYS);
-        //HBox.setHgrow(rightComponent, Priority.ALWAYS);
+        HBox.setHgrow(rightComponent, Priority.ALWAYS);
 
         AnchorPane.setTopAnchor(centerComponent, 0.0);
         AnchorPane.setBottomAnchor(centerComponent, 0.0);
@@ -303,7 +327,7 @@ public class AdminController implements Initializable {
         AnchorPane.setRightAnchor(centerComponent, 0.0);
 
         borderPane.setCenter(new AnchorPane(centerComponent));
-        //borderPane.setRight(rightComponent);
+        borderPane.setRight(rightComponent);
     }
 
 }
