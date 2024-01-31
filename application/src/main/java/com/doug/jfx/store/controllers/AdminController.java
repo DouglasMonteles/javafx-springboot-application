@@ -39,12 +39,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.lang.model.AnnotatedConstruct;
+import java.math.BigDecimal;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 @Component
 public class AdminController implements Initializable {
@@ -252,6 +255,7 @@ public class AdminController implements Initializable {
             ProductDTO p1 = new ProductDTO();
             p1.setId((long)(1+i));
             p1.setName("Teste " + (i+1));
+            p1.setPrice(new BigDecimal(10));
 
             x.add(p1);
         }
@@ -275,6 +279,8 @@ public class AdminController implements Initializable {
             optionsComponent.setSpacing(10);
 
             VBox selectedItemsComponent = new VBox();
+            selectedItemsComponent.setSpacing(10);
+            selectedItemsComponent.setPadding(new Insets(5));
 
             MFXButton addItemButton = new MFXButton("Adicionar item");
             addItemButton.setMinWidth(260);
@@ -282,10 +288,29 @@ public class AdminController implements Initializable {
             addItemButton.setTextFill(Color.WHITE);
             addItemButton.setOnAction(addItemEvent -> {
                 ProductDTO selectedProduct = (ProductDTO) salesTableComponent.getSelectionModel().getSelectedValues().getFirst();
-                selectedItemsComponent.getChildren().add(new Label(selectedProduct.getName()));
+                MFXCheckbox item = new MFXCheckbox();
+                DecimalFormat priceFormat = new DecimalFormat("R$ #,##0.00");
+                item.setText(selectedProduct.getName() + " - " + priceFormat.format(selectedProduct.getPrice()));
+
+                selectedItemsComponent.getChildren().add(item);
+            });
+
+            MFXButton removeItemButton = new MFXButton("Remover item");
+            removeItemButton.setMinWidth(260);
+            removeItemButton.setStyle("-fx-background-color:red");
+            removeItemButton.setTextFill(Color.WHITE);
+            removeItemButton.setOnAction(removeItemEvent -> {
+                List<MFXCheckbox> items = new ArrayList<>(selectedItemsComponent.getChildren().stream().map(it -> (MFXCheckbox) it).toList());
+
+                List<MFXCheckbox> itemsToRemove = items.stream()
+                                .filter(MFXCheckbox::isSelected)
+                                .toList();
+
+                selectedItemsComponent.getChildren().removeAll(itemsToRemove);
             });
 
             optionsComponent.getChildren().add(addItemButton);
+            optionsComponent.getChildren().add(removeItemButton);
             optionsComponent.getChildren().add(new MFXScrollPane(selectedItemsComponent));
 
             buildAdminScreen(salesTableComponent, optionsComponent);
