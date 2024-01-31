@@ -20,6 +20,7 @@ import io.github.palexdev.materialfx.utils.others.observables.When;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -309,9 +310,23 @@ public class AdminController implements Initializable {
                 selectedItemsComponent.getChildren().removeAll(itemsToRemove);
             });
 
+            MFXButton finalizeItemButton = new MFXButton("Finalizar venda");
+            finalizeItemButton.setMinWidth(260);
+            finalizeItemButton.setStyle("-fx-background-color:blue");
+            finalizeItemButton.setTextFill(Color.WHITE);
+            finalizeItemButton.setDisable(selectedItemsComponent.getChildren().isEmpty());
+            finalizeItemButton.setOnAction(finalizeEvent -> {
+
+            });
+
+            selectedItemsComponent.getChildren().addListener((ListChangeListener<Node>) c -> {
+                finalizeItemButton.setDisable(selectedItemsComponent.getChildren().isEmpty());
+            });
+
             optionsComponent.getChildren().add(addItemButton);
             optionsComponent.getChildren().add(removeItemButton);
             optionsComponent.getChildren().add(new MFXScrollPane(selectedItemsComponent));
+            optionsComponent.getChildren().add(finalizeItemButton);
 
             buildAdminScreen(salesTableComponent, optionsComponent);
         } catch (IndexOutOfBoundsException e) {
