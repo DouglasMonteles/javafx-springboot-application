@@ -34,4 +34,4 @@ build/
 .vscode/
 
 # H2 database file
-!**/src/main/**/database/*.db
+/src/main/resources/database/*.db

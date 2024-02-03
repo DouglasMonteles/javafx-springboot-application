@@ -30,3 +30,13 @@ INSERT INTO tb_product_category (product_id, category_id) VALUES (2, 2);
 INSERT INTO tb_picture (path, type, product_id) VALUES ('https://img.itdg.com.br/tdg/images/recipes/000/000/770/323683/323683_original.jpg', 1, 1);
 INSERT INTO tb_picture (path, type, product_id) VALUES ('https://karsten.vtexassets.com/arquivos/ids/171343/3582923_01.jpg?v=637256802131200000', 1, 2);
 
+INSERT INTO tb_order (`date`, client_id) VALUES ('2024-02-03T14:05:12.024', 1);
+
+INSERT INTO tb_ordered_item (discount, price, quantity, order_id, product_id) VALUES (2, 10.99, 1, 1, 1);
+INSERT INTO tb_ordered_item (discount, price, quantity, order_id, product_id) VALUES (0, 10.99, 2, 1, 2);
+
+INSERT INTO tb_payment (status, order_id) VALUES (0, 1);
+
+INSERT INTO tb_money_payment (change, order_id) VALUES (0, 1);
+
+

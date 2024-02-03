@@ -55,9 +55,12 @@ public class Product implements Serializable {
     )
     private List<Category> categories = new ArrayList<>();
 
-
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     private List<Picture> pictures = new ArrayList<>();
+
+    @OneToMany(mappedBy = "id.product")
+    @Transient
+    private final List<Product> orders = new ArrayList<>();
 
     public Product(ProductDTO productDTO) {
         this.id = productDTO.getId();

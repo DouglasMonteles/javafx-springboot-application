@@ -21,7 +21,7 @@ import java.io.Serializable;
 public class Picture implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = 6626905976242780205L;
+    private static final long serialVersionUID = 8819041721687862883L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

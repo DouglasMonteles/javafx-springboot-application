@@ -57,6 +57,10 @@ public class User implements Serializable {
     @Column(name = "phone", length = 20)
     private final Set<String> phones = new HashSet<>();
 
+    @Transient
+    @OneToMany(mappedBy = "client")
+    private final List<Order> orders = new ArrayList<>();
+
     public User(UserDTO userDTO) {
         this(userDTO.getId(), userDTO.getName(), userDTO.getEmail(), userDTO.getPassword(), userDTO.isActive());
 
