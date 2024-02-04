@@ -18,4 +18,9 @@ public interface UserService {
     void updateTableData();
 
     UserDTO inactive(Long id);
+
+    boolean login(String username, String password);
+
+    UserDTO getLoggedUser();
+
 }

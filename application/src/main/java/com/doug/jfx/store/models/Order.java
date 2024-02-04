@@ -1,5 +1,7 @@
 package com.doug.jfx.store.models;
 
+import com.doug.jfx.store.models.dtos.OrderDTO;
+import com.doug.jfx.store.models.dtos.UserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,7 +41,15 @@ public class Order implements Serializable {
     private Payment payment;
 
     @OneToMany(mappedBy = "id.order")
-    private final List<OrderedItem> orderedItems = new ArrayList<>();
+    private List<OrderedItem> orderedItems = new ArrayList<>();
+
+    public Order(OrderDTO orderDTO) {
+        this.id = orderDTO.getId();
+        this.date = orderDTO.getDate();
+        this.client = new User(orderDTO.getClient());
+        this.payment = orderDTO.getPayment();
+        this.orderedItems = orderDTO.getOrderedItems();
+    }
 
     public BigDecimal getTotal() {
         return orderedItems.stream()

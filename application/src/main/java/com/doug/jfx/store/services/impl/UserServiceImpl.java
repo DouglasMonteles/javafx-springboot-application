@@ -26,6 +26,8 @@ public class UserServiceImpl implements UserService {
 
     private final TableBuilder tableBuilder = new TableBuilderImpl<User>();
 
+    private UserDTO loggedUser;
+
     @Override
     public List<UserDTO> findAll() {
         return userRepository.findAll().stream().map(UserDTO::new).toList();
@@ -68,6 +70,23 @@ public class UserServiceImpl implements UserService {
         user = userRepository.save(user);
 
         return new UserDTO(user);
+    }
+
+    @Override
+    public boolean login(String username, String password) {
+        UserDTO userDTO = userRepository.login(username, password);
+
+        if (userDTO != null) {
+            this.loggedUser = userDTO;
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public UserDTO getLoggedUser() {
+        return findAll().getFirst();
     }
 
     @Override

@@ -5,13 +5,14 @@ import com.doug.jfx.store.builders.impl.PaginatedTableBuilderImpl;
 import com.doug.jfx.store.controllers.components.SideOptionsComponent;
 import com.doug.jfx.store.enums.Routes;
 import com.doug.jfx.store.helpers.Dialog;
+import com.doug.jfx.store.models.MoneyPayment;
+import com.doug.jfx.store.models.OrderedItem;
 import com.doug.jfx.store.models.Product;
 import com.doug.jfx.store.models.dtos.CategoryDTO;
+import com.doug.jfx.store.models.dtos.OrderDTO;
 import com.doug.jfx.store.models.dtos.ProductDTO;
 import com.doug.jfx.store.models.dtos.UserDTO;
-import com.doug.jfx.store.services.CategoryService;
-import com.doug.jfx.store.services.ProductService;
-import com.doug.jfx.store.services.UserService;
+import com.doug.jfx.store.services.*;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.LongFilter;
@@ -43,6 +44,7 @@ import javax.lang.model.AnnotatedConstruct;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -61,6 +63,12 @@ public class AdminController implements Initializable {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private OrderedItemService orderedItemService;
 
     @FXML
     private BorderPane borderPane;
@@ -251,16 +259,6 @@ public class AdminController implements Initializable {
     public void openCashRegister(ActionEvent event) {
         PaginatedTableBuilder<ProductDTO> salesTable = new PaginatedTableBuilderImpl<>();
 
-        List<ProductDTO> x = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            ProductDTO p1 = new ProductDTO();
-            p1.setId((long)(1+i));
-            p1.setName("Teste " + (i+1));
-            p1.setPrice(new BigDecimal(10));
-
-            x.add(p1);
-        }
-
         try {
             MFXPaginatedTableView<?> salesTableComponent = salesTable
                     .setCurrentPage(0)
@@ -270,7 +268,7 @@ public class AdminController implements Initializable {
                     .addColumn("Nome", true, Comparator.comparing(ProductDTO::getName), ProductDTO::getName)
                     .addFilter(new LongFilter<>("Id", ProductDTO::getId))
                     .addFilter(new StringFilter<>("Nome", ProductDTO::getName))
-                    .setData(x)
+                    .setData(productService.findAll())
                     .build();
 
             VBox optionsComponent = new VBox();
@@ -294,6 +292,14 @@ public class AdminController implements Initializable {
                 item.setText(selectedProduct.getName() + " - " + priceFormat.format(selectedProduct.getPrice()));
 
                 selectedItemsComponent.getChildren().add(item);
+
+                OrderedItem orderedItem = new OrderedItem();
+                orderedItem.setOrder(null);
+                orderedItem.setProduct(new Product(selectedProduct));
+                orderedItem.setQuantity(1);
+                orderedItem.setDiscount(new BigDecimal(0));
+
+                orderedItemService.addCartItem(orderedItem);
             });
 
             MFXButton removeItemButton = new MFXButton("Remover item");
@@ -303,9 +309,16 @@ public class AdminController implements Initializable {
             removeItemButton.setOnAction(removeItemEvent -> {
                 List<MFXCheckbox> items = new ArrayList<>(selectedItemsComponent.getChildren().stream().map(it -> (MFXCheckbox) it).toList());
 
-                List<MFXCheckbox> itemsToRemove = items.stream()
-                                .filter(MFXCheckbox::isSelected)
-                                .toList();
+                List<MFXCheckbox> itemsToRemove = new ArrayList<>();
+
+                for (int i = 0; i < items.size(); i++) {
+                    MFXCheckbox item = items.get(i);
+
+                    if (item.isSelected()) {
+                        itemsToRemove.add(item);
+                        orderedItemService.removeCartItem(i);
+                    }
+                }
 
                 selectedItemsComponent.getChildren().removeAll(itemsToRemove);
             });
@@ -316,7 +329,13 @@ public class AdminController implements Initializable {
             finalizeItemButton.setTextFill(Color.WHITE);
             finalizeItemButton.setDisable(selectedItemsComponent.getChildren().isEmpty());
             finalizeItemButton.setOnAction(finalizeEvent -> {
+                OrderDTO orderDTO = new OrderDTO();
+                orderDTO.setClient(userService.getLoggedUser());
+                orderDTO.setOrderedItems(orderedItemService.getCartItems());
+                orderDTO.setPayment(new MoneyPayment(new BigDecimal(0)));
+                orderDTO.setDate(Instant.now());
 
+                orderService.insert(orderDTO);
             });
 
             selectedItemsComponent.getChildren().addListener((ListChangeListener<Node>) c -> {
