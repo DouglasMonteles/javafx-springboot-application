@@ -9,7 +9,7 @@ import java.util.function.Function;
 
 public interface PaginatedTableBuilder<S> {
 
-    PaginatedTableBuilder<S> addColumn(String label, boolean resizable, Comparator<S> comparator, Function <S, ?> extractor);
+    PaginatedTableBuilder<S> addColumn(String label, boolean resizable, double prefWidth, Comparator<S> comparator, Function <S, ?> extractor);
 
     PaginatedTableBuilder<S> addFilter(AbstractFilter<S, ?> filter);
 

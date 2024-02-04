@@ -13,8 +13,11 @@ import com.doug.jfx.store.models.dtos.OrderDTO;
 import com.doug.jfx.store.models.dtos.ProductDTO;
 import com.doug.jfx.store.models.dtos.UserDTO;
 import com.doug.jfx.store.services.*;
+import com.doug.jfx.store.utils.DateUtils;
+import com.doug.jfx.store.utils.PriceUtils;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import io.github.palexdev.materialfx.filter.DoubleFilter;
 import io.github.palexdev.materialfx.filter.LongFilter;
 import io.github.palexdev.materialfx.filter.StringFilter;
 import io.github.palexdev.materialfx.utils.others.observables.When;
@@ -44,11 +47,10 @@ import javax.lang.model.AnnotatedConstruct;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.time.ZonedDateTime;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
@@ -264,12 +266,21 @@ public class AdminController implements Initializable {
                     .setCurrentPage(0)
                     .setPagesToShow(5)
                     .setRowsPerPage(15)
-                    .addColumn("Id", false, Comparator.comparing(ProductDTO::getId), ProductDTO::getId)
-                    .addColumn("Nome", true, Comparator.comparing(ProductDTO::getName), ProductDTO::getName)
+                    .addColumn("Id", false, 0, Comparator.comparing(ProductDTO::getId), ProductDTO::getId)
+                    .addColumn("Nome", true, 0, Comparator.comparing(ProductDTO::getName), ProductDTO::getName)
+                    .addColumn("Descrição", true, 300, Comparator.comparing(ProductDTO::getDescription), ProductDTO::getDescription)
+                    .addColumn("Preço", false, 0, Comparator.comparing(ProductDTO::getPrice), productDTO -> PriceUtils.pricePtBr(productDTO.getPrice()))
                     .addFilter(new LongFilter<>("Id", ProductDTO::getId))
                     .addFilter(new StringFilter<>("Nome", ProductDTO::getName))
+                    .addFilter(new DoubleFilter<>("Preço", productDTO -> productDTO.getPrice().doubleValue()))
                     .setData(productService.findAll())
                     .build();
+
+            salesTableComponent.getTableColumns().forEach(it -> {
+                it.prefWidthProperty().addListener((observable, oldValue, newValue) -> {
+                    it.setPrefWidth(it.getWidth());
+                });
+            });
 
             VBox optionsComponent = new VBox();
             optionsComponent.setPadding(new Insets(4));
@@ -288,8 +299,7 @@ public class AdminController implements Initializable {
             addItemButton.setOnAction(addItemEvent -> {
                 ProductDTO selectedProduct = (ProductDTO) salesTableComponent.getSelectionModel().getSelectedValues().getFirst();
                 MFXCheckbox item = new MFXCheckbox();
-                DecimalFormat priceFormat = new DecimalFormat("R$ #,##0.00");
-                item.setText(selectedProduct.getName() + " - " + priceFormat.format(selectedProduct.getPrice()));
+                item.setText(selectedProduct.getName() + " - " + PriceUtils.pricePtBr(selectedProduct.getPrice()));
 
                 selectedItemsComponent.getChildren().add(item);
 
@@ -306,6 +316,7 @@ public class AdminController implements Initializable {
             removeItemButton.setMinWidth(260);
             removeItemButton.setStyle("-fx-background-color:red");
             removeItemButton.setTextFill(Color.WHITE);
+            removeItemButton.setDisable(selectedItemsComponent.getChildren().isEmpty());
             removeItemButton.setOnAction(removeItemEvent -> {
                 List<MFXCheckbox> items = new ArrayList<>(selectedItemsComponent.getChildren().stream().map(it -> (MFXCheckbox) it).toList());
 
@@ -333,18 +344,24 @@ public class AdminController implements Initializable {
                 orderDTO.setClient(userService.getLoggedUser());
                 orderDTO.setOrderedItems(orderedItemService.getCartItems());
                 orderDTO.setPayment(new MoneyPayment(new BigDecimal(0)));
-                orderDTO.setDate(Instant.now());
+                orderDTO.setDate(DateUtils.getDateTime());
 
-                orderService.insert(orderDTO);
+                OrderDTO orderedItem = orderService.insert(orderDTO);
+                Dialog.infoDialog("Pedido confirmado", "O pedido foi realizado com sucesso", "Pedido " + orderedItem.getId() + " realizado às " + DateUtils.timePtBr(orderedItem.getDate()) + " do dia " + DateUtils.datePtBr(orderedItem.getDate()));
+
+                selectedItemsComponent.getChildren().clear();
+                salesTableComponent.getSelectionModel().clearSelection();
+                salesTableComponent.getSelectionModel().selectIndex(0);
             });
 
             selectedItemsComponent.getChildren().addListener((ListChangeListener<Node>) c -> {
+                removeItemButton.setDisable(selectedItemsComponent.getChildren().isEmpty());
                 finalizeItemButton.setDisable(selectedItemsComponent.getChildren().isEmpty());
             });
 
             optionsComponent.getChildren().add(addItemButton);
-            optionsComponent.getChildren().add(removeItemButton);
             optionsComponent.getChildren().add(new MFXScrollPane(selectedItemsComponent));
+            optionsComponent.getChildren().add(removeItemButton);
             optionsComponent.getChildren().add(finalizeItemButton);
 
             buildAdminScreen(salesTableComponent, optionsComponent);

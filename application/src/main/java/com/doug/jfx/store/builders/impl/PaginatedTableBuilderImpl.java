@@ -9,7 +9,9 @@ import io.github.palexdev.materialfx.filter.base.AbstractFilter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.layout.Region;
 
+import javax.swing.text.TableView;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
@@ -24,13 +26,14 @@ public class PaginatedTableBuilderImpl<S> implements PaginatedTableBuilder<S> {
     }
 
     @Override
-    public PaginatedTableBuilder<S> addColumn(String label, boolean resizable, Comparator<S> comparator, Function <S, ?> extractor) {
+    public PaginatedTableBuilder<S> addColumn(String label, boolean resizable, double prefWidth, Comparator<S> comparator, Function <S, ?> extractor) {
         if (isColumnAlreadyCreated(label)) {
             return this;
         }
 
         MFXTableColumn<S> column = new MFXTableColumn<>(label, resizable, comparator);
         column.setRowCellFactory(data -> new MFXTableRowCell<>(extractor));
+        column.setPrefWidth(prefWidth);
 
         table.getTableColumns().add(column);
 
