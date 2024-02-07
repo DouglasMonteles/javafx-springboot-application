@@ -4,6 +4,7 @@ import com.doug.jfx.store.models.OrderedItem;
 import com.doug.jfx.store.models.dtos.OrderDTO;
 import javafx.scene.control.TableView;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface OrderedItemService {
@@ -13,5 +14,7 @@ public interface OrderedItemService {
     void removeCartItem(int index);
 
     List<OrderedItem> getCartItems();
+
+    BigDecimal getTotal();
 
 }

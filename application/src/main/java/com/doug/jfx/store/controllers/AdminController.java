@@ -39,6 +39,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -292,6 +293,11 @@ public class AdminController implements Initializable {
             selectedItemsComponent.setSpacing(10);
             selectedItemsComponent.setPadding(new Insets(5));
 
+            Label totalLabel = new Label();
+            totalLabel.setFont(new Font(15));
+            totalLabel.setAlignment(Pos.CENTER_RIGHT);
+            totalLabel.setText("TOTAL: R$ 0,00");
+
             MFXButton addItemButton = new MFXButton("Adicionar item");
             addItemButton.setMinWidth(260);
             addItemButton.setStyle("-fx-background-color:green");
@@ -308,9 +314,29 @@ public class AdminController implements Initializable {
                 orderedItem.setProduct(new Product(selectedProduct));
                 orderedItem.setQuantity(1);
                 orderedItem.setDiscount(new BigDecimal(0));
+                orderedItem.setPrice(selectedProduct.getPrice());
 
                 orderedItemService.addCartItem(orderedItem);
+
+                totalLabel.setText("TOTAL: " + PriceUtils.pricePtBr(orderedItemService.getTotal()));
             });
+
+            HBox quantityContainer = new HBox();
+
+            MFXButton increaseQuantityButton = new MFXButton("+");
+            increaseQuantityButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 12pt");
+            increaseQuantityButton.setPrefWidth(50);
+            increaseQuantityButton.setOnAction(event1 -> {
+
+            });
+
+            MFXButton decreaseQuantityButton = new MFXButton("-");
+            decreaseQuantityButton.setStyle("-fx-background-color: gray; -fx-text-fill: white; -fx-font-size: 12pt");
+            decreaseQuantityButton.setPrefWidth(50);
+
+            quantityContainer.getChildren().addAll(increaseQuantityButton, decreaseQuantityButton);
+            quantityContainer.setAlignment(Pos.BASELINE_CENTER);
+            quantityContainer.setSpacing(100);
 
             MFXButton removeItemButton = new MFXButton("Remover item");
             removeItemButton.setMinWidth(260);
@@ -332,6 +358,7 @@ public class AdminController implements Initializable {
                 }
 
                 selectedItemsComponent.getChildren().removeAll(itemsToRemove);
+                totalLabel.setText("TOTAL: " + PriceUtils.pricePtBr(orderedItemService.getTotal()));
             });
 
             MFXButton finalizeItemButton = new MFXButton("Finalizar venda");
@@ -361,10 +388,22 @@ public class AdminController implements Initializable {
 
             optionsComponent.getChildren().add(addItemButton);
             optionsComponent.getChildren().add(new MFXScrollPane(selectedItemsComponent));
+            optionsComponent.getChildren().add(quantityContainer);
             optionsComponent.getChildren().add(removeItemButton);
             optionsComponent.getChildren().add(finalizeItemButton);
 
-            buildAdminScreen(salesTableComponent, optionsComponent);
+            VBox mainContainer = new VBox();
+            mainContainer.setSpacing(10);
+
+            salesTableComponent.setPrefWidth(Double.MAX_VALUE);
+
+            HBox mainFooter = new HBox(totalLabel);
+            mainFooter.setAlignment(Pos.CENTER_RIGHT);
+
+            mainContainer.getChildren().add(salesTableComponent);
+            mainContainer.getChildren().add(mainFooter);
+
+            buildAdminScreen(mainContainer, optionsComponent);
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Erro ao tentar acessar o indice de uma lista, mas este indice não existe. Erro: " + e.getMessage());
         }
@@ -387,22 +426,8 @@ public class AdminController implements Initializable {
         borderPane.setRight(rightComponent);
     }
 
-    private void buildAdminScreen(MFXTableView<?> centerComponent, Node rightComponent) {
-        centerComponent.setMinWidth(800);
-
-        if (!centerComponent.getItems().isEmpty()) {
-            centerComponent.getSelectionModel().selectIndex(0);
-        }
-
-        HBox.setHgrow(centerComponent, Priority.ALWAYS);
-        HBox.setHgrow(rightComponent, Priority.ALWAYS);
-
-        AnchorPane.setTopAnchor(centerComponent, 0.0);
-        AnchorPane.setBottomAnchor(centerComponent, 0.0);
-        AnchorPane.setLeftAnchor(centerComponent, 0.0);
-        AnchorPane.setRightAnchor(centerComponent, 0.0);
-
-        borderPane.setCenter(new AnchorPane(centerComponent));
+    private void buildAdminScreen(Pane centerComponent, Pane rightComponent) {
+        borderPane.setCenter(centerComponent);
         borderPane.setRight(rightComponent);
     }
 

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,13 @@ public class OrderedItemServiceImpl implements OrderedItemService {
     @Override
     public List<OrderedItem> getCartItems() {
         return cartItems;
+    }
+
+    @Override
+    public BigDecimal getTotal() {
+        return cartItems.stream()
+                .map(OrderedItem::getPrice)
+                .reduce(new BigDecimal(0), BigDecimal::add);
     }
 
 
