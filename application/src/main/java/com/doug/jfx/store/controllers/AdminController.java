@@ -8,10 +8,7 @@ import com.doug.jfx.store.helpers.Dialog;
 import com.doug.jfx.store.models.MoneyPayment;
 import com.doug.jfx.store.models.OrderedItem;
 import com.doug.jfx.store.models.Product;
-import com.doug.jfx.store.models.dtos.CategoryDTO;
-import com.doug.jfx.store.models.dtos.OrderDTO;
-import com.doug.jfx.store.models.dtos.ProductDTO;
-import com.doug.jfx.store.models.dtos.UserDTO;
+import com.doug.jfx.store.models.dtos.*;
 import com.doug.jfx.store.services.*;
 import com.doug.jfx.store.utils.DateUtils;
 import com.doug.jfx.store.utils.PriceUtils;
@@ -246,6 +243,7 @@ public class AdminController implements Initializable {
         PaginatedTableBuilder<ProductDTO> salesTable = new PaginatedTableBuilderImpl<>();
 
         try {
+            // Tabela de produtos para venda (main)
             MFXPaginatedTableView<?> salesTableComponent = salesTable
                     .setCurrentPage(0)
                     .setPagesToShow(5)
@@ -266,12 +264,14 @@ public class AdminController implements Initializable {
                 });
             });
 
+            // Menu lateral com os botoes de opções
             VBox optionsComponent = new VBox();
             optionsComponent.setPadding(new Insets(4));
             optionsComponent.setMinWidth(260);
             optionsComponent.setPadding(new Insets(5));
             optionsComponent.setSpacing(10);
 
+            // Container com a lista de checkbox dos produtos selecionados
             VBox selectedItemsComponent = new VBox();
             selectedItemsComponent.setSpacing(10);
             selectedItemsComponent.setPadding(new Insets(5));
@@ -287,20 +287,19 @@ public class AdminController implements Initializable {
             addItemButton.setTextFill(Color.WHITE);
             addItemButton.setOnAction(addItemEvent -> {
                 ProductDTO selectedProduct = (ProductDTO) salesTableComponent.getSelectionModel().getSelectedValues().getFirst();
-                int productIndex = orderedItemService.findIndex(selectedProduct.getId());
 
-                MFXCheckbox item = new MFXCheckbox();
+                int cartProductIndex = orderedItemService.findIndex(selectedProduct.getId());
 
-                if (productIndex >= 0) {
+                if (cartProductIndex >= 0) {
                     // Atualizar item
                     orderedItemService.increaseQuantity(selectedProduct.getId());
-                    item.setText(selectedProduct.getName() + " - " + PriceUtils.pricePtBr(selectedProduct.getPrice()) + " - Qtd. " + orderedItemService.getOrderedItem(selectedProduct.getId()).getQuantity());
-                    selectedItemsComponent.getChildren().remove(orderedItemService.findIndex(selectedProduct.getId()));
-                    selectedItemsComponent.getChildren().add(item);
+                    orderedItemService.getCartItems().get(cartProductIndex).getProductDTOCheckbox().setText(selectedProduct.getName() + " - " + PriceUtils.pricePtBr(selectedProduct.getPrice()) + " - Qtd. " + orderedItemService.getOrderedItem(selectedProduct.getId()).getQuantity());
 
                     totalLabel.setText("TOTAL: " + PriceUtils.pricePtBr(orderedItemService.getTotal()));
                 } else {
                     // Adicionar item
+                    CartTupleDTO productCartDTO = new CartTupleDTO();
+
                     OrderedItem orderedItem = new OrderedItem();
                     orderedItem.setOrder(null);
                     orderedItem.setProduct(new Product(selectedProduct));
@@ -308,10 +307,17 @@ public class AdminController implements Initializable {
                     orderedItem.setDiscount(new BigDecimal(0));
                     orderedItem.setPrice(selectedProduct.getPrice());
 
+                    MFXCheckbox item = new MFXCheckbox();
                     item.setText(selectedProduct.getName() + " - " + PriceUtils.pricePtBr(selectedProduct.getPrice()) + " - Qtd. " + orderedItem.getQuantity());
-                    selectedItemsComponent.getChildren().add(item);
 
-                    orderedItemService.addCartItem(orderedItem);
+                    productCartDTO.setOrderedItem(orderedItem);
+                    productCartDTO.setProductDTOCheckbox(item);
+
+                    orderedItemService.addCartItem(productCartDTO);
+
+                    selectedItemsComponent.getChildren().clear();
+                    selectedItemsComponent.getChildren().addAll(orderedItemService.getCartItems().stream().map(CartTupleDTO::getProductDTOCheckbox).toList());
+
                     totalLabel.setText("TOTAL: " + PriceUtils.pricePtBr(orderedItemService.getTotal()));
                 }
             });
@@ -322,26 +328,43 @@ public class AdminController implements Initializable {
             increaseQuantityButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 12pt");
             increaseQuantityButton.setPrefWidth(50);
             increaseQuantityButton.setOnAction(event1 -> {
-                List<OrderedItem> cartItems = orderedItemService.getCartItems();
+                List<CartTupleDTO> cartItems = orderedItemService.getCartItems();
 
-                for (int i = 0; i < cartItems.size(); i++) {
-                    MFXCheckbox itemCheckbox = (MFXCheckbox) selectedItemsComponent.getChildren().get(i);
+                for (CartTupleDTO cartItem : cartItems) {
+                    if (cartItem.getProductDTOCheckbox().isSelected()) {
+                        ProductDTO selectedProduct = new ProductDTO(cartItem.getOrderedItem().getProduct());
 
-                    if (itemCheckbox.isSelected()) {
-                        orderedItemService.increaseQuantity(cartItems.get(i).getProduct().getId());
+                        cartItem.getOrderedItem().increaseQuantity();
+                        cartItem.getProductDTOCheckbox().setText(selectedProduct.getName() + " - " + PriceUtils.pricePtBr(selectedProduct.getPrice()) + " - Qtd. " + cartItem.getOrderedItem().getQuantity());
                     }
-
-                    ProductDTO selectedProduct = new ProductDTO(orderedItemService.getOrderedItem(i).getProduct());
-
-                    itemCheckbox.setText(selectedProduct.getName() + " - " + PriceUtils.pricePtBr(selectedProduct.getPrice()) + " - Qtd. " + orderedItemService.getOrderedItem(selectedProduct.getId()).getQuantity());
-                    selectedItemsComponent.getChildren().remove(orderedItemService.findIndex(selectedProduct.getId()));
-                    selectedItemsComponent.getChildren().add(itemCheckbox);
                 }
+
+                selectedItemsComponent.getChildren().clear();
+                selectedItemsComponent.getChildren().addAll(orderedItemService.getCartItems().stream().map(CartTupleDTO::getProductDTOCheckbox).toList());
+
+                totalLabel.setText("TOTAL: " + PriceUtils.pricePtBr(orderedItemService.getTotal()));
             });
 
             MFXButton decreaseQuantityButton = new MFXButton("-");
             decreaseQuantityButton.setStyle("-fx-background-color: gray; -fx-text-fill: white; -fx-font-size: 12pt");
             decreaseQuantityButton.setPrefWidth(50);
+            decreaseQuantityButton.setOnAction(event1 -> {
+                List<CartTupleDTO> cartItems = orderedItemService.getCartItems();
+
+                for (CartTupleDTO cartItem : cartItems) {
+                    if (cartItem.getProductDTOCheckbox().isSelected()) {
+                        ProductDTO selectedProduct = new ProductDTO(cartItem.getOrderedItem().getProduct());
+
+                        cartItem.getOrderedItem().decreaseQuantity();
+                        cartItem.getProductDTOCheckbox().setText(selectedProduct.getName() + " - " + PriceUtils.pricePtBr(selectedProduct.getPrice()) + " - Qtd. " + cartItem.getOrderedItem().getQuantity());
+                    }
+                }
+
+                selectedItemsComponent.getChildren().clear();
+                selectedItemsComponent.getChildren().addAll(orderedItemService.getCartItems().stream().map(CartTupleDTO::getProductDTOCheckbox).toList());
+
+                totalLabel.setText("TOTAL: " + PriceUtils.pricePtBr(orderedItemService.getTotal()));
+            });
 
             quantityContainer.getChildren().addAll(increaseQuantityButton, decreaseQuantityButton);
             quantityContainer.setAlignment(Pos.BASELINE_CENTER);
@@ -381,7 +404,7 @@ public class AdminController implements Initializable {
             finalizeItemButton.setOnAction(finalizeEvent -> {
                 OrderDTO orderDTO = new OrderDTO();
                 orderDTO.setClient(userService.getLoggedUser());
-                orderDTO.setOrderedItems(orderedItemService.getCartItems());
+                orderDTO.setOrderedItems(orderedItemService.getCartItems().stream().map(CartTupleDTO::getOrderedItem).toList());
                 orderDTO.setPayment(new MoneyPayment(new BigDecimal(0)));
                 orderDTO.setDate(DateUtils.getDateTime());
 

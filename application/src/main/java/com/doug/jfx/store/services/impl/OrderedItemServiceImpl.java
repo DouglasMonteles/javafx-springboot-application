@@ -1,9 +1,8 @@
 package com.doug.jfx.store.services.impl;
 
 import com.doug.jfx.store.models.OrderedItem;
-import com.doug.jfx.store.repositories.OrderedItemRepository;
+import com.doug.jfx.store.models.dtos.CartTupleDTO;
 import com.doug.jfx.store.services.OrderedItemService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -13,18 +12,14 @@ import java.util.List;
 @Service
 public class OrderedItemServiceImpl implements OrderedItemService {
 
-    private final List<OrderedItem> cartItems = new ArrayList<>();
-
-    @Autowired
-    private OrderedItemRepository orderedItemRepository;
-
+    private final List<CartTupleDTO> cartItems = new ArrayList<>();
 
     @Override
-    public void addCartItem(OrderedItem orderedItem) {
-        Long productId = orderedItem.getProduct().getId();
+    public void addCartItem(CartTupleDTO cartTupleDTO) {
+        Long productId = cartTupleDTO.getOrderedItem().getProduct().getId();
 
         if (!isItemAlreadySelected(productId)) {
-            this.cartItems.add(orderedItem);
+            this.cartItems.add(cartTupleDTO);
         } else {
             increaseQuantity(productId);
         }
@@ -33,22 +28,17 @@ public class OrderedItemServiceImpl implements OrderedItemService {
     @Override
     public void increaseQuantity(Long productId) {
         this.cartItems.stream()
-                .filter(it -> it.getProduct().getId().equals(productId))
+                .filter(it -> it.getOrderedItem().getProduct().getId().equals(productId))
                 .findFirst()
-                .ifPresent(OrderedItem::increaseQuantity);
+                .ifPresent(it -> it.getOrderedItem().increaseQuantity());
     }
 
     @Override
     public void decreaseQuantity(Long productId) {
         this.cartItems.stream()
-                .filter(it -> it.getProduct().getId().equals(productId))
+                .filter(it -> it.getOrderedItem().getProduct().getId().equals(productId))
                 .findFirst()
-                .ifPresent(OrderedItem::decreaseQuantity);
-    }
-
-    @Override
-    public void addCartItem(List<OrderedItem> orderedItems) {
-        orderedItems.forEach(this::addCartItem);
+                .ifPresent(it -> it.getOrderedItem().decreaseQuantity());
     }
 
     @Override
@@ -59,7 +49,7 @@ public class OrderedItemServiceImpl implements OrderedItemService {
     @Override
     public void removeCartItem(List<Long> productsIds) {
         var itemsToRemove = this.cartItems.stream()
-                .filter(it -> productsIds.contains(it.getProduct().getId()))
+                .filter(it -> productsIds.contains(it.getOrderedItem().getProduct().getId()))
                 .toList();
 
         this.cartItems.removeAll(itemsToRemove);
@@ -71,21 +61,21 @@ public class OrderedItemServiceImpl implements OrderedItemService {
     }
 
     @Override
-    public List<OrderedItem> getCartItems() {
+    public List<CartTupleDTO> getCartItems() {
         return cartItems;
     }
 
     @Override
     public BigDecimal getTotal() {
         return cartItems.stream()
-                .map(OrderedItem::getPrice)
+                .map(it -> it.getOrderedItem().getPrice())
                 .reduce(new BigDecimal(0), BigDecimal::add);
     }
 
     @Override
     public int findIndex(Long productId) {
         for (int i = 0; i < cartItems.size(); i++) {
-            if (cartItems.get(i).getProduct().getId().equals(productId)) {
+            if (cartItems.get(i).getOrderedItem().getProduct().getId().equals(productId)) {
                 return i;
             }
         }
@@ -95,17 +85,17 @@ public class OrderedItemServiceImpl implements OrderedItemService {
 
     @Override
     public OrderedItem getOrderedItem(long productId) {
-        return cartItems.get(findIndex(productId));
+        return cartItems.get(findIndex(productId)).getOrderedItem();
     }
 
     @Override
     public OrderedItem getOrderedItem(int index) {
-        return cartItems.get(index);
+        return cartItems.get(index).getOrderedItem();
     }
 
     public boolean isItemAlreadySelected(Long productId) {
         return !cartItems.stream()
-                .filter(it -> it.getProduct().getId().equals(productId))
+                .filter(it -> it.getOrderedItem().getProduct().getId().equals(productId))
                 .toList().isEmpty();
     }
 

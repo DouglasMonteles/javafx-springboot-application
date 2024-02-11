@@ -1,15 +1,14 @@
 package com.doug.jfx.store.services;
 
 import com.doug.jfx.store.models.OrderedItem;
+import com.doug.jfx.store.models.dtos.CartTupleDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 public interface OrderedItemService {
 
-    void addCartItem(OrderedItem orderedItem);
-
-    void addCartItem(List<OrderedItem> orderedItems);
+    void addCartItem(CartTupleDTO cartTupleDTO);
 
     void increaseQuantity(Long productId);
 
@@ -21,7 +20,7 @@ public interface OrderedItemService {
 
     void clearCartItems();
 
-    List<OrderedItem> getCartItems();
+    List<CartTupleDTO> getCartItems();
 
     BigDecimal getTotal();
 
