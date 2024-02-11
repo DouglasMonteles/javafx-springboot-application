@@ -1,19 +1,9 @@
 package com.doug.jfx.store.services.impl;
 
-import com.doug.jfx.store.builders.TableBuilder;
-import com.doug.jfx.store.builders.impl.TableBuilderImpl;
-import com.doug.jfx.store.helpers.Dialog;
-import com.doug.jfx.store.models.Order;
 import com.doug.jfx.store.models.OrderedItem;
-import com.doug.jfx.store.models.dtos.OrderDTO;
-import com.doug.jfx.store.repositories.OrderRepository;
 import com.doug.jfx.store.repositories.OrderedItemRepository;
-import com.doug.jfx.store.services.OrderService;
 import com.doug.jfx.store.services.OrderedItemService;
-import jakarta.transaction.Transactional;
-import javafx.scene.control.TableView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -31,12 +21,53 @@ public class OrderedItemServiceImpl implements OrderedItemService {
 
     @Override
     public void addCartItem(OrderedItem orderedItem) {
-        this.cartItems.add(orderedItem);
+        Long productId = orderedItem.getProduct().getId();
+
+        if (!isItemAlreadySelected(productId)) {
+            this.cartItems.add(orderedItem);
+        } else {
+            increaseQuantity(productId);
+        }
+    }
+
+    @Override
+    public void increaseQuantity(Long productId) {
+        this.cartItems.stream()
+                .filter(it -> it.getProduct().getId().equals(productId))
+                .findFirst()
+                .ifPresent(OrderedItem::increaseQuantity);
+    }
+
+    @Override
+    public void decreaseQuantity(Long productId) {
+        this.cartItems.stream()
+                .filter(it -> it.getProduct().getId().equals(productId))
+                .findFirst()
+                .ifPresent(OrderedItem::decreaseQuantity);
+    }
+
+    @Override
+    public void addCartItem(List<OrderedItem> orderedItems) {
+        orderedItems.forEach(this::addCartItem);
     }
 
     @Override
     public void removeCartItem(int index) {
         this.cartItems.remove(index);
+    }
+
+    @Override
+    public void removeCartItem(List<Long> productsIds) {
+        var itemsToRemove = this.cartItems.stream()
+                .filter(it -> productsIds.contains(it.getProduct().getId()))
+                .toList();
+
+        this.cartItems.removeAll(itemsToRemove);
+    }
+
+    @Override
+    public void clearCartItems() {
+        this.cartItems.clear();
     }
 
     @Override
@@ -49,6 +80,33 @@ public class OrderedItemServiceImpl implements OrderedItemService {
         return cartItems.stream()
                 .map(OrderedItem::getPrice)
                 .reduce(new BigDecimal(0), BigDecimal::add);
+    }
+
+    @Override
+    public int findIndex(Long productId) {
+        for (int i = 0; i < cartItems.size(); i++) {
+            if (cartItems.get(i).getProduct().getId().equals(productId)) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    @Override
+    public OrderedItem getOrderedItem(long productId) {
+        return cartItems.get(findIndex(productId));
+    }
+
+    @Override
+    public OrderedItem getOrderedItem(int index) {
+        return cartItems.get(index);
+    }
+
+    public boolean isItemAlreadySelected(Long productId) {
+        return !cartItems.stream()
+                .filter(it -> it.getProduct().getId().equals(productId))
+                .toList().isEmpty();
     }
 
 

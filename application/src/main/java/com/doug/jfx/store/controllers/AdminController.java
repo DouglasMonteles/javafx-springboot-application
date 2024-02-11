@@ -16,27 +16,17 @@ import com.doug.jfx.store.services.*;
 import com.doug.jfx.store.utils.DateUtils;
 import com.doug.jfx.store.utils.PriceUtils;
 import io.github.palexdev.materialfx.controls.*;
-import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.DoubleFilter;
 import io.github.palexdev.materialfx.filter.LongFilter;
 import io.github.palexdev.materialfx.filter.StringFilter;
-import io.github.palexdev.materialfx.utils.others.observables.When;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -44,16 +34,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.lang.model.AnnotatedConstruct;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.IntStream;
 
 @Component
 public class AdminController implements Initializable {
@@ -304,21 +287,33 @@ public class AdminController implements Initializable {
             addItemButton.setTextFill(Color.WHITE);
             addItemButton.setOnAction(addItemEvent -> {
                 ProductDTO selectedProduct = (ProductDTO) salesTableComponent.getSelectionModel().getSelectedValues().getFirst();
+                int productIndex = orderedItemService.findIndex(selectedProduct.getId());
+
                 MFXCheckbox item = new MFXCheckbox();
-                item.setText(selectedProduct.getName() + " - " + PriceUtils.pricePtBr(selectedProduct.getPrice()));
 
-                selectedItemsComponent.getChildren().add(item);
+                if (productIndex >= 0) {
+                    // Atualizar item
+                    orderedItemService.increaseQuantity(selectedProduct.getId());
+                    item.setText(selectedProduct.getName() + " - " + PriceUtils.pricePtBr(selectedProduct.getPrice()) + " - Qtd. " + orderedItemService.getOrderedItem(selectedProduct.getId()).getQuantity());
+                    selectedItemsComponent.getChildren().remove(orderedItemService.findIndex(selectedProduct.getId()));
+                    selectedItemsComponent.getChildren().add(item);
 
-                OrderedItem orderedItem = new OrderedItem();
-                orderedItem.setOrder(null);
-                orderedItem.setProduct(new Product(selectedProduct));
-                orderedItem.setQuantity(1);
-                orderedItem.setDiscount(new BigDecimal(0));
-                orderedItem.setPrice(selectedProduct.getPrice());
+                    totalLabel.setText("TOTAL: " + PriceUtils.pricePtBr(orderedItemService.getTotal()));
+                } else {
+                    // Adicionar item
+                    OrderedItem orderedItem = new OrderedItem();
+                    orderedItem.setOrder(null);
+                    orderedItem.setProduct(new Product(selectedProduct));
+                    orderedItem.increaseQuantity();
+                    orderedItem.setDiscount(new BigDecimal(0));
+                    orderedItem.setPrice(selectedProduct.getPrice());
 
-                orderedItemService.addCartItem(orderedItem);
+                    item.setText(selectedProduct.getName() + " - " + PriceUtils.pricePtBr(selectedProduct.getPrice()) + " - Qtd. " + orderedItem.getQuantity());
+                    selectedItemsComponent.getChildren().add(item);
 
-                totalLabel.setText("TOTAL: " + PriceUtils.pricePtBr(orderedItemService.getTotal()));
+                    orderedItemService.addCartItem(orderedItem);
+                    totalLabel.setText("TOTAL: " + PriceUtils.pricePtBr(orderedItemService.getTotal()));
+                }
             });
 
             HBox quantityContainer = new HBox();
@@ -327,7 +322,21 @@ public class AdminController implements Initializable {
             increaseQuantityButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 12pt");
             increaseQuantityButton.setPrefWidth(50);
             increaseQuantityButton.setOnAction(event1 -> {
+                List<OrderedItem> cartItems = orderedItemService.getCartItems();
 
+                for (int i = 0; i < cartItems.size(); i++) {
+                    MFXCheckbox itemCheckbox = (MFXCheckbox) selectedItemsComponent.getChildren().get(i);
+
+                    if (itemCheckbox.isSelected()) {
+                        orderedItemService.increaseQuantity(cartItems.get(i).getProduct().getId());
+                    }
+
+                    ProductDTO selectedProduct = new ProductDTO(orderedItemService.getOrderedItem(i).getProduct());
+
+                    itemCheckbox.setText(selectedProduct.getName() + " - " + PriceUtils.pricePtBr(selectedProduct.getPrice()) + " - Qtd. " + orderedItemService.getOrderedItem(selectedProduct.getId()).getQuantity());
+                    selectedItemsComponent.getChildren().remove(orderedItemService.findIndex(selectedProduct.getId()));
+                    selectedItemsComponent.getChildren().add(itemCheckbox);
+                }
             });
 
             MFXButton decreaseQuantityButton = new MFXButton("-");
@@ -347,17 +356,20 @@ public class AdminController implements Initializable {
                 List<MFXCheckbox> items = new ArrayList<>(selectedItemsComponent.getChildren().stream().map(it -> (MFXCheckbox) it).toList());
 
                 List<MFXCheckbox> itemsToRemove = new ArrayList<>();
+                List<Long> cartItemsProductsToRemove = new ArrayList<>();
 
                 for (int i = 0; i < items.size(); i++) {
                     MFXCheckbox item = items.get(i);
 
                     if (item.isSelected()) {
                         itemsToRemove.add(item);
-                        orderedItemService.removeCartItem(i);
+                        cartItemsProductsToRemove.add(orderedItemService.getOrderedItem(i).getProduct().getId());
                     }
                 }
 
                 selectedItemsComponent.getChildren().removeAll(itemsToRemove);
+                orderedItemService.removeCartItem(cartItemsProductsToRemove);
+
                 totalLabel.setText("TOTAL: " + PriceUtils.pricePtBr(orderedItemService.getTotal()));
             });
 

@@ -31,7 +31,7 @@ public class OrderedItem implements Serializable {
     private BigDecimal price;
 
     @Column(nullable = false)
-    private Integer quantity;
+    private Integer quantity = 0;
 
     public OrderedItem(Order order, Product product,
                        BigDecimal discount, BigDecimal price, Integer quantity) {
@@ -61,6 +61,16 @@ public class OrderedItem implements Serializable {
     public BigDecimal getPrice() {
         double priceWithDiscount = (price.doubleValue() - discount.doubleValue());
         return new BigDecimal(priceWithDiscount * quantity);
+    }
+
+    public void increaseQuantity() {
+        this.quantity = this.quantity + 1;
+    }
+
+    public void decreaseQuantity() {
+        if (this.quantity > 0) {
+            this.quantity = this.quantity - 1;
+        }
     }
 
 }
