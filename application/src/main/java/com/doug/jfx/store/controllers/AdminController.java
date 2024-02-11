@@ -292,7 +292,7 @@ public class AdminController implements Initializable {
 
                 if (cartProductIndex >= 0) {
                     // Atualizar item
-                    orderedItemService.increaseQuantity(selectedProduct.getId());
+                    orderedItemService.increaseQuantity();
                     orderedItemService.getCartItems().get(cartProductIndex).getProductDTOCheckbox().setText(selectedProduct.getName() + " - " + PriceUtils.pricePtBr(selectedProduct.getPrice()) + " - Qtd. " + orderedItemService.getOrderedItem(selectedProduct.getId()).getQuantity());
 
                     totalLabel.setText("TOTAL: " + PriceUtils.pricePtBr(orderedItemService.getTotal()));
@@ -328,19 +328,17 @@ public class AdminController implements Initializable {
             increaseQuantityButton.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-font-size: 12pt");
             increaseQuantityButton.setPrefWidth(50);
             increaseQuantityButton.setOnAction(event1 -> {
-                List<CartTupleDTO> cartItems = orderedItemService.getCartItems();
-
-                for (CartTupleDTO cartItem : cartItems) {
-                    if (cartItem.getProductDTOCheckbox().isSelected()) {
-                        ProductDTO selectedProduct = new ProductDTO(cartItem.getOrderedItem().getProduct());
-
-                        cartItem.getOrderedItem().increaseQuantity();
-                        cartItem.getProductDTOCheckbox().setText(selectedProduct.getName() + " - " + PriceUtils.pricePtBr(selectedProduct.getPrice()) + " - Qtd. " + cartItem.getOrderedItem().getQuantity());
-                    }
-                }
+                orderedItemService.increaseQuantity();
 
                 selectedItemsComponent.getChildren().clear();
-                selectedItemsComponent.getChildren().addAll(orderedItemService.getCartItems().stream().map(CartTupleDTO::getProductDTOCheckbox).toList());
+                selectedItemsComponent.getChildren().addAll(orderedItemService.getCartItems()
+                        .stream()
+                        .map(it -> {
+                            var selectedProduct = it.getOrderedItem().getProduct();
+
+                            it.getProductDTOCheckbox().setText(selectedProduct.getName() + " - " + PriceUtils.pricePtBr(selectedProduct.getPrice()) + " - Qtd. " + it.getOrderedItem().getQuantity());
+                            return it.getProductDTOCheckbox();
+                        }).toList());
 
                 totalLabel.setText("TOTAL: " + PriceUtils.pricePtBr(orderedItemService.getTotal()));
             });
@@ -349,19 +347,17 @@ public class AdminController implements Initializable {
             decreaseQuantityButton.setStyle("-fx-background-color: gray; -fx-text-fill: white; -fx-font-size: 12pt");
             decreaseQuantityButton.setPrefWidth(50);
             decreaseQuantityButton.setOnAction(event1 -> {
-                List<CartTupleDTO> cartItems = orderedItemService.getCartItems();
-
-                for (CartTupleDTO cartItem : cartItems) {
-                    if (cartItem.getProductDTOCheckbox().isSelected()) {
-                        ProductDTO selectedProduct = new ProductDTO(cartItem.getOrderedItem().getProduct());
-
-                        cartItem.getOrderedItem().decreaseQuantity();
-                        cartItem.getProductDTOCheckbox().setText(selectedProduct.getName() + " - " + PriceUtils.pricePtBr(selectedProduct.getPrice()) + " - Qtd. " + cartItem.getOrderedItem().getQuantity());
-                    }
-                }
+                orderedItemService.decreaseQuantity();
 
                 selectedItemsComponent.getChildren().clear();
-                selectedItemsComponent.getChildren().addAll(orderedItemService.getCartItems().stream().map(CartTupleDTO::getProductDTOCheckbox).toList());
+                selectedItemsComponent.getChildren().addAll(orderedItemService.getCartItems()
+                        .stream()
+                        .map(it -> {
+                            var selectedProduct = it.getOrderedItem().getProduct();
+
+                            it.getProductDTOCheckbox().setText(selectedProduct.getName() + " - " + PriceUtils.pricePtBr(selectedProduct.getPrice()) + " - Qtd. " + it.getOrderedItem().getQuantity());
+                            return it.getProductDTOCheckbox();
+                        }).toList());
 
                 totalLabel.setText("TOTAL: " + PriceUtils.pricePtBr(orderedItemService.getTotal()));
             });

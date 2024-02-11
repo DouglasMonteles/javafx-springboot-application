@@ -21,24 +21,29 @@ public class OrderedItemServiceImpl implements OrderedItemService {
         if (!isItemAlreadySelected(productId)) {
             this.cartItems.add(cartTupleDTO);
         } else {
-            increaseQuantity(productId);
+            increaseQuantity();
         }
     }
 
     @Override
-    public void increaseQuantity(Long productId) {
+    public void increaseQuantity() {
         this.cartItems.stream()
-                .filter(it -> it.getOrderedItem().getProduct().getId().equals(productId))
-                .findFirst()
-                .ifPresent(it -> it.getOrderedItem().increaseQuantity());
+                .filter(it -> it.getProductDTOCheckbox().isSelected())
+                .forEach(it -> it.getOrderedItem().increaseQuantity());
     }
 
     @Override
-    public void decreaseQuantity(Long productId) {
-        this.cartItems.stream()
-                .filter(it -> it.getOrderedItem().getProduct().getId().equals(productId))
-                .findFirst()
-                .ifPresent(it -> it.getOrderedItem().decreaseQuantity());
+    public void decreaseQuantity() {
+        var cartItems = this.cartItems.stream()
+                .filter(it -> it.getProductDTOCheckbox().isSelected())
+                .peek(it -> it.getOrderedItem().decreaseQuantity())
+                .toList();
+
+        for (CartTupleDTO cartItem : cartItems) {
+            if (cartItem.getOrderedItem().getQuantity() < 1) {
+                this.cartItems.remove(cartItem);
+            }
+        }
     }
 
     @Override

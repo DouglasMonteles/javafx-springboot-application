@@ -10,9 +10,9 @@ public interface OrderedItemService {
 
     void addCartItem(CartTupleDTO cartTupleDTO);
 
-    void increaseQuantity(Long productId);
+    void increaseQuantity();
 
-    void decreaseQuantity(Long productId);
+    void decreaseQuantity();
 
     void removeCartItem(int index);
 
