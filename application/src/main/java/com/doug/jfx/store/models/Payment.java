@@ -35,4 +35,6 @@ public abstract class Payment implements Serializable {
     @MapsId
     private Order order;
 
+    public abstract String description();
+
 }

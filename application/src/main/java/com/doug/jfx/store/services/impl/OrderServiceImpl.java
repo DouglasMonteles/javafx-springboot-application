@@ -9,6 +9,7 @@ import com.doug.jfx.store.models.Order;
 import com.doug.jfx.store.models.OrderedItem;
 import com.doug.jfx.store.models.dtos.CategoryDTO;
 import com.doug.jfx.store.models.dtos.OrderDTO;
+import com.doug.jfx.store.models.dtos.OrderListTableDTO;
 import com.doug.jfx.store.models.enums.PaymentStatus;
 import com.doug.jfx.store.repositories.*;
 import com.doug.jfx.store.services.OrderService;
@@ -40,6 +41,7 @@ public class OrderServiceImpl implements OrderService {
     private final TableBuilder tableBuilder = new TableBuilderImpl<OrderDTO>();
 
     @Override
+    @Transactional
     public List<OrderDTO> findAll() {
         var orders = orderRepository.findAll();
         return orders.stream().map(OrderDTO::new).toList();
@@ -92,11 +94,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public TableView<?> buildOrderTable() {
         var orders = findAll();
+        orders.forEach(it -> it.setOrderedItems(orderedItemRepository.findOrderedItemsByOrderId(it.getId())));
+
+        var ordersTableDTO = orders.stream().map(OrderListTableDTO::new).toList();
 
         return tableBuilder
                 .addColumn("Id", "id")
-                .addColumn("Preço Total", "price")
-                .setData(orders)
+                .addColumn("Data da venda", "date")
+                .addColumn("Forma de pagamento", "payment")
+                .addColumn("Status", "status")
+                .addColumn("Total", "total")
+                .setData(ordersTableDTO)
                 .build();
     }
 

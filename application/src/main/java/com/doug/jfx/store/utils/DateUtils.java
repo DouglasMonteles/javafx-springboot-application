@@ -18,6 +18,8 @@ public class DateUtils {
     // hh: 12hrs
     public static final String TIME_BR_PATTERN = "HH:mm:ss";
 
+    public static final String DATE_TIME_BR_PATTERN = DATE_BR_PATTERN + " " + TIME_BR_PATTERN;
+
     public static Instant getDateTime() {
         return Instant.now().atZone(ZONE_ID).toInstant();
     }
@@ -31,4 +33,10 @@ public class DateUtils {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(TIME_BR_PATTERN);
         return date.atZone(ZONE_ID).format(timeFormatter);
     }
+
+    public static String dateTimePtBr(Instant date) {
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(DATE_TIME_BR_PATTERN);
+        return date.atZone(ZONE_ID).format(timeFormatter);
+    }
+
 }

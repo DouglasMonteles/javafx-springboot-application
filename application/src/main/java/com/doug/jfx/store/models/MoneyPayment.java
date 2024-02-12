@@ -26,5 +26,9 @@ public class MoneyPayment extends Payment {
     @Column(nullable = false)
     private BigDecimal change;
 
+    @Override
+    public String description() {
+        return "DINHEIRO";
+    }
 }
 

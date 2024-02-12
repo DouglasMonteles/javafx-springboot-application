@@ -236,7 +236,24 @@ public class AdminController implements Initializable {
 
     @FXML
     public void listSales(ActionEvent event) {
+        var ordersTableComponent = orderService.buildOrderTable();
+        var sideOptionsComponent = new SideOptionsComponent();
 
+        ordersTableComponent.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+            int selectedIndex = ordersTableComponent.getSelectionModel().getSelectedIndex();
+
+            if (selectedIndex >= 0) {
+                var selectedOrder = (OrderDTO) ordersTableComponent.getItems().get(selectedIndex);
+
+                OrderController.setSelectedOrder(selectedOrder);
+
+                sideOptionsComponent.setInfoAction(() -> {
+                    Routes.redirectTo(Routes.INFO_PRODUCT);
+                });
+            }
+        });
+
+        buildAdminScreen(ordersTableComponent, sideOptionsComponent);
     }
 
     @FXML

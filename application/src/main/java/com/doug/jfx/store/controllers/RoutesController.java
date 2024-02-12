@@ -11,18 +11,21 @@ public class RoutesController {
     public static UserController userController;
     public static CategoryController categoryController;
     public static ProductController productController;
+    public static OrderController orderController;
 
     @Autowired
     public RoutesController(final LoginController loginController,
                             final AdminController adminController,
                             final UserController userController,
                             final CategoryController categoryController,
-                            final ProductController productController) {
+                            final ProductController productController,
+                            final OrderController orderController) {
         RoutesController.loginController = loginController;
         RoutesController.adminController = adminController;
         RoutesController.userController = userController;
         RoutesController.categoryController = categoryController;
         RoutesController.productController = productController;
+        RoutesController.orderController = orderController;
     }
 
 }
