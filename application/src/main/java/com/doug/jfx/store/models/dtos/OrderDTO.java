@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,12 @@ public class OrderDTO implements Serializable {
         this.client = new UserDTO(order.getClient());
         this.payment = order.getPayment();
         this.orderedItems = order.getOrderedItems();
+    }
+
+    public BigDecimal getTotal() {
+        return orderedItems.stream()
+                .map(OrderedItem::getPrice)
+                .reduce(new BigDecimal(0), BigDecimal::add);
     }
 
 }

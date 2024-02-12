@@ -2,6 +2,8 @@ package com.doug.jfx.store.helpers;
 
 import com.doug.jfx.store.builders.DialogBuilder;
 import com.doug.jfx.store.builders.impl.DialogBuilderImpl;
+import io.github.palexdev.materialfx.dialogs.MFXDialogs;
+import io.github.palexdev.materialfx.dialogs.MFXGenericDialogBuilder;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
@@ -26,6 +28,13 @@ public class Dialog {
 
     public static Optional<ButtonType> confirmationDialog(String title, String headerText, String contentText) {
         DialogBuilder alert = baseDialog(Alert.AlertType.CONFIRMATION, title, headerText, contentText);
+        return alert.build();
+    }
+
+    public static Optional<ButtonType> confirmationDialog(String title, String headerText, String contentText, double width) {
+        DialogBuilder alert = baseDialog(Alert.AlertType.CONFIRMATION, title, headerText, contentText);
+        alert.setWidth(width);
+
         return alert.build();
     }
 

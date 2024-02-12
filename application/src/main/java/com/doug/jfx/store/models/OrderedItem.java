@@ -1,5 +1,6 @@
 package com.doug.jfx.store.models;
 
+import com.doug.jfx.store.utils.PriceUtils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -71,6 +72,14 @@ public class OrderedItem implements Serializable {
         if (this.quantity > 0) {
             this.quantity = this.quantity - 1;
         }
+    }
+
+    public String toString() {
+        return "Produto: " + getProduct().getName() + "\n" +
+                "Preço Unit.: " + PriceUtils.pricePtBr(getProduct().getPrice()) + " | " +
+                "Qtd.: " + quantity + " | " +
+                "Desconto: " + PriceUtils.pricePtBr(discount) + " | " +
+                "\nPreço final: " + PriceUtils.pricePtBr(price) + "\n";
     }
 
 }

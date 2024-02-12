@@ -34,6 +34,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class AdminController implements Initializable {
@@ -404,12 +405,29 @@ public class AdminController implements Initializable {
                 orderDTO.setPayment(new MoneyPayment(new BigDecimal(0)));
                 orderDTO.setDate(DateUtils.getDateTime());
 
-                OrderDTO orderedItem = orderService.insert(orderDTO);
-                Dialog.infoDialog("Pedido confirmado", "O pedido foi realizado com sucesso", "Pedido " + orderedItem.getId() + " realizado às " + DateUtils.timePtBr(orderedItem.getDate()) + " do dia " + DateUtils.datePtBr(orderedItem.getDate()));
+                String productLists = orderDTO.getOrderedItems()
+                        .stream()
+                        .map(OrderedItem::toString)
+                        .collect(Collectors.joining("\n"));
 
-                selectedItemsComponent.getChildren().clear();
-                salesTableComponent.getSelectionModel().clearSelection();
-                salesTableComponent.getSelectionModel().selectIndex(0);
+                productLists += "\nTotal da venda: " + PriceUtils.pricePtBr(orderDTO.getTotal());
+
+                if (Dialog.confirmationDialog(
+                        "Finalização do pedido",
+                        "Deseja confirmar a venda dos seguintes produtos?",
+                        productLists
+                ).filter(response -> response == ButtonType.OK).isPresent()) {
+                    OrderDTO orderedItem = orderService.insert(orderDTO);
+                    Dialog.infoDialog("Pedido confirmado", "O pedido foi realizado com sucesso", "Pedido " + orderedItem.getId() + " realizado às " + DateUtils.timePtBr(orderedItem.getDate()) + " do dia " + DateUtils.datePtBr(orderedItem.getDate()));
+
+                    selectedItemsComponent.getChildren().clear();
+                    salesTableComponent.getSelectionModel().clearSelection();
+                    salesTableComponent.getSelectionModel().selectIndex(0);
+
+                    orderedItemService.getCartItems().clear();
+
+                    totalLabel.setText("TOTAL: " + PriceUtils.pricePtBr(new BigDecimal(0)));
+                }
             });
 
             selectedItemsComponent.getChildren().addListener((ListChangeListener<Node>) c -> {

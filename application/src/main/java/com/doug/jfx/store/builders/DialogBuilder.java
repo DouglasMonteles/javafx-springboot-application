@@ -12,6 +12,8 @@ public interface DialogBuilder {
 
     DialogBuilder setContentText(String contentText);
 
+    DialogBuilder setWidth(double width);
+
     Optional<ButtonType> build();
 
 }

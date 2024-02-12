@@ -32,6 +32,12 @@ public class DialogBuilderImpl implements DialogBuilder {
         return this;
     }
 
+    @Override
+    public DialogBuilder setWidth(double width) {
+        this.alert.setWidth(width);
+        return this;
+    }
+
     public Optional<ButtonType> build() {
         return this.alert.showAndWait();
     }
