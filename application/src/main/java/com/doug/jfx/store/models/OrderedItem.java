@@ -79,7 +79,7 @@ public class OrderedItem implements Serializable {
                 "Preço Unit.: " + PriceUtils.pricePtBr(getProduct().getPrice()) + " | " +
                 "Qtd.: " + quantity + " | " +
                 "Desconto: " + PriceUtils.pricePtBr(discount) + " | " +
-                "\nPreço final: " + PriceUtils.pricePtBr(price) + "\n";
+                "\nPreço final: " + PriceUtils.pricePtBr(getPrice()) + "\n";
     }
 
 }

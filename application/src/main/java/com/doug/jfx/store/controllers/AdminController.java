@@ -243,12 +243,12 @@ public class AdminController implements Initializable {
             int selectedIndex = ordersTableComponent.getSelectionModel().getSelectedIndex();
 
             if (selectedIndex >= 0) {
-                var selectedOrder = (OrderDTO) ordersTableComponent.getItems().get(selectedIndex);
+                var selectedOrder = (OrderListTableDTO) ordersTableComponent.getItems().get(selectedIndex);
 
                 OrderController.setSelectedOrder(selectedOrder);
 
                 sideOptionsComponent.setInfoAction(() -> {
-                    Routes.redirectTo(Routes.INFO_PRODUCT);
+                    Routes.redirectTo(Routes.INFO_ORDER);
                 });
             }
         });

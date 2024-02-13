@@ -4,6 +4,7 @@ import com.doug.jfx.store.controllers.components.FormOrderRegisterController;
 import com.doug.jfx.store.controllers.components.FormProductRegisterController;
 import com.doug.jfx.store.controllers.components.SubmitAction;
 import com.doug.jfx.store.models.dtos.OrderDTO;
+import com.doug.jfx.store.models.dtos.OrderListTableDTO;
 import com.doug.jfx.store.services.CategoryService;
 import com.doug.jfx.store.services.OrderService;
 import com.doug.jfx.store.services.ProductService;
@@ -25,9 +26,12 @@ public class OrderController implements Initializable {
     @Autowired
     private OrderService orderService;
 
-    private static OrderDTO selectedOrder;
+    private static OrderListTableDTO selectedOrder;
 
-    private SubmitAction<OrderDTO> submitAction;
+    private SubmitAction<OrderListTableDTO> submitAction;
+
+    @FXML
+    public VBox infoOrderContainer;
 
     @FXML
     private MFXButton submitButton;
@@ -58,18 +62,18 @@ public class OrderController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (infoProductContainer != null) {
-            var formInfoCategory = new FormOrderRegisterController(orderService);
-            formInfoCategory.setTitle("Informações sobre a categoria");
-            formInfoCategory.setFormDisabled(true);
-            formInfoCategory.setProductDTO(selectedOrder);
+        if (infoOrderContainer != null) {
+            var formInfoOrder = new FormOrderRegisterController(orderService);
+            //formInfoCategory.setTitle("Informações sobre a categoria");
+            formInfoOrder.setFormDisabled(true);
+            formInfoOrder.setOrderDTO(selectedOrder);
 
-            infoProductContainer.getChildren().clear();
-            infoProductContainer.getChildren().add(formInfoCategory);
+            infoOrderContainer.getChildren().clear();
+            infoOrderContainer.getChildren().add(formInfoOrder);
         }
     }
 
-    public static void setSelectedOrder(OrderDTO selectedOrder) {
+    public static void setSelectedOrder(OrderListTableDTO selectedOrder) {
         OrderController.selectedOrder = selectedOrder;
     }
 

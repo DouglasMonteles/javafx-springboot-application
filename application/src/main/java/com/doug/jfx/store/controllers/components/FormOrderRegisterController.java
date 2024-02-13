@@ -3,8 +3,10 @@ package com.doug.jfx.store.controllers.components;
 import com.doug.jfx.store.enums.ProductMeasurement;
 import com.doug.jfx.store.models.dtos.CategoryDTO;
 import com.doug.jfx.store.models.dtos.OrderDTO;
+import com.doug.jfx.store.models.dtos.OrderListTableDTO;
 import com.doug.jfx.store.services.OrderService;
 import io.github.palexdev.materialfx.controls.*;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,45 +23,33 @@ public class FormOrderRegisterController extends VBox implements Initializable {
 
     private final OrderService orderService;
 
-    @FXML
-    private MFXTextField description;
-
-    @FXML
-    private MFXCheckbox isAvailable;
-
-    @FXML
-    private MFXTextField measurement;
-
-    @FXML
-    private MFXCheckListView<CategoryDTO> categories;
-
-    @FXML
-    private MFXFilterComboBox<ProductMeasurement> measurementType;
-
-    @FXML
-    private MFXButton picturesButton;
-
-    @FXML
-    private MFXScrollPane picturesPreviewContainer;
-
-    @FXML
-    private MFXTextField name;
-
-    @FXML
-    private MFXTextField price;
-
-    @FXML
-    private Text title;
-
-    @FXML
-    private MFXButton submitButton;
-
-    private OrderDTO orderDTO;
+    private OrderListTableDTO orderDTO;
 
     private boolean isFormDisabled = false;
 
+    @FXML
+    private MFXTextField date;
+
+    @FXML
+    private MFXTextField id;
+
+    @FXML
+    private MFXScrollPane items;
+
+    @FXML
+    private MFXTextField paymentMethod;
+
+    @FXML
+    private MFXTextField seller;
+
+    @FXML
+    private MFXTextField status;
+
+    @FXML
+    private MFXTextField total;
+
     public FormOrderRegisterController(OrderService orderService) {
-        this.orderDTO = new OrderDTO();
+        this.orderDTO = new OrderListTableDTO();
         this.orderService = orderService;
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/screens/components/form_order_component.fxml"));
@@ -78,11 +68,7 @@ public class FormOrderRegisterController extends VBox implements Initializable {
 
     }
 
-    public void setTitle(String title) {
-        this.title.setText(title);
-    }
-
-    public void setProductDTO(OrderDTO orderDTO) {
+    public void setOrderDTO(OrderListTableDTO orderDTO) {
         this.orderDTO = orderDTO;
         this.populateFormWithOrderData();
     }
@@ -97,7 +83,31 @@ public class FormOrderRegisterController extends VBox implements Initializable {
 
     private void populateFormWithOrderData() {
         boolean isFormDisable = isFormDisabled();
+        boolean isAllowEdit = !isFormDisable;
 
+        id.setText(orderDTO.getId().toString());
+        id.setAllowEdit(isAllowEdit);
+
+        date.setText(orderDTO.getDate());
+        date.setAllowEdit(isAllowEdit);
+
+        paymentMethod.setText(orderDTO.getPayment());
+        paymentMethod.setAllowEdit(isAllowEdit);
+
+        seller.setText(orderDTO.getClientName());
+        seller.setAllowEdit(isAllowEdit);
+
+        status.setText(orderDTO.getStatus());
+        status.setAllowEdit(isAllowEdit);
+
+        total.setText(orderDTO.getTotal());
+        total.setAllowEdit(isAllowEdit);
+
+        MFXListView<String> listOrderedItems = new MFXListView<>();
+        listOrderedItems.setPrefWidth(600);
+        listOrderedItems.setItems(FXCollections.observableArrayList(orderDTO.getOrderedItems()));
+
+        items.setContent(listOrderedItems);
     }
 
 }

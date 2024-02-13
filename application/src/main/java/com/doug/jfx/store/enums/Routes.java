@@ -336,6 +336,36 @@ public enum Routes {
         public void close() {
             screen.destroy();
         }
+    },
+
+    INFO_ORDER () {
+        private final ScreenBuilder screen = new ScreenBuilderImpl();
+
+        @Override
+        protected FXMLLoader loadFxmlScreen() {
+            var fxmlLoader = getResource("info_order_screen");
+            fxmlLoader.setControllerFactory(controller -> RoutesController.orderController);
+
+            return fxmlLoader;
+        }
+
+        @Override
+        public void apply() {
+            screen.setTitle("Informações do Pedido")
+                    .setWidth(600)
+                    .setMaxWidth(600)
+                    .setHeight(720)
+                    .setMinWidth(200)
+                    .setMinHeight(200)
+                    .setResizable(true)
+                    .setScene(handleFxmlScene(loadFxmlScreen()))
+                    .build();
+        }
+
+        @Override
+        public void close() {
+            screen.destroy();
+        }
     };
 
     protected abstract FXMLLoader loadFxmlScreen();

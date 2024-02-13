@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -33,6 +34,7 @@ public class OrderListTableDTO implements Serializable {
     private String payment;
     private String status;
     private String total;
+    private List<String> orderedItems = new ArrayList<>();
 
     public OrderListTableDTO(OrderDTO order) {
         this.id = order.getId();
@@ -41,5 +43,17 @@ public class OrderListTableDTO implements Serializable {
         this.payment = order.getPayment().description();
         this.status = order.getPayment().getStatus().name();
         this.total = PriceUtils.pricePtBr(order.getTotal());
+
+        this.orderedItems.addAll(
+                order.getOrderedItems().stream()
+                        .map(it -> {
+                            var prod = it.getProduct();
+                            return "Nome: " + prod.getName() + " - " +
+                                    "Preço: " + PriceUtils.pricePtBr(prod.getPrice()) + " - " +
+                                    "Qtd.: " + it.getQuantity() + " - " +
+                                    "Desc.: " + PriceUtils.pricePtBr(it.getDiscount()) + " - " +
+                                    "Tot.: " + PriceUtils.pricePtBr(it.getPrice());
+                        }).toList()
+        );
     }
 }
