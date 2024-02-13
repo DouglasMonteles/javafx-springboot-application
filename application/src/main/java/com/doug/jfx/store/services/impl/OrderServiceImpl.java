@@ -22,6 +22,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -82,6 +83,26 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void confirmOrderPayment(Long orderId) {
+        var order = orderRepository.findById(orderId);
+
+        order.ifPresent(orderPresent -> {
+            orderPresent.getPayment().setStatus(PaymentStatus.SOLD);
+            paymentRepository.save(orderPresent.getPayment());
+        });
+    }
+
+    @Override
+    public void cancelOrder(Long orderId) {
+        var order = orderRepository.findById(orderId);
+
+        order.ifPresent(orderPresent -> {
+            orderPresent.getPayment().setStatus(PaymentStatus.CANCELED);
+            paymentRepository.save(orderPresent.getPayment());
+        });
+    }
+
+    @Override
     public void delete(Long id) {
         try {
             orderRepository.deleteById(id);
@@ -111,7 +132,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void updateTableData() {
         var orders = findAll();
-        tableBuilder.setData(orders);
+        orders.forEach(it -> it.setOrderedItems(orderedItemRepository.findOrderedItemsByOrderId(it.getId())));
+
+        var ordersTableDTO = orders.stream().map(OrderListTableDTO::new).toList();
+
+        tableBuilder.setData(ordersTableDTO);
     }
 
 }

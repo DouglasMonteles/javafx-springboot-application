@@ -236,8 +236,12 @@ public class AdminController implements Initializable {
 
     @FXML
     public void listSales(ActionEvent event) {
+        String btnInfoLabel = "Informações do pedido";
+        String btnConfirmLabel = "Confirmar pagamento";
+        String btnCancelLabel = "Cancelar pedido";
+
         var ordersTableComponent = orderService.buildOrderTable();
-        var sideOptionsComponent = new SideOptionsComponent();
+        var sideOptionsComponent = new SideOptionsComponent(btnInfoLabel, btnConfirmLabel, btnCancelLabel);
 
         ordersTableComponent.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
             int selectedIndex = ordersTableComponent.getSelectionModel().getSelectedIndex();
@@ -249,6 +253,18 @@ public class AdminController implements Initializable {
 
                 sideOptionsComponent.setInfoAction(() -> {
                     Routes.redirectTo(Routes.INFO_ORDER);
+                });
+
+                sideOptionsComponent.setEditAction(() -> {
+                    // Confirmar pagamento do pedido
+                    orderService.confirmOrderPayment(selectedOrder.getId());
+                    orderService.updateTableData();
+                });
+
+                sideOptionsComponent.setDeleteAction(() -> {
+                    // Cancelar pedido
+                    orderService.cancelOrder(selectedOrder.getId());
+                    orderService.updateTableData();
                 });
             }
         });

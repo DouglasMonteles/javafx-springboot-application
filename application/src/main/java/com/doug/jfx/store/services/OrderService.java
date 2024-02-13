@@ -13,6 +13,10 @@ public interface OrderService {
 
     OrderDTO update(OrderDTO orderDTO);
 
+    void confirmOrderPayment(Long orderId);
+
+    void cancelOrder(Long orderId);
+
     void delete(Long id);
 
     TableView<?> buildOrderTable();
