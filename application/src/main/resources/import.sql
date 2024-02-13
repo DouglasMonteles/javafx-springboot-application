@@ -50,7 +50,6 @@ INSERT INTO tb_product (name, price, description, measurement_type, measurement,
 INSERT INTO tb_product (name, price, description, measurement_type, measurement, is_available) VALUES ('Base Líquida', 12.99, 'Base líquida de cobertura média', 1, 1, true);
 INSERT INTO tb_product (name, price, description, measurement_type, measurement, is_available) VALUES ('Corretivo', 7.99, 'Corretivo cremoso de alta cobertura', 1, 1, true);
 INSERT INTO tb_product (name, price, description, measurement_type, measurement, is_available) VALUES ('Pó Compacto', 9.99, 'Pó compacto translúcido para acabamento matte', 1, 1, true);
-INSERT INTO tb_product (name, price, description, measurement_type, measurement, is_available) VALUES ('Máscara de Cílios', 6.49, 'Máscara de cílios à prova d'água para volume intenso', 1, 1, true);
 INSERT INTO tb_product (name, price, description, measurement_type, measurement, is_available) VALUES ('Sombra', 4.99, 'Sombra compacta de longa duração', 1, 1, true);
 INSERT INTO tb_product (name, price, description, measurement_type, measurement, is_available) VALUES ('Blush', 10.99, 'Blush em pó para efeito natural', 1, 1, true);
 INSERT INTO tb_product (name, price, description, measurement_type, measurement, is_available) VALUES ('Delineador', 5.99, 'Delineador líquido de secagem rápida', 1, 1, true);
